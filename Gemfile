@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
-gem "jekyll"
-gem "compass"
-gem "rake"
-gem "RedCloth"
+group :jekyll_plugins do
+  gem "jekyll-paginate"
+  gem "jekyll-sitemap"
+  gem "octopress-autoprefixer"
+end

@@ -1,5 +1,33 @@
-permalink: pretty
-paginate: 10
-exclude: ['Rakefile', 'Gemfile', 'Gemfile.lock', 'config.rb', 'run']
+# Site settings
+email: 
+baseurl: ""
+paginate: 5
+paginate_path: "/blog/page-:num"
+google_analytics: 
 
-production_url: http://jduff.github.com
+# SEO settings
+title: Trophy
+description: 
+url: ""
+twitter_username: 
+default_img: 
+
+# Profile settings
+name: 
+profile_img: 
+profile: 
+social:
+  github: 
+
+# Build settings
+include: ["_categories"]
+exclude: ["_screenshots", "Gemfile", "Gemfile.lock"]
+markdown: kramdown
+permalink: /:year/:month/:day/:title/
+
+# Sass
+sass:
+  style: compressed
+
+# Gems
+gems: [jekyll-paginate, jekyll-sitemap, octopress-autoprefixer]
