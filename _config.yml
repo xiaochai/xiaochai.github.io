@@ -17,7 +17,8 @@ name: 小差小差
 profile_img: 
 profile: 
 social:
-github: https://github.com/xiaochai
+  github: https://github.com/xiaochai
+  weibo: http://weibo.com/lqso
 
 # Build settings
 include: ["_categories"]
