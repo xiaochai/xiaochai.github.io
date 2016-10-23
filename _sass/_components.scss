@@ -190,7 +190,10 @@
   &__img {
     position: relative;
 
-    height: 11em;
+    height: 5em;
+    @media (min-width: $mq-md) {
+      height: 11em;
+    }
     width: 24%;
     clear: none;
     float: left;
