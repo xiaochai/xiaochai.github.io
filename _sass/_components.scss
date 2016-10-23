@@ -121,6 +121,114 @@
 }
 
 /**
+ * galleries
+ * On the blog page under galleries tab
+ */
+.galleries {
+  @include flex-grid(1, 2, $xxl: 3, $pad: 0.25em);
+
+  padding: 2em 1em 0em 1em;
+
+  @media (min-width: $mq-md) {
+    padding: 4em 2em 0em 2em;
+  }
+}
+.gallery{
+  flex-basis: 100%;
+  max-width: 100%;
+  &__link {
+    box-shadow: 0 2px 4px rgba(0,0,0, 0.5), 0 1px 2px rgba(10,10,10,0.2);
+    position: relative;
+
+    display: block;
+
+    overflow: hidden;
+
+    margin-bottom: 4em;
+
+    background-color: $color-white;
+    transition: background-color 0.2s ease-in-out;
+
+    &:after {
+      @include box-shadow(3px);
+
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      height: 100%;
+      width: 100%;
+
+      opacity: 0;
+      will-change: opacity;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    &:hover {
+      background-color: $color-alpha--light;
+
+      &:after {
+        opacity: 1;
+      }
+      
+      .gallery__more {
+        box-shadow: inset 175px 0 0 0 $color-alpha;
+        color: $color-white;
+      }
+      .gallery__header {
+        color: #9f8f68;
+      }
+      .gallery__date {
+        color: #9f8f68;
+      }
+      .gallery__upper {
+        background-color: rgba(255,255,255,0.8);
+      }
+    }
+  }
+  &__img {
+    position: relative;
+
+    height: 11em;
+    width: 24%;
+    clear: none;
+    float: left;
+    margin: 3px;
+
+    background-color: $color-black;
+
+    &:after {
+      @extend %overlay;
+    }
+  }
+  &__upper {
+    position: absolute;
+    align-items: center;
+    display: flex;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(255,255,255,0.2);
+    transition: background-color 0.2s ease-in-out;
+  }
+  &__more {
+    @include button-slide();
+  }
+  &__date {
+    color: white;
+    transition: color 0.2s ease-in-out;
+  }
+  &__header {
+    color: white;
+    transition: color 0.2s ease-in-out;
+  }
+
+}
+
+/**
  * Category Card
  * On the blog page under category tab
  */

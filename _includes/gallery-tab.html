@@ -1,0 +1,22 @@
+<div class="tab">
+  <ul class="galleries">
+    {% for post in site.categories.Gallery %}
+      <li class="gallery">
+	    <a class="gallery__link" href="{{ post.url }}">
+          {% for thumb in post.thumbs %}
+            <div class="gallery__img">
+				<figure class="absolute-bg" style="background-image: url('{{ thumb }}');"></figure>
+			</div>
+          {% endfor %}
+		  <div class="gallery__upper">
+			<span class="gallery__date" itemprop="datePublished" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</span>
+			<h2 class="gallery__header" itemprop="name">{{ post.title }}</h2>
+		    <span class="gallery__more">View More</span>
+		  </div>
+	    </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% include archive-link.html %}
+</div>
