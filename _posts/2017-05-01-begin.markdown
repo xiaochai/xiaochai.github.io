@@ -3,7 +3,7 @@ layout: post
 title: "开始"
 date: 2016-12-6
 categories:
-  - Travel
+  - Journey
   - Gallery
 description: 
 image: http://ww3.sinaimg.cn/large/6a1f6674jw1elllqltqifj21kw11x4dp.jpg
