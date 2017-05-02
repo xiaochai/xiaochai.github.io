@@ -26,6 +26,11 @@ exclude: ["_screenshots", "Gemfile", "Gemfile.lock"]
 markdown: kramdown
 permalink: /:year/:month/:day/:title/
 
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
 # Sass
 sass:
   style: compressed
