@@ -1,0 +1,330 @@
+---
+layout: post
+title: "使用canvas画出你的函数"
+date: 2017-5-6
+categories:
+  - Tech
+description: 
+image: http://wx3.sinaimg.cn/large/6a1f6674ly1ff7g80yu8kj21kw0zjwqt.jpg
+image-sm: http://ww3.sinaimg.cn/mw1024/6a1f6674ly1ff7g80yu8kj21kw0zjwqt.jpg
+---
+<script>
+function group(canvas) {
+	this.canvas = canvas
+	var cw = canvas.width
+	var ch = canvas.height
+	var ctx = canvas.getContext("2d")
+
+	// (x, y)正常坐标系上的点，(cx, cy)为canvas里的坐标点, ctx为canvas绘图环境
+	this.drawLine = function (x1, y1, x2, y2){
+		var cx1 = x1+cw/2
+		var cx2 = x2+cw/2
+		var cy1 = ch/2-y1
+		var cy2 = ch/2-y2
+
+		ctx.moveTo(cx1, cy1)
+		ctx.lineTo(cx2, cy2)
+		ctx.stroke()
+	}
+
+	this.drawPoint = function (x, y){
+		var cx = x+cw/2
+		var cy = ch/2-y
+		ctx.fillRect(cx, cy, 1, 1)
+	}
+
+	// 每一次x的取值增加多少
+	var step = 0.01
+	// 每一毫秒画几个点
+	var pointsPerMillisecond = 100
+	this.drawFx = function (f, scalex, scaley){
+		var dp = this.drawPoint
+		var currentx = -cw/2
+		var ticker = setInterval(function(){
+			for(var i=0; i<pointsPerMillisecond; i++){
+				dp(currentx, f(currentx*scalex) * scaley)
+				currentx += step
+			}
+			if(currentx > cw/2){
+				clearInterval(ticker)
+			}
+		}, 1)
+	}
+
+	this.drawFxNow = function (f, scalex, scaley){
+		for(var x=-cw/2; x<cw/2; x+=step){
+			this.drawPoint(x, f(x*scalex) * scaley)
+		}
+	}
+
+	this.drawCoords = function (){
+		// 画出x轴和y轴
+		this.drawLine(-cw/2, 0, cw/2, 0);
+		this.drawLine(0, ch/2, 0, -ch/2);
+	}
+
+	this.clear = function (){
+		ctx.clearRect(0, 0, cw, ch);
+	}
+
+	this.setColor = function (stroke, fill){
+		ctx.strokeStyle = stroke
+		ctx.fillStyle = fill
+	}
+}
+
+</script>
+
+有图有真相。
+
+看到一个函数，不管你是想知道他的趋势如何，或者有人说他有一个漂亮的函数图像，我们都要画出这个函数的图来确认。
+
+比如有人跟你说
+
+```
+f(x) = sin(4*x) 
+```
+
+是一个爱情方程式，在看到图像之前绝对会一脸蒙逼。所以如果能有一个显示出函数图像的工具，会提升你的浪漫值和幸福感。
+
+网页是一个快速开发的好东西，而canvas正好能实现这个需求。
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~幸福的分割线~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### canvas 基础
+
+##### 创建一个canvas
+
+首先，创建一个空的canvas，宽高为800x400
+
+``` html
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>画出你的函数</title>
+</head>
+<body>
+	<canvas id="myCanvas" width="800px" height="400px" style="border:1px solid lightgrey;">
+		你的浏览器不支持canvas
+	</canvas>
+</body>
+</html>
+```
+
+canvas的坐标原点(0,0)在画布的左上角，x轴延水平从左向右递增，y轴从上到下递增，y轴的方向与常规的坐标系方向相反。
+
+##### 使用javascript画图
+
+``` javascript
+ctx = document.getElementById("myCanvas").getContext("2d");
+
+ctx.strokeStyle="lightgreen";
+ctx.fillStyle="lightblue";
+
+ctx.moveTo(20, 20);
+ctx.lineTo(200, 300);
+ctx.stroke();
+
+ctx.fillRect(300, 20, 200, 300);
+
+ctx.beginPath();
+ctx.arc(700,180,90,0,2*Math.PI);
+ctx.stroke();
+```
+
+使用getContext("2d")获取到2d的绘图环境(CanvasRenderingContext2D)，目前并没有3d这个参数值，3d做图可以使用WebGL。
+
+strokeStyle和fillStyle分别是笔触的样式和填充的样式，不仅可以是单一的颜色，也可以是一个渐变的对象(如createLinearGradient等)。
+
+画直线使用moveTo来确认起始点，使用lineTo来确认结束点，stroke绘制路径。可以通过添加lineTo的调用来绘制折线。
+
+画长方形使用fillRect，这个方法绘制的图形是填充的，如果只要描边，使用strokeRect方法。
+
+画圆使用了一个画弧线的函数，参数依次是圆心坐标x,y，半径，起始角度，结束角度，是否是顺时针。例子中没有显示最后一个参数。以下是角度值的规定图例。
+
+![图片](http://www.w3school.com.cn/i/arc.gif)
+
+##### 如何画一个点
+
+并没有提供直接画点的函数，但可以用以下方法画出点来（[参见此](http://html5tutorial.com/how-to-draw-a-point-with-the-canvas-api/)）
+
+``` javascript
+ctx = document.getElementById("myCanvas").getContext("2d");
+
+ctx.strokeStyle="lightgreen";
+ctx.fillStyle="lightgreen";
+
+ctx.beginPath();
+ctx.moveTo(2,1);
+ctx.lineTo(3,2);
+ctx.stroke();
+
+ctx.fillRect(2,5,1,1);
+
+ctx.beginPath();
+ctx.arc(2, 10, 1, 0, 2 * Math.PI, true);
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(2, 15, 0.5, 0, 2 * Math.PI, true);
+ctx.fill();
+```
+
+画出来的效果和放大500%后的效果:
+
+![图片](http://wx2.sinaimg.cn/mw690/6a1f6674ly1ffbgjcsl5tj203i02sweb.jpg) ![图片](http://wx1.sinaimg.cn/mw690/6a1f6674ly1ffbgjdo6ouj205m06qaa0.jpg)
+
+#### 画出函数
+
+##### 坐标系转换
+
+按正常，我们把canvas的中心点(200,400)点做为坐标的函数的原点，所以我们需要将函数的坐标点映射成canvas上的点（也可以使用transform函数来实现）
+
+``` javascript
+var canvas = document.getElementById("myCanvas");
+var cw = canvas.width
+var ch = canvas.height
+var ctx = canvas.getContext("2d")
+
+// (x, y)正常坐标系上的点，(cx, cy)为canvas里的坐标点, ctx为canvas绘图环境
+function drawLine(x1, y1, x2, y2){
+	var cx1 = x1+cw/2
+	var cx2 = x2+cw/2
+	var cy1 = ch/2-y1
+	var cy2 = ch/2-y2
+
+	ctx.moveTo(cx1, cy1)
+	ctx.lineTo(cx2, cy2)
+	ctx.stroke()
+}
+
+function drawPoint(x, y){
+	var cx = x+cw/2
+	var cy = ch/2-y
+	ctx.fillRect(cx, cy, 1, 1)
+}
+```
+
+##### 画出对应的函数
+
+有了之前的这些准备，画了一函数的图就很容易，x取-cw/2到cw/2，求出对应的y值，画出对应的点即可展示出函数的图。
+
+``` javascript
+// 每一次x的取值增加多少
+var step = 0.01
+// 每一毫秒画几个点
+var pointsPerMillisecond = 100
+function drawFx(f, scalex, scaley){
+	var currentx = -cw/2
+	var ticker = setInterval(function(){
+		for(var i=0; i<pointsPerMillisecond; i++){
+			drawPoint(currentx, f(currentx*scalex) * scaley)
+			currentx += step
+		}
+		if(currentx > cw.width/2){
+			clearInterval(ticker)
+		}
+	}, 1)
+}
+```
+
+像 ```f(x)=x*x``` 这样的函数，y值的过快，导致在最左点的y值超过了canvas的范围，所以drawFx函数提供了scaley参数(scalex同理)。
+
+``` javascript
+ctx.strokeStyle="lightgrey"
+ctx.fillStyle="red"
+
+// 画出x轴和y轴
+drawLine(-cw/2, 0, cw/2, 0);
+drawLine(0, ch/2, 0, -ch/2);
+
+drawFx(function(x){ return x*x;}, 1, 0.005);
+```
+
+点击以下的区域，会重新开始绘画
+
+<canvas id="c1" width="400px" height="200px" style="border:1px solid lightgrey;">
+	你的浏览器不支持canvas
+</canvas>
+<script>
+var canvas = document.getElementById("c1");
+c1 = new group(canvas);
+c1.setColor("lightgrey", "red")
+canvas.onclick = function(){
+	c1.clear()
+	c1.drawCoords()
+	c1.drawFx(function(x){ return x*x;}, 1, 0.005)
+}
+
+canvas.click()
+</script>
+
+##### 猜猜下图都是些什么函数
+
+<canvas id="c2" width="600px" height="400px" style="border:1px solid lightgrey;">
+	你的浏览器不支持canvas
+</canvas>
+<script>
+var canvas2 = document.getElementById("c2");
+var c2 = new group(canvas2);
+c2.setColor("lightgrey", "red")
+c2.drawCoords()
+c2.drawFxNow(function(x){return -200/x}, 1, 1)
+c2.setColor("lightgrey", "#ccff00")
+c2.drawFxNow(function(x){return 10*x+10}, 0.1, 1);
+c2.setColor("lightgrey", "#ff00ff")
+c2.drawFxNow(function(x){return 0.1*x*x*x+x*x+90}, 0.5, 0.5);
+c2.setColor("lightgrey", "#9900ff")
+c2.drawFxNow(function(x){return Math.pow(2, x)}, 0.1, 1);
+c2.setColor("lightgrey", "#6600ff")
+c2.drawFxNow(function(x){return Math.pow(0.5, x)}, 0.1, 1);
+c2.setColor("lightgrey", "#330066")
+c2.drawFxNow(function(x){return Math.log(x)}, 10,10);
+c2.setColor("lightgrey", "#EEB422")
+c2.drawFxNow(function(x){return Math.cos(x)}, 0.1, 100);
+c2.setColor("lightgrey", "#003300")
+c2.drawFxNow(function(x){return Math.atan(x)}, 0.1, 100);
+</script>
+
+##### 画一个心(点击出动画)
+
+<canvas id="c3" width="220px" height="320px" style="border:1px solid lightgrey;">
+	你的浏览器不支持canvas
+</canvas>
+
+<script>
+var canvas3 = document.getElementById("c3");
+c3 = new group(canvas3);
+c3.setColor("lightgrey", "red")
+canvas3.onclick = function(){
+	c3.clear()
+	c3.drawCoords()
+	c3.drawFx(function(x){return Math.sqrt(1-x*x) + Math.pow(x * x, 1/3)}, 0.01, 100, "green");
+	c3.drawFx(function(x){return -Math.sqrt(1-x*x) + Math.pow(x * x, 1/3)}, 0.01, 100, "yellow");
+}
+canvas3.click()
+</script>
+
+心是由两个函数组成
+
+![图片](http://wx3.sinaimg.cn/mw1024/6a1f6674ly1ffc0pikk3nj207e048aag.jpg)
+
+转成javascript函数如下
+
+``` javascript
+function(x){
+	return Math.sqrt(1-x*x) + Math.pow(x * x, 1/3)
+}
+function(x){
+	return -Math.sqrt(1-x*x) + Math.pow(x * x, 1/3)
+}
+```
+
+#### 极坐标系下的函数图像
+
+还记得文章开始说的这个函数吗：f(x) = sin(4*x)。输入后发现并没有出现啥浪漫的图案啊？只是一个正常的正弦曲线罢了！
+
+原因是这个函数需要在极坐标系下才能展示出漂亮的图来，所以准确的函数表示应该是r = sin(4θ)。
+
+##### 坐标系转换思路
+
