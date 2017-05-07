@@ -8,6 +8,10 @@ description:
 image: http://wx4.sinaimg.cn/large/6a1f6674ly1ffcsacbkv8j21io10g7w2.jpg
 image-sm: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1ffcsacbkv8j21io10g7w2.jpg
 ---
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
 <script>
 function FuncDraw(canvas) {
 	this.canvas = canvas
@@ -418,9 +422,14 @@ canvas3.onclick = function(){
 canvas3.click()
 </script>
 
-心是由两个函数组成
+心是由两个函数组成(以下公式展示由[MathJax](https://www.mathjax.org/)支持)
 
-![图片](http://wx3.sinaimg.cn/mw1024/6a1f6674ly1ffc0pikk3nj207e048aag.jpg)
+<div>
+`y = sqrt(1-x^2)+x^(2/3)`
+<br/>
+`y = -sqrt(1-x^2)+x^(2/3)`
+</div>
+<br/>
 
 转成javascript函数如下
 
@@ -583,9 +592,10 @@ canvas6.onclick = function(){
 canvas6.click();
 </script>
 
-```
-r = sinθ * sqrt(abs(cosθ)) / (sinθ+7/5) - 2*sinθ +2
-```
+
+<div>
+`r = sinθ * sqrt(abs(cosθ)) / (sinθ+7/5) - 2*sinθ + 2`
+</div>
 
 <canvas id="c7" width="320px" height="320px" style="border:1px solid lightgrey;">
 	你的浏览器不支持canvas
