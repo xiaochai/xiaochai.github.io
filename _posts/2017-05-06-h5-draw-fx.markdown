@@ -119,6 +119,24 @@ function FuncDraw(canvas) {
 		}, 1)
 		ticker.push(t)
 	}
+
+	// 画Lissajous曲线
+	this.drawLissajous = function(fx, fy, scalex, scaley){
+		var dp = this.drawPoint
+		var currentT = 0
+		var t = setInterval(function(){
+			for(var i=0; i<pointsPerMillisecond; i++){
+				var x = fx(currentT)
+				var y = fy(currentT)
+				dp(x*scalex, y*scaley)
+				currentT += step
+			}
+			if(currentT > 3*Math.PI){
+				clearInterval(t)
+			}
+		}, 1)
+		ticker.push(t)
+	}
 }
 </script>
 
@@ -666,8 +684,7 @@ canvas9.onclick = function(){
 canvas9.click();
 </script>
 
-
-##### 你的函数
+##### 你的函数(极坐标)
 
 输入你的函数(js function):
 <br/>
@@ -694,4 +711,31 @@ document.getElementById("gen").onclick = function(){
 	c10.drawPolarFx(func, 20, 20)
 }
 document.getElementById("gen").click();
+</script>
+
+
+##### 送一个x,y随时间变化的函数曲线
+
+```
+x = sin(m*t)
+y = sin(n*t)
+```
+
+以下曲线为m = 13, n = 18 (参考[此](http://www.matrix67.com/blog/archives/6947))
+
+<canvas id="c11" width="320px" height="320px" style="border:1px solid lightgrey;">
+	你的浏览器不支持canvas
+</canvas>
+<script>
+var canvas11 = document.getElementById("c11");
+var c11 = new FuncDraw(canvas11);
+canvas11.onclick = function(){
+	c11.clear()
+	c11.setConfig(0.0005, 5)
+	c11.setColor("lightgrey", "red")
+	c11.drawCoords()
+
+	c11.drawLissajous(function(t){return Math.sin(13*t);}, function(t){return Math.sin(18*t);}, 120, 120)
+}
+canvas11.click();
 </script>
