@@ -89,7 +89,7 @@ $$\class{myMJSmall}{\theta_j := \theta_j - \alpha \frac{\partial}{\partial \thet
 > $$\alpha$$: learning rate。当选择过大时，可能无法收敛; 当选择太小时，需要迭代多次才能收敛。
 
 
-##### 计算：$$ \class{myMJSmall}{\frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1) = \frac{1}{m} \sum_{i=1}^m(h_\theta(x_i)-y_i)x_i}$$
+##### 计算：$$ \class{myMJSmall}{\frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1) = \frac{1}{m} \sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x^{(i)}}$$
 
 * 两个函数相加的导数等于两个函数的导数相加$$(f(x)+g(x))' = f'(x) + g'(x)$$
 
@@ -105,14 +105,14 @@ $$\class{myMJSmall}{\theta_j := \theta_j - \alpha \frac{\partial}{\partial \thet
 
 * 计算：
 
-> 过程如下：$$\frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1) = \frac{\partial}{\partial \theta_1} \frac{1}{2m} \sum_{i=1}^m(h_\theta(x_i)-y_i)^2 \\
+> 过程如下：$$\frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1) = \frac{\partial}{\partial \theta_1} \frac{1}{2m} \sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})^2 \\
 > = \frac{\partial}{\partial \theta_1} \frac{1}{2m} \sum_{i=1}^m(\theta_0+\theta_1 x_i-y_i)^2 \\
-> = \frac{\partial}{\partial \theta_1} \frac{1}{2m} ((\theta_0+\theta_1 x_1 -y_1)^2+ \cdots + (\theta_0+\theta_1 x_m - y_m)^2) \\
-> = \frac{\partial}{\partial \theta_1} \frac{1}{2m} (\theta_0+\theta_1 x_1 -y_1)^2 + \cdots + \frac{\partial}{\partial \theta_1} \frac{1}{2m} (\theta_0+\theta_1 x_m -y_m)^2 \\ 
-> = \frac{\partial(\frac{1}{2m}(\theta_0+\theta_1 x_1 -y_1)^2)}{\partial(\theta_0+\theta_1 x_1 -y_1)} \cdot \frac{\partial(\theta_0+\theta_1 x_1 -y_1)}{\partial\theta_1} + \cdots + \frac{\partial(\frac{1}{2m}(\theta_0+\theta_1 x_m -y_m)^2)}{\partial(\theta_0+\theta_1 x_m -y_m)} \cdot \frac{\partial(\theta_0+\theta_1 x_m -y_m)}{\partial\theta_1}\\
-> = \frac{1}{m}(\theta_0+\theta_1 x_1 - y_1) \cdot x_1 + \cdots + \frac{1}{m}(\theta_0 + \theta_1 x_m - y_m) \cdot x_m \\
-> = \frac{1}{m}\sum_{i=1}^m(\theta_0+\theta_1 x_i+y_i)x_i \\
-> = \frac{1}{m}\sum_{i=1}^m(h_\theta(x_i) - y_i)x_i
+> = \frac{\partial}{\partial \theta_1} \frac{1}{2m} ((\theta_0+\theta_1 x^{(1)} -y^{(1)})^2+ \cdots + (\theta_0+\theta_1 x^{(m)} - y^{(m)})^2) \\
+> = \frac{\partial}{\partial \theta_1} \frac{1}{2m} (\theta_0+\theta_1 x^{(1)} -y^{(1)})^2 + \cdots + \frac{\partial}{\partial \theta_1} \frac{1}{2m} (\theta_0+\theta_1 x^{(m)} -y^{(m)})^2 \\ 
+> = \frac{\partial(\frac{1}{2m}(\theta_0+\theta_1 x^{(1)} -y^{(1)})^2)}{\partial(\theta_0+\theta_1 x^{(1)} -y^{(1)})} \cdot \frac{\partial(\theta_0+\theta_1 x^{(1)} -y^{(1)})}{\partial\theta_1} + \cdots + \frac{\partial(\frac{1}{2m}(\theta_0+\theta_1 x^{(m)} -y^{(m)})^2)}{\partial(\theta_0+\theta_1 x^{(m)} -y^{(m)})} \cdot \frac{\partial(\theta_0+\theta_1 x^{(m)} -y^{(m)})}{\partial\theta_1}\\
+> = \frac{1}{m}(\theta_0+\theta_1 x^{(1)} - y^{(1)}) \cdot x^{(1)} + \cdots + \frac{1}{m}(\theta_0 + \theta_1 x^{(m)} - y^{(m)}) \cdot x^{(m)} \\
+> = \frac{1}{m}\sum_{i=1}^m(\theta_0+\theta_1 x^{(i)}+y^{(i)})x^{(i)} \\
+> = \frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)}) - y^{(i)})x^{(i)}
 > $$
 
 * 由于每一次迭代都要对所有的样本进行计算，所以梯度下降也叫批量梯度下降(Batch Gradient Descent)
@@ -120,11 +120,11 @@ $$\class{myMJSmall}{\theta_j := \theta_j - \alpha \frac{\partial}{\partial \thet
 <br/>
 *当j=0时*
 
-$$\class{myMJSmall}{\frac{\partial}{\partial \theta_0} J(\theta_0, \theta_1) = \frac{1}{m} \sum_{i=1}^m(h_\theta(x_i)-y_i)}$$
+$$\class{myMJSmall}{\frac{\partial}{\partial \theta_0} J(\theta_0, \theta_1) = \frac{1}{m} \sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})}$$
 
 *当j=1时*
 
-$$\class{myMJSmall}{\frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1) = \frac{1}{m} \sum_{i=1}^m(h_\theta(x_i)-y_i)x_i}$$
+$$\class{myMJSmall}{\frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1) = \frac{1}{m} \sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x^{(i)}}$$
 
 
 
