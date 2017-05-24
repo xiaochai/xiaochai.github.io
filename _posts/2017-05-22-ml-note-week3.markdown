@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "机器学习课程备忘(Week3)"
+title: "机器学习(Week3)-逻辑回归"
 date: 2017-5-22
 categories:
   - Tech

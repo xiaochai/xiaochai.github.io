@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "机器学习课程备忘(Week2)"
+title: "机器学习(Week2)-多变量线性回归"
 date: 2017-5-20
 categories:
   - Tech
