@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "机器学习课程备忘(Week3)"
-date: 2017-5-22
+title: "机器学习课程备忘(Week4)"
+date: 2017-5-24
 categories:
   - Tech
 description: 
@@ -17,11 +17,46 @@ image-sm: http://wx3.sinaimg.cn/mw1024/6a1f6674ly1ffuf6qvvc8j21kw0u5n0z.jpg
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 
-### Lecture1: Classification and Representation
+### Lecture1: Neural Networks
 
-#### 分类问题（Classification）
+#### 为什么我们需要神经网络
 
-##### 二元分类问题（Binary Classification）
+* 当特征特别多（计算机视觉问题）时，如果计算多次多项式，得出来的最终特征会特别多，多到计算机无法处理。
+
+#### 产生的原因
+
+> Algorithms that try to mimic the brain. Was very widely used in 80s and early 90s; popularity diminished in late 90s<br/>
+> Recent resurgence: State-of-the-art technique for many applications
+
+* One learning algorithm
+
+> 大脑的某一块区域（听觉皮层）能处理听觉，视觉，触觉等相关的信息（神经重接实验），所以是否有一各机器学习算法，可以处理各种的事务？
+
+##### 模型表示（Model Representation）
+
+* 最简单的表示（只有一个神经元的情况下）
+
+$$\class{myMJSmall}{
+\begin{bmatrix}
+x_0 \\
+x_1 \\
+x_2 \\
+x_3 \\
+  \end{bmatrix} \rightarrow
+\begin{bmatrix}  
+\end{bmatrix} \rightarrow
+ h_\theta(x)
+}$$
+
+> 模拟神经元：输入特征$$x_1\cdots x_n$$像是神经元树突(dendrites)；输出结果$$h_\theta(x)$$好比神经轴突(axons)<br/>
+> $$x_0$$的值总是为0，称之为偏置单元（bias unit），有时候会不画出来<br/>
+> 神经网络中也使用$$\frac{1}{1+e^{\theta^Tx}}$$，称之为S型激活函数（sigmoid/logistic activation function）<br/>
+> $$\tehta$$参数有时候也称之为权重(weight)
+
+
+
+
+
 
 $$\class{myMJSmall}{y \in \{0,1\}}$$
 
