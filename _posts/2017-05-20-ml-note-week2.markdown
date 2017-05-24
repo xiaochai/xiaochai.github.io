@@ -390,5 +390,5 @@ y2 = x^3
 
 ##### 学习资料
 
-[课件和笔记](/assets/material/ml/)
+[课件和笔记](http://pan.baidu.com/s/1hsGETb2)
 [Octave编程作业](https://github.com/xiaochai/ml_assignment)

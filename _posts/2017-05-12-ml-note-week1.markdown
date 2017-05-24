@@ -163,4 +163,4 @@ $$\class{myMJSmall}{\frac{\partial}{\partial \theta_1} J(\theta_0, \theta_1) = \
 
 ##### 学习资料
 
-[课件和笔记](/assets/material/ml/)
+[课件和笔记](http://pan.baidu.com/s/1hsGETb2)
