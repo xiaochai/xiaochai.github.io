@@ -97,6 +97,92 @@ $$\class{myMJSmall}{
 > 函数$$g$$为S型函数(sigmoid function)
 
 
+* 向量表示
+
+$$\class{myMJSmall}{
+ a_1{(2)} = g(z_1^{(2)}) \\
+ a_2{(2)} = g(z_2^{(2)}) \\
+ a_3{(2)} = g(z_3^{(2)}) \\
+ \\
+ a_1{(3)} = g(z_1^{(3)}) \\
+}$$
+
+*其中*
+
+$$\class{myMJSmall}{
+ z_k^{(2)} = \Theta_{k,0}^{(1)}x_0+\Theta_{k,1}^{(1)}x_1 +\cdots + \Theta_{k,n}^{(1)}x_n \\
+
+ z_k^{(3)} = \Theta_{k,0}^{(1)}a_0+\Theta_{k,1}^{(1)}a_1 +\cdots + \Theta_{k,n}^{(1)}a_n \\
+}$$
+
+*更一般的*
+
+$$\class{myMJSmall}{
+ z_k^{(j)} = \Theta_{k,0}^{(j-1)}x_0 + \Theta_{k,1}^{(j-1)}+\cdots+\Theta_{k,n}^{(j-1)}x_n \\
+}$$
+
+*令*
+
+$$\class{myMJSmall}{
+x = \begin{bmatrix}
+  x_0 \\
+  x_1 \\
+  \vdots \\
+  x_n\\
+  \end{bmatrix}
+
+a^{(j)} = \begin{bmatrix}
+  a_0^{(j)} \\
+  a_1^{(j)}  \\
+  \vdots \\
+  a_n^{(j)} \\
+  \end{bmatrix}
+ 
+z^{(j)} = \begin{bmatrix}
+  z_0^{(j)} \\
+  z_1^{(j)}  \\
+  \vdots \\
+  z_n^{(j)} \\
+ \end{bmatrix}
+}$$
+
+*且*
+
+$$\class{myMJSmall}{
+ a^{(1)} = x
+}$$
+
+*则，向量表示为* 
+
+$$\class{myMJSmall}{
+z^{(j)} = \Theta^{(j−1)}a^{(j−1)}\\
+a^{(j)} = g(z^{(j)})\\
+j \in [2,3\cdots]
+}$$
+
+#### 例子
+
+* AND运算
+
+$$\class{myMJSmall}{
+\begin{align*}\begin{bmatrix}x_0 \newline x_1 \newline x_2\end{bmatrix} \rightarrow\begin{bmatrix}g(z^{(2)})\end{bmatrix} \rightarrow h_\Theta(x)\end{align*}
+}$$
+
+
+*假设我们有两个特征值$$x_0, x_1$$，值只能取0和1*
+
+*令$$\class{myMJSmall}{\Theta_{(1)} = \begin{bmatrix}-30 & 20 & 20 \end{bmatrix}}$$，则可以得到以下结果*
+
+ $$\class{myMJSmall}{\begin{array}{cc|c}
+ x_1 & x_2 & h_\theta(x) \\
+ \hline \\
+ 0 & 0 & g(-30) \approx 0 \\
+ 0 & 1 & g(-10) \approx 0 \\
+ 1 & 0 & g(-10) \approx 0 \\
+ 1 & 1 & g(10) \approx 1 \\
+ \end{array}
+ }$$
+
 
 
 
