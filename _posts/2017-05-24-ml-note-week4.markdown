@@ -175,13 +175,91 @@ $$\class{myMJSmall}{
 
  $$\class{myMJSmall}{\begin{array}{cc|c}
  x_1 & x_2 & h_\theta(x) \\
- \hline \\
+ \hline
  0 & 0 & g(-30) \approx 0 \\
  0 & 1 & g(-10) \approx 0 \\
  1 & 0 & g(-10) \approx 0 \\
  1 & 1 & g(10) \approx 1 \\
  \end{array}
  }$$
+
+* OR运算与NOR运算
+
+*同理，我们可以得到如下*
+
+$$\class{myMJSmall}{
+NOR: \Theta^{(1)} = \begin{bmatrix} -30  & 20 &  20 \end{bmatrix} \\
+OR: \Theta^{(1)} = \begin{bmatrix}-10 & 20 & 20\end{bmatrix}
+}$$
+
+* XNOR异或非运算
+
+*使用AND，NOR，OR和神经网络结合成XNOR运算*
+
+$$\class{myMJSmall}{
+\begin{align*}\begin{bmatrix}
+x_0 \\ 
+x_1 \\ 
+x_2
+\end{bmatrix} \rightarrow
+\begin{bmatrix}
+a_1^{(2)} \\
+a_2^{(2)} 
+\end{bmatrix} \rightarrow
+\begin{bmatrix}
+a^{(3)}
+\end{bmatrix} \rightarrow 
+h_\Theta(x)
+\end{align*}
+}$$
+
+$$\class{myMJSmall}{
+\Theta^{(1)} =\begin{bmatrix}-30 & 20 & 20 \newline 10 & -20 & -20\end{bmatrix} \\
+\Theta^{(2)} =\begin{bmatrix}-10 & 20 & 20\end{bmatrix}
+}$$
+
+*过程如下图*
+![xnor](/assets/images/xnor.png)
+
+#### 多分类分类问题（Multiclass Classification）
+
+*此时输出层包含有多个$$h_\theta(x)$$函数，即为向量。每一列代表属于所属分类的概率，取概率最大的为对应的预测值* 
+
+*如下图，$$n$$个特征，预测4个分类*
+
+$$\class{myMJSmall}{
+\begin{align*}\begin{bmatrix}
+x_0 \\ 
+x_1 \\ 
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix} \rightarrow
+\begin{bmatrix}
+a_0^{(2)} \\
+a_1^{(2)}  \\
+a_2^{(2)}  \\
+\vdots
+\end{bmatrix} \rightarrow
+\begin{bmatrix}
+a_0^{(3)} \\
+a_1^{(3)}  \\
+a_2^{(3)}  \\
+\vdots
+\end{bmatrix} \rightarrow \cdots \rightarrow
+\begin{bmatrix}
+h_\theta(x)_1 \\
+h_\theta(x)_2 \\
+h_\theta(x)_3 \\
+h_\theta(x)_4 \\
+\end{bmatrix}
+\end{align*}
+}$$
+
+*如下图*
+
+![lr](/assets/images/mulrg.png)
+
 
 
 
