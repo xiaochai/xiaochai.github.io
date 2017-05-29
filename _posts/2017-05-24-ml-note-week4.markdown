@@ -5,8 +5,8 @@ date: 2017-5-24
 categories:
   - Tech
 description: 
-image: http://wx3.sinaimg.cn/large/6a1f6674ly1ffuf6qvvc8j21kw0u5n0z.jpg
-image-sm: http://wx3.sinaimg.cn/mw1024/6a1f6674ly1ffuf6qvvc8j21kw0u5n0z.jpg
+image: /assets/images/neural_network.jpeg
+image-sm: /assets/images/neural_network.jpeg
 ---
 <style>
 .myMJSmall {
