@@ -29,14 +29,14 @@ image-sm: /assets/images/k_means.jpg
 
 > 市场划分（Market segmentation）<br/>
 > 社交网络划分（Social network analysis）<br/>
-> 组织机算机集群（Organizing computer clusters）<br/>
+> 组织计算机集群（Organizing computer clusters）<br/>
 > 天文数据分析（Astronomical data analysis）<br/>
 
 #### K-均值算法（K-Means Algorithm）
 
 ##### 基本步骤
 
-* 随机选取两个点（分类两类），这两个点称之为聚类中心（cluster centroids）
+* 随机选取两个点（分为两类），这两个点称之为聚类中心（cluster centroids）
 * 聚类分配：将样本数据根据距离聚类中心的远近分成两类
 * 移动聚类中心：根据聚类分配划分的两个集合，算出各自的均值，将聚类中心移至该点
 * 重复聚类分配和移动聚类中心两个步骤，直到聚类中心不再变化
@@ -84,7 +84,7 @@ J(c^{(1)},\cdots,c^{(m)},\mu_1,\cdots,\mu_K) = \frac{1}{m}\sum_{i=1}^{m}||x^{(i)
 
 > $$c^{(i)}$$：样本$$x^{(i)}$$所属于的聚类中心序号，$$c^{(i)} \in [1,K]$$<br/>
 > $$\mu_k$$：第k个聚类中心$$k\in[1,K]，\mu_k \in \mathbb{R}^n$$<br/>
-> $$\mu_{c^{(i)}}$$：样本$$x^{(i})$$与n属于的聚类中心<br/>
+> $$\mu_{c^{(i)}}$$：样本$$x^{(i})$$所属于的聚类中心<br/>
 > 以上函数也叫做失真代价函数（Distortion Cost Function）
 
 * 我们的优化目标是找出K个聚类中心，使用所有样本到其所属的聚类中心的距离之和最小，即$$min_{c,\mu}\ J(c,\mu)$$
@@ -103,7 +103,8 @@ J(c^{(1)},\cdots,c^{(m)},\mu_1,\cdots,\mu_K) = \frac{1}{m}\sum_{i=1}^{m}||x^{(i)
 
 * K值一般人工手动选取
 * 有一些方法可以用于某些特定场景
-> 肘部法则（The elbow method）：画出K值和函数J值的图像，如果随着K值的增加，J值先快速减少，并且后续平衡减少，则选取平衡减少开始的K的值<br/>
+
+> 肘部法则（The elbow method）：画出K值和函数J值的图像，如果随着K值的增加，J值先快速减少，并且后续平稳减少，则选取平稳减少开始的K的值<br/>
 > 但更多的情况是，J值一直是平稳减少的，此时很难用此方法先出K的值<br/>
 > 注意：随着K的增加，J的值总是减少的，如果J的值没有减少，则很可能收敛在了局部最小值
 
@@ -136,7 +137,7 @@ J(c^{(1)},\cdots,c^{(m)},\mu_1,\cdots,\mu_K) = \frac{1}{m}\sum_{i=1}^{m}||x^{(i)
 
 * PCA与线性回归
 
-> 线性回归求得是使用预测值与样本y值之间的距离平方，而PCA是样本点到投影点的垂直距离
+> 线性回归求的是预测值与样本y值之间的距离平方，而PCA是样本点到投影点的距离
 
 ##### PCA算法步骤
 
@@ -146,7 +147,7 @@ $$\class{myMJSmall}{
 	x_j^{(i)} = \dfrac{x_j^{(i)} - \mu_j}{s_j}
 }$$
 
-* 计算时协方差矩阵（covariance matrix）
+* 计算协方差矩阵（covariance matrix）
 
 $$\class{myMJSmall}{
 	\Sigma = \frac{1}{m}\sum_{i=1}^n (x^{(i)})(x^{(i)})^T
@@ -167,15 +168,15 @@ Sigma = (1/m) * X' * X;
 
 > svd是奇异值分解函数(singular value decomposition)<br/>
 > 这块用到的数据知识和证明todo<br/>
-> 返回来的U值为$$n\times n$$矩阵，每一列为$$u^{(1)},u^{(2)},\cdots,u^{(n)}$$即为我们之前所要求的$$\mu{(i)}$$
+> 返回来的U值为$$n\times n$$矩阵，每一列为$$u^{(1)},u^{(2)},\cdots,u^{(n)}$$即为我们之前所要求的$$\mu^{(i)}$$
 
 * 取U前k列计算新的特征值
 
 > 约定$$z^{(i)}$$为$$x^{(i)}$$对应的新特征，则<br/>
 > $$z^{(i)} = U_{reduce}^T \cdot x^{(i)}$$<br/>
-> 其中$$U_{reduce}$$为$$k \times n$$维矩阵，即U的前k列
+> 其中$$U_{reduce}$$为$$n \times k$$维矩阵，即U的前k列
 
-* 完事的程序
+* 完整的程序
 
 ```matlab
 Sigma = (1/m) * X' * X; % compute the covariance matrix
@@ -189,7 +190,7 @@ Z = X * Ureduce;        % compute the projected data points
 > 可以从压缩后的数据近似地恢复原始数据
 
 $$\class{myMJSmall}{
-	x_{approx}^{(1)} = U_{reduce} \cdot z^{(1)}
+	x_{approx}^{(i)} = U_{reduce} \cdot z^{(i)}
 }$$
 
 ##### 如何选择新维度k
@@ -206,9 +207,9 @@ $$\class{myMJSmall}{
 > 计算$$U_{reduce},z,x$$<br/>
 > 检验算出来的结果是否大于99%，如果不是，则继续加大k的值。
 
-* 使用svd反回值加速运算
+* 使用svd返回值加速运算
 
-> 使用svd返回的第二个值来快速计算如何选择k
+> 使用svd返回的第二个值S来快速计算如何选择k
 
 $$\class{myMJSmall}{
 	\dfrac{\sum_{i=1}^kS_{ii}}{\sum_{i=1}^nS_{ii}} \geq 0.99
@@ -218,11 +219,11 @@ $$\class{myMJSmall}{
 ##### 使用PCA的建议
 
 > PCA经常用来加速监督学习<br/>
-> PCA减少了数据存储所需要的磁盘空间，加快了算法运行时间<br/>
-> 当选择k=2或者k=3时，可以将特征的图片展示 出来<br/>
+> PCA减少了数据存储所需要的磁盘空间，减少了算法运行时间<br/>
+> 当选择k=2或者k=3时，可以将特征的图像展示出来<br/>
 
-> 不应该使用PCA来过解决拟合问题，应该使用正规选项操作<br/>
-> 刚开始训练时别用PCA，等团站再使用
+> 不应该使用PCA来过解决拟合问题，应该使用正规化<br/>
+> 别假设你的算法需要PCA，先使用完整的样本进行训练，只有当你发现你需要PCA时，才使用PCA
 
 ##### 学习资料
 
