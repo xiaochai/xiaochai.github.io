@@ -21,7 +21,7 @@ image-sm: /assets/images/recom_system.jpg
 
 ##### 问题描述
 
-> 给出一组样本数据$${x^{(1)}, x^{(2)},\dots,x^{(m)}}$$<br/>
+> 已经有一组样本数据$${x^{(1)}, x^{(2)},\dots,x^{(m)}}$$<br/>
 > 给出一个新的样本数据$$x_{test}$$，判断这个样本数据是否为异常数据（abnormal/anomalous）
 
 ##### 模型
@@ -43,14 +43,14 @@ image-sm: /assets/images/recom_system.jpg
 
 $$\class{myMJSmall}{x \sim \mathcal{N}(\mu, \sigma^2)}$$
 
-> 其中$$\mu$$为均值，也是高斯曲线的最高点，$$\sigma^2$$为方差，$$\sigma$$为标准差，体现为高斯曲线的胖廋程度<br/>
+> 其中$$\mu$$为均值，也是高斯曲线的中点，$$\sigma^2$$为方差，$$\sigma$$为标准差，体现为高斯曲线的胖廋程度<br/>
 > 高斯函数的具体表示形式为：<br/>
 
 $$\class{myMJSmall}{
 	p(x;\mu,\sigma^2) = \frac{1}{\sigma \sqrt{(2\pi)}} exp(-\frac{(x-\mu)^2}{2\sigma^2})
 }$$
 
-> 我们从样本中可以直接通过以下式子算出$$\mu，\sigma^2$$<br/>
+> 可以直接通过以下式子算出$$\mu，\sigma^2$$<br/>
 
 $$\class{myMJSmall}{
 	\mu = \frac{1}{m}\sum^m_{i=1}x^{(i)} \\
@@ -71,7 +71,7 @@ $$\class{myMJSmall}{
 	p(x) = \displaystyle \prod^n_{j=1} p(x_j;\mu_j,\sigma_j^2)
 }$$
 
-> 以上式子是基于每一个样本特征都是独立互不相关的独立性假设（independence assumption），虽然实际中这样样本特征并不一定是毫不相关的，但以上算法在实际中表示不错<br/>
+> 以上式子是基于每一个样本特征都是独立互不相关的独立性假设（independence assumption），虽然实际中这些样本特征并不一定是毫不相关的，但以上算法在实际情况下表现不错<br/>
 
 * 整体算法描述
 
@@ -95,7 +95,7 @@ $$\class{myMJSmall}{
 
 ##### 使用错误检测的情况
 
-> 样本中只有一小部分的正样本($$y=1$$)，大部分都是负样本($$y=0$$)<br/>
+> 样本中只有一小部分是正样本($$y=1$$)，大部分都是负样本($$y=0$$)<br/>
 > 引发异常的原因多样，无法从正样本中学习出异常引发的特征。而且新出现的异常与之前的异常样本没有相似的地方<br/>
 
 #### 使用监督学习的情况
@@ -124,7 +124,7 @@ $$\class{myMJSmall}{
 }$$
 
 > 其中$$\mu \in \mathbb{R}^n, \Sigma \in \mathbb{R}^{n \times n}$$，$$\Sigma$$是协方差矩阵(covariance matrix)<br/>
-> 多元高斯分布模型可以表示出非平等于轴线的高斯分布数据，可以更好的拟合样本数据<br/>
+> 多元高斯分布模型可以表示出非平行于轴线的高斯分布数据，可以更好的拟合样本数据<br/>
 
 #### 使用多元高斯分布实现错误检测
 
