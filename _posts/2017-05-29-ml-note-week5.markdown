@@ -91,11 +91,11 @@ $$\class{myMJSmall}{
 > 初使化：<br/>
 > 设置$$\Delta^{(l)}_{ij} = 0$$。即创建若干个与$$\Theta^{(1)}, \Theta^{(2)} \cdots \Theta^{(L-1)}$$ 维度相同的矩阵，每一个元素都为0<br/>
 > 循环遍历整个样本，$$for \, t=1:m$$ <br/>
-> 1. 设置$$a^{(1)} = x^{(t)}$$<br/>
-> 2. 使用正向传播算出$$a^{(l)}, a^{(l)} ; l \in \{2,3,\cdots L\}$$<br/>
-> 3. 使用$$y^{(t)}$$计算$$\delta^{(L)} = a^{(L)} - y^{(t)}$$ <br/>
-> 4. 使用反向传播计算$$\delta^{L-1}, \delta^{L-2},\cdots \delta^{2)}$$<br/>
-> 5. 更新$$\Delta: \Delta^{(l)}_{ij} := \Delta^{(l)}_{ij}+a_j^{(l)}\delta_i^{(l+1)};$$ 或者使用矩阵形式：$$\Delta^{(l)} := \Delta^{(l)} + \delta^{(l+1)}(a^{(l)})^T$$<br/>
+> (1) 设置$$a^{(1)} = x^{(t)}$$<br/>
+> (2) 使用正向传播算出$$a^{(l)}, a^{(l)} ; l \in \{2,3,\cdots L\}$$<br/>
+> (3) 使用$$y^{(t)}$$计算$$\delta^{(L)} = a^{(L)} - y^{(t)}$$ <br/>
+> (4) 使用反向传播计算$$\delta^{L-1}, \delta^{L-2},\cdots \delta^{2)}$$<br/>
+> (5) 更新$$\Delta: \Delta^{(l)}_{ij} := \Delta^{(l)}_{ij}+a_j^{(l)}\delta_i^{(l+1)};$$ 或者使用矩阵形式：$$\Delta^{(l)} := \Delta^{(l)} + \delta^{(l+1)}(a^{(l)})^T$$<br/>
 > 循环结束
 
 $$\class{myMJSmall}{
