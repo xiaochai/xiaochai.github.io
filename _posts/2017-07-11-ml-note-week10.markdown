@@ -1,0 +1,27 @@
+---
+layout: post
+title: "机器学习(Week10)-大规模机器学习(Large Scale Machine Learning)"
+date: 2017-07-11
+categories:
+  - Tech
+description: 
+image: /assets/images/sgd.jpg
+image-sm: /assets/images/sgd.jpg
+---
+<style>
+.myMJSmall {
+	font-size: 0.8em;
+}
+</style>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+### Lecture1: Large scale machine learning
+
+
+##### 学习资料
+
+[课件和笔记](http://pan.baidu.com/s/1hsGETb2)
+[Octave编程作业](https://github.com/xiaochai/ml_assignment)
+
