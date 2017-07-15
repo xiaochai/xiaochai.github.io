@@ -1,0 +1,104 @@
+---
+layout: post
+title: "机器学习(Week11)-应用: 图片OCR(Photo OCR)"
+date: 2017-07-14
+categories:
+  - Tech
+description: 
+image: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
+image-sm: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
+---
+<style>
+.myMJSmall {
+	font-size: 0.8em;
+}
+</style>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+### Lecture1: Applica'on example: Photo OCR
+
+#### 问题描述
+
+> 图片OCR（Optical Character Recognition，光学字符识别），让计算机读取图片中的字符信息<br/>
+
+##### Photo OCR Pineline
+
+* 文字检测，找出有文字的区域
+
+* 字符切分，将之前找到的矩形文字区域，切分成单个字符
+
+* 字符识别，识别之前划分的单个字符
+
+* 后续可能还会附加的其它处理，比如拼写校正等
+
+#### 滑动窗口
+
+##### 行人检测例子
+
+* 首先选定输入特征为82x36的灰度图片，找到两组数据样本，一组有行人(y=1)，一组没有行人(y=0)，使用神经网络或者其它的学习算法训练出模型
+
+* 对需要检测行人的原始照片，从左上角起，依次使用82x36的矩形裁剪，将得到的区域输入之前训练好的模型，判断此区域是否有行人
+
+* 将矩形框往右滑动一点，取出另外一个矩形，执行行人判断
+
+> 滑动的大小参数叫做步长(step size)，有时也称之为步幅参数(stride parameter)。<br/>
+> 步长越小，表现越好，但计算量会比较大;一般使用步长为4或者8像素
+
+* 如此重复执行，直到滑动完整张照片
+
+* 等比例放大矩形框，再执行相同的动作
+
+> 注意，此时得到的矩形，需要缩放到82x36大小后输入模型
+
+##### 文字检测
+
+> 与之前的行人检测类似，使用一堆有文字和没有文字的小矩形图片样本训练出模型<br/>
+
+![](http://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwqvvc5j20gy0aeah7.jpg)
+
+> 使用滑动窗口，检测对应矩形是否含有文字，使用不同的灰度区块来表示含有文字的概率，如下图<br/>
+
+![](http://wx1.sinaimg.cn/mw690/6a1f6674ly1fhkvwnvsm5j20lc0da754.jpg)
+
+> 展开处理（expansion operator），对于某一个白色的点，如果他的附近有白点，那么就把附近的点变成白色<br/>
+
+![](http://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwn4a4gj20lc0d2t9h.jpg)
+
+> 找出大块的白色区域，即为文字区域
+
+##### 字符切分
+
+> 使用那些图片中间为字母分隔的样本做为正样本，那些空白、或者只有一个字符的图片做为负样本，则使用这些样本训练的模型，可以正确分隔字符
+
+![](http://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwxwx46j21bm0qwds6.jpg)
+
+
+#### 人工合成数据（Artificial Data Synthesis）
+
+##### Photo OCR的样本数据合成
+
+* 使用不同的字体，放在随机的背景上面，再对这些字符做一些变形。这种方法可以得到无数的样本集合。
+
+* 使用你现有的样本数据为基础，扩大样本数量
+
+> 比如对图片做一些人工的扭曲。对于音频数据，可以加入不同的背景噪音等等
+
+#### 上限检测（Ceiling Analysis）
+
+> 判断流水线中的哪个环节值得花时间去提高
+
+> 以PhotoOCR的机器学习Pineline为例<br/>
+> 假设整个系统的估计准确率为72%<br/>
+> 如果流水线中的文字检测效果达到100%，则整个系统的估计准确率为89%<br/>
+> 如果文字检测和字符切分效果都达到100%，则整体的准确率为90%<br/>
+> 如果流水线中所有的环节效果都100%，则整体的准确率为100%
+
+> 以上可以得出，文字检测环节的提升，对整体的提升最大，所以文字检测为最值得被改善的环节
+
+##### 学习资料
+
+[课件和笔记](http://pan.baidu.com/s/1hsGETb2)
+[Octave编程作业](https://github.com/xiaochai/ml_assignment)
+
