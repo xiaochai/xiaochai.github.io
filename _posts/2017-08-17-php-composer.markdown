@@ -11,7 +11,7 @@ image-sm: http://image.phpcomposer.com/logo/phpcomposer.png
 
 为了更加系统地了解Composer，完整地阅读了官方文档，并记录在此，供后续参考。
 
-Composero为一个php的包依赖管理工具，类似于nodejs的npm和ruby的bundler。
+Composer是一个php的包依赖管理工具，类似于nodejs的npm和ruby的bundler。
 
 ### Composer安装
 
@@ -83,7 +83,9 @@ $log->error('Bar');
 
 Root包：是指你当前所工作的包，一般来说是你的项目，这个是相对于依赖包来说的
 
-##### require key
+以下为支持的配置属性
+
+##### require
 
 require包含包名称和包版本映射关系，而包名称又包含供应商名称和项目名称
 
@@ -98,6 +100,7 @@ require包含包名称和包版本映射关系，而包名称又包含供应商�
 - 稳定性标签：以@开头，例如@dev表示空的版本约束，1.0.*@beta，表示允许依赖一个不稳定的包(beta版本)
 - 明确版本引用：#<ref>，ref表示版本控制的提交编号，如git为md5，dev-master#2eb0c0978d290a1c45346a1955188929cb4e5db7
 
+<br/>
 Composer会将已经安装在系统上的平台软件包，如php本身，php扩展，系统库等，看成一个虚拟的包
 
 所以可以使用类似以下的require来约束版本号
@@ -113,13 +116,13 @@ Composer会将已经安装在系统上的平台软件包，如php本身，php扩
 }
 ```
 
-##### require-dev key
+##### require-dev
 
 这个列表是为开发或测试等目的，额外列出的依赖。可以使用\-\-no-dev跳过对require-dev依赖的安装
 
-##### autoload key
+##### autoload
 
-可以composser.json里添加以下内容，来告诉Composer新的autoload规则
+可以composer.json里添加以下内容，来告诉Composer新的autoload规则，并重新执行```composer.phar install -vvv```
 
 ```json
 {
@@ -144,20 +147,22 @@ class Math{
 }
 ```
 
+*testNs.php
+
 ```php
 <?php
 include_once "vendor/autoload.php";
 
 use \Ns1\Math;
-var_dump(Math::add(1,2));
+var_dump(Math::sum(1,2));
 ```
 
 这样autoload就会自动在与vendor同级目录下的Ns1里找到对应的\Ns1\Math类
 
 
-##### name key
+##### name
 
-只有包含了一composer.json在你的项目中，那么它就是一个包。项目与所依赖包的区别仅仅是项目没有名字。
+只要包含了composer.json在你的项目中，那么它就是一个包。项目与所依赖包的区别仅仅是项目一般没有名字。
 
 在composer.json里添加以下内容，可以为项目添加名字
 
@@ -176,13 +181,13 @@ var_dump(Math::add(1,2));
 
 ##### version
 
-不是必须的，并建议不填写，因为可以从版本库推导出版本号来
+不是必须的，并且建议不填写，因为可以从版本库推导出版本号来
 
 ##### keyword,homepage,time,license,authors,support
 
 分别表示项目的相关信息，
 
-- keyword:项目的关键字，用户搜索和过滤
+- keyword:项目的关键字，用于搜索和过滤
 - homepage:项目的主页
 - time:版本发布时间
 - license:许可协议
@@ -195,24 +200,94 @@ var_dump(Math::add(1,2));
 
 不同的类型会对应不同的处理，除了内置类型，还可以自定义类型，这就要求项目能够识别此类型，并进行对应安装
 
-##### repositories key
+##### repositories
 
-如果将之前的包提交到github，那么就可以使用respositories来指定源申明
+composer的资源库有多种类型，下面逐一介绍每一种类型的特点
+
+*composer类型*
+
+composer的默认源地址即为此类型，如下
 
 ```json
 {
-    "repositories":{
+    "repositories": [
+      {
+        "type": "composer",
+        "url":  "https://packagist.org/"
+      }
+    ]
+}
+```
+
+这种类型的源都会在网站的根路径下存放有packages.json，表示这个源的所有资源（或者为include相关的申明）
+
+如: https://packagist.org/packages.json
+
+可以使用[Satis](https://github.com/composer/satis)和[packagist](https://github.com/composer/packagist)来搭建自己的composer源
+
+*VCS类型*
+
+composer支持git、svn等多种包管理，以下以git为例
+
+```json
+{
+    "repositories":[
+      {
         "type":"vcs",
-        "url":"https://github.com/xiaochai/composer-test"
-    },
+        "url":"https://github.com/xiaochai/phplib"
+      }
+    ],
     "require":{
-        "xiaochai/composer-test":"dev-master"
+        "xiaochai/phplib":"dev-master"
     }
 }
 ```
 
-Composer的默认源地址为https://packagist.org/
+testRepo.php
 
+```php
+<?php
+include_once "vendor/autoload.php";
+use \Phplib\FileLineIterator;
+
+$t = new FileLineIterator(__DIR__ . "/testRepo.php");
+foreach($t as $k=>$v){
+    var_dump($k, $v);
+}
+```
+
+*Package自定义源*
+
+```json
+{
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "smarty/smarty",
+                "version": "3.1.7",
+                "dist": {
+                    "url": "http://www.smarty.net/files/Smarty-3.1.7.zip",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "http://smarty-php.googlecode.com/svn/",
+                    "type": "svn",
+                    "reference": "tags/Smarty_3_1_7/distribution/"
+                },
+                "autoload": {
+                    "classmap": ["libs/"]
+                }
+            }
+        }
+    ],
+    "require": {
+        "smarty/smarty": "3.1.*"
+    }
+}
+```
+
+不建议使用这种方式，因为他无法更新，除非手动修改这里的version和dist相关信息
 
 ### composer.lock锁文件
 
@@ -231,7 +306,7 @@ composer.phar update monolog/monolog [...]
 
 ##### init
 
-composer init会一步引导创建composer.json文件
+```composer.phar init```会一步引导创建composer.json文件
 
 ##### install
 
@@ -267,7 +342,27 @@ composer.phar require vendor/package:2.*
 从源中搜索依赖包 
 
 ```shell
-php composer.phar search monolog
+composer.phar search monolog
 ```
 
+##### show
 
+列出项目中依赖的包
+
+```
+composer.phar show
+```
+
+常用参数 :
+
+- \-\-installed (\-i): 列出已安装的依赖包。
+- \-\-platform (\-p): 仅列出平台软件包（PHP 与它的扩展）。
+- \-\-self (\-s): 仅列出当前项目信息。
+
+#### 总结
+
+以上为composer常见的使用方式和配置方法，后续针对性补充psr-4标准，自搭建资源库等内容
+
+参考文档
+
+[官方入门简介](http://docs.phpcomposer.com/00-intro.html)
