@@ -13,19 +13,28 @@ image-sm: /assets/images/phpunit.jpg
 
 phpunit的可执行文件为phar，直接下载并移动到PATH目录即可
 
-使用phpunit.phar --version测试是否已经成功安装
+```shell
+cd ~/bin
+wget https://phar.phpunit.de/phpunit.phar
+chmod +x phpunit.phar
+phpuni.phar --version
+```
+
+使用```phpunit.phar --version```测试是否已经成功安装(以6.4.4版本做为测试)
 
 对于使用composer管理项目依赖时，使用
+
 ```shell
-composer require --dev phpunit/phpunit ^6.3
+composer.phar require --dev phpunit/phpunit
 ```
-来声明对phpunit的依赖关系
 
-另外的两个可选组件 
+来声明对phpunit的依赖关系，执行```composer.phar install``` 之后即可在```vendor/bin```目录下的可执行的phpunit
+
+另外的两个可选组件
 
 ```shell
-composer require --dev phpunit/php-invoker: 提供超时限制的函数调用方式
-composer require --dev phpunit/dbunit: 对数据库交互方式的测试
+composer.phar require --dev phpunit/php-invoker: 提供超时限制的函数调用方式
+composer.phar require --dev phpunit/dbunit: 对数据库交互方式的测试
 ```
 
 ### 约定
@@ -37,6 +46,8 @@ composer require --dev phpunit/dbunit: 对数据库交互方式的测试
 * 测试都是命名为```test*```的公用方法。 也可以在方法的文档注释块(docblock)中使用 ```@test``` 标注将其标记为测试方法。
 
 * 在测试方法内，类似于```assertEquals()```这样的断言方法用来对实际值与预期值的匹配做出断言。
+
+~/work/phpunit/test/StackTest.php
 
 ```php
 <?php
@@ -59,6 +70,8 @@ class StackTest extends TestCase {
 ### 使用依赖
 
 使用```@depends```来表达依赖关系
+
+~/work/phpunit/test/StackTest.php
 
 ```php
 // skip others
@@ -102,7 +115,7 @@ There was 1 failure:
 1) StackTest::testEmpty
 Failed asserting that an array is not empty.
 
-/home/liqingshou/work/xiaochai/phpuint/test/StackTest.php:8
+/home/liqingshou/work/xiaochai/phpunit/test/StackTest.php:8
 
 FAILURES!
 Tests: 3, Assertions: 1, Failures: 1, Skipped: 2.
@@ -117,6 +130,8 @@ Tests: 3, Assertions: 1, Failures: 1, Skipped: 2.
 ### 数据供给器
 
 * 使用```@dataProvider```来使用数据供给器，供给器需要返回一个多维数组或者数组的迭代器，每一次迭代生成的数组都将做为参数传给消费者
+
+~/work/phpunit/test/DataTest.php
 
 ```php
 <?php
@@ -155,7 +170,7 @@ There was 1 failure:
 1) DataTest::testAdd with data set #3 (1, 1, 3)
 Failed asserting that 2 matches expected 3.
 
-/home/liqingshou/work/xiaochai/phpuint/test/DataTest.php:9
+/home/liqingshou/work/xiaochai/phpunit/test/DataTest.php:9
 
 FAILURES!
 Tests: 4, Assertions: 4, Failures: 1.
@@ -169,6 +184,8 @@ Tests: 4, Assertions: 4, Failures: 1.
 
 
 ### 对异常进行测试
+
+~/work/phpunit/test/ExceptionTest.php
 
 ```php
 <?php
@@ -210,7 +227,7 @@ class ExceptionTest extends TestCase{
 }
 ```
 
-* 使用expectException，expectExceptionCode，expectExceptionMessage，expectExceptionMessageRegExp方法来预期接下来的调用将会抛出异常
+* 使用```expectException```，```expectExceptionCode```，```expectExceptionMessage```，```expectExceptionMessageRegExp```方法来预期接下来的调用将会抛出异常
 
 * 也可以使用这些标注来代替```expectedException```，```expectedExceptionCode```，```expectedExceptionMessage```，```expectedExceptionMessageRegExp```，其中后面三个必须与第一个标注一起使用
 
@@ -219,6 +236,8 @@ class ExceptionTest extends TestCase{
 #### 对PHP错误进行测试
 
 * 默认情况下PHPUnit会将PHP的错误、警告、提示转化为异常，分别使用```PHPUnit\Framework\Error\Error```，```PHPUnit\Framework\Error\Warning```，```PHPUnit\Framework\Error\Notice```来代表
+
+~/work/phpunit/test/ExceptionTest.php
 
 ```php
 <?php
@@ -243,6 +262,8 @@ class ExceptionTest extends TestCase{
 * todo：对于```PHPUnit\Framework\Error\Error```和Fatal的测试不符合预期，后续补充
 
 ### 对输出进行测试
+
+~/work/phpunit/test/OutputTest.php
 
 ```php
 <?php
@@ -274,13 +295,15 @@ class OutputTest extends TestCase{
 }
 ```
 
-* 以上演示了对输入进行测试处理，包括以下函数```expectOutputString```，```expectOutputRegex```，```setOutputCallback```，```getActualOutput```
+* 以上演示了对输出进行测试处理，包括以下函数```expectOutputString```，```expectOutputRegex```，```setOutputCallback```，```getActualOutput```
 
 ### 基境(fixture)
 
 * 在编写测试时，最费时的部分之一是编写代码来将整个场景设置成某个已知的状态，并在测试结束后将其复原到初始状态。这个已知的状态称为测试的基境(fixture)
 
 * PHPUnit在调用测试用例的各个时机提供了不同的方法来创建基境
+
+~/work/phpunit/test/TemplateMethodsTest.php
 
 ```php
 <?php
@@ -352,7 +375,7 @@ There was 1 failure:
 1) TemplateMethodsTest::testTwo
 Failed asserting that false is true.
 
-/home/liqingshou/work/xiaochai/phpuint/test/TemplateMethodsTest.php:22
+/home/liqingshou/work/xiaochai/phpunit/test/TemplateMethodsTest.php:22
 
 FAILURES!
 Tests: 2, Assertions: 2, Failures: 1.
@@ -362,9 +385,9 @@ Tests: 2, Assertions: 2, Failures: 1.
 
 ### 组织测试
 
-* 在PHPUnit命令后跟随目录时，则会寻找*Test.php的文件
+* 在PHPUnit命令后跟随目录时，则会寻找对应目录下的*Test.php的文件
 
-* 使用--filter来指明需要测试的方法，例如
+* 使用```--filter```来指明需要测试的方法，例如
 
 ```shell
 $ phpunit.phar test/OutputTest.php --debug --filter OutputTest::testGet
@@ -413,6 +436,8 @@ OK (1 test, 1 assertion)
 
 * 有风险的测试将会标记成R，例子如下
 
+~/work/phpunit/test/RiskTest.php
+
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -420,7 +445,7 @@ class RiskTest extends TestCase{
 	/**
 	 * 无任何断言，包括预期的标注
 	 * 此各类型默认开启，可以通过--dont-report-useless-tests选项来关闭
-	 * 著使用<phpunit bootstrap="./autoload.php" beStrictAboutTestsThatDoNotTestAnything="false">来关闭
+	 * 或使用<phpunit bootstrap="./autoload.php" beStrictAboutTestsThatDoNotTestAnything="false">来关闭
 	 */
 	public function testNothing(){
 	}
@@ -428,7 +453,6 @@ class RiskTest extends TestCase{
 	/**
 	 * 意外的代码覆盖
 	 * @todo 还没有理解意思
-	 *
 	 */
 	public function testCoverage(){
 		$this->assertTrue(true);
@@ -446,7 +470,7 @@ class RiskTest extends TestCase{
 
 	/**
 	 * @todo 需要安装PHP_Invoker包并且pcntl扩展才可用
-	 * 执行超地指定时间
+	 * 执行超过指定时间
 	 * 通过--enforce-time-limit或者beStrictAboutTestSize="true"来开启
 	 * 如果执行时间超过1秒，则视为Risk，可通过标注@large或者@media来设置这个时间为10秒、60秒
 	 * 默认为@small超时为1秒
@@ -470,6 +494,8 @@ class RiskTest extends TestCase{
 ```
 
 ### 未完成的测试与跳过的测试
+
+~/work/phpunit/test/IncompleteTest.php
 
 ```php
 <?php
