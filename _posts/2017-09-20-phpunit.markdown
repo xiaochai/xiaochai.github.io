@@ -14,11 +14,11 @@ image-sm: /assets/images/phpunit.jpg
 
 而且在需要重构一个项目或者修改添加新功能时，有单元测试的项目会更加地得心应手。
 
-作为php测试的重要组件，以下介绍phpunit的基本用法。
+作为php测试的重要组件，以下介绍PHPUnit的基本用法。
 
 ### 下载安装
 
-phpunit的可执行文件为phar，直接下载并移动到PATH目录即可：
+PHPUnit的可执行文件为phar，直接下载并移动到PATH目录即可：
 
 ```shell
 cd ~/bin
@@ -35,7 +35,7 @@ phpuni.phar --version
 composer.phar require --dev phpunit/phpunit
 ```
 
-来声明对phpunit的依赖关系，执行```composer.phar install``` 之后即可在```vendor/bin```目录下找到可执行的phpunit。
+来声明对PHPUnit的依赖关系，执行```composer.phar install``` 之后即可在```vendor/bin```目录下找到可执行的phpunit。
 
 另外的一些可选组件：
 
@@ -1003,7 +1003,7 @@ class HardObject{
 }
 ```
 
-对于桩件，phpunit的实现方式为继承了原来的类，重新实现了需要打桩的方法，
+对于桩件，PHPUnit的实现方式为继承了原来的类，重新实现了需要打桩的方法，
 
 所以对于final类或者类中的private, static, final方法，都无法上桩。
 
