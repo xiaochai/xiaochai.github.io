@@ -8,10 +8,17 @@ description:
 image: /assets/images/phpunit.jpg
 image-sm: /assets/images/phpunit.jpg
 ---
+单元测试在日常的编程中占有十分重要的地位，但大部分公司为了敏捷开发的效率要求，往往都忽略了测试用例的编写，而把这部分工作丢到了QA的身上。
+
+但做为一个开发者，测试代码先行会带来可观的收益，不仅提高了代码的质量，而且还提供了外部使用者如何使用对应接口的例子乃至文档。
+
+而且在需要重构一个项目或者修改添加新功能时，有单元测试的项目会更加地得心应手。
+
+作为php测试的重要组件，以下介绍phpunit的基本用法。
 
 ### 下载安装
 
-phpunit的可执行文件为phar，直接下载并移动到PATH目录即可
+phpunit的可执行文件为phar，直接下载并移动到PATH目录即可：
 
 ```shell
 cd ~/bin
@@ -20,7 +27,7 @@ chmod +x phpunit.phar
 phpuni.phar --version
 ```
 
-使用```phpunit.phar --version```测试是否已经成功安装(以6.4.4版本做为测试)
+使用```phpunit.phar --version```测试是否已经成功安装(以6.4.4版本做为测试)。
 
 对于使用composer管理项目依赖时，使用
 
@@ -28,22 +35,23 @@ phpuni.phar --version
 composer.phar require --dev phpunit/phpunit
 ```
 
-来声明对phpunit的依赖关系，执行```composer.phar install``` 之后即可在```vendor/bin```目录下的可执行的phpunit
+来声明对phpunit的依赖关系，执行```composer.phar install``` 之后即可在```vendor/bin```目录下找到可执行的phpunit。
 
-另外的两个可选组件
+另外的一些可选组件：
 
 ```shell
 composer.phar require --dev phpunit/php-invoker: 提供超时限制的函数调用方式
-composer.phar require --dev phpunit/dbunit: 对数据库交互方式的测试
+composer.phar require --dev phpunit/dbunit: 对数据库交互的测试
+composer.phar require --dev phpunit/php-code-coverage: 代码覆盖率统计的依赖
 ```
 
 ### 约定
 
-* 针对类```Class```的测试写在类```ClassTest```中。
+* 针对类```Class```的测试写在类```ClassTest```中；
 
-* ```ClassTest```(通常)继承自```PHPUnit\Framework\TestCase```。
+* ```ClassTest```(通常)继承自```PHPUnit\Framework\TestCase```；
 
-* 测试都是命名为```test*```的公用方法。 也可以在方法的文档注释块(docblock)中使用 ```@test``` 标注将其标记为测试方法。
+* 测试都是命名为```test*```的公用方法。 也可以在方法的文档注释块(docblock)中使用 ```@test``` 标注将其标记为测试方法；
 
 * 在测试方法内，类似于```assertEquals()```这样的断言方法用来对实际值与预期值的匹配做出断言。
 
@@ -74,6 +82,7 @@ class StackTest extends TestCase {
 ~/work/phpunit/test/StackTest.php
 
 ```php
+<?php
 // skip others
 	public function testEmpty(){
 		$stack = [];
@@ -99,9 +108,9 @@ class StackTest extends TestCase {
 	}
 ```
 
-* 注意```@depends```中的生产者如果返回一个对象，则传给消费者的为对象的引用，如果需要传递副本，使用```@depends clone```
+* 注意```@depends```中的生产者如果返回一个对象，则传给消费者的为对象的引用，如果需要传递副本，使用```@depends clone```；
 
-* 如果生产者测试失败了，那么依赖他的消费都将会跳过，比如testEmpty失败了，那么将产生以下输出
+* 如果生产者测试失败了，那么依赖他的消费都将会跳过，比如testEmpty失败了，那么将产生以下输出：
 
 ```
 PHPUnit 6.3.0 by Sebastian Bergmann and contributors.
@@ -121,15 +130,15 @@ FAILURES!
 Tests: 3, Assertions: 1, Failures: 1, Skipped: 2.
 ```
 
-* 其中第二行内容中的F表示Failed，S表示Skipped，如果是通过，则使用符号.表示，从最后一行结论可以看出，三个测试，失败了1个，跳过两个
+* 其中第二行内容中的F表示Failed，S表示Skipped，如果是通过，则使用符号.表示，从最后一行结论可以看出，三个测试，失败了1个，跳过两个；
 
-* 可以使用多个```@depends```标注来声明多个依赖，生产者的返回值将依次传消费者的参数
+* 可以使用多个```@depends```标注来声明多个依赖，生产者的返回值将依次传给消费者做为参数；
 
-* PHPUnit的执行顺序是函数出现的顺序，如果依赖在消费都之后，则会报incomplete，并会跳过对应的测试
+* PHPUnit的执行顺序是函数出现的顺序，如果依赖在消费者之后，则会报incomplete，并会跳过对应的测试。
 
 ### 数据供给器
 
-* 使用```@dataProvider```来使用数据供给器，供给器需要返回一个多维数组或者数组的迭代器，每一次迭代生成的数组都将做为参数传给消费者
+* 使用```@dataProvider```来使用数据供给器，供给器需要返回一个多维数组或者数组的迭代器，每一次迭代生成的数组都将做为参数传给消费者：
 
 ~/work/phpunit/test/DataTest.php
 
@@ -156,7 +165,7 @@ class DataTest extends TestCase{
 }
 ```
 
-* 以上返回如下信息
+* 以上测试返回如下信息：
 
 ```
 PHPUnit 6.3.0 by Sebastian Bergmann and contributors.
@@ -176,11 +185,11 @@ FAILURES!
 Tests: 4, Assertions: 4, Failures: 1.
 ```
 
-* 每一次返回的值可以包含一个键，用来说明本次测试用例，这样在报错的时候可以更详细
+* 每一次返回的值可以包含一个键，用来说明本次测试用例，这样在报错的时候可以更详细；
 
-* 如果一个消费者同时有```@depends```和```@dataProvider```，那么数据供给器的数据优先传入参数
+* 如果一个消费者同时有```@depends```和```@dataProvider```，那么数据供给器的数据优先传入参数；
 
-* 注意：如果一个生产者被多次依赖，那么，他只会执行一次
+* 注意：如果一个生产者被多次依赖，那么，他只会执行一次。
 
 
 ### 对异常进行测试
@@ -227,15 +236,15 @@ class ExceptionTest extends TestCase{
 }
 ```
 
-* 使用```expectException```，```expectExceptionCode```，```expectExceptionMessage```，```expectExceptionMessageRegExp```方法来预期接下来的调用将会抛出异常
+* 使用```expectException```，```expectExceptionCode```，```expectExceptionMessage```，```expectExceptionMessageRegExp```方法来预期接下来的调用将会抛出异常；
 
-* 也可以使用这些标注来代替```expectedException```，```expectedExceptionCode```，```expectedExceptionMessage```，```expectedExceptionMessageRegExp```，其中后面三个必须与第一个标注一起使用
+* 也可以使用这些标注来代替```expectedException```，```expectedExceptionCode```，```expectedExceptionMessage```，```expectedExceptionMessageRegExp```，其中后面三个必须与第一个标注一起使用；
 
-* 标注时，可使用常量代表，例如```@expectedExceptionCode MyClass::ERRORCODE```
+* 标注时，可使用常量代表，例如```@expectedExceptionCode MyClass::ERRORCODE```;
 
 #### 对PHP错误进行测试
 
-* 默认情况下PHPUnit会将PHP的错误、警告、提示转化为异常，分别使用```PHPUnit\Framework\Error\Error```，```PHPUnit\Framework\Error\Warning```，```PHPUnit\Framework\Error\Notice```来代表
+* 默认情况下PHPUnit会将PHP的错误、警告、提示转化为异常，分别使用```PHPUnit\Framework\Error\Error```，```PHPUnit\Framework\Error\Warning```，```PHPUnit\Framework\Error\Notice```来代表：
 
 ~/work/phpunit/test/ExceptionTest.php
 
@@ -259,7 +268,7 @@ class ExceptionTest extends TestCase{
 	}
 ```
 
-* todo：对于```PHPUnit\Framework\Error\Error```和Fatal的测试不符合预期，后续补充
+* todo：对于```PHPUnit\Framework\Error\Error```和Fatal的测试不符合预期，后续补充。
 
 ### 对输出进行测试
 
@@ -295,13 +304,13 @@ class OutputTest extends TestCase{
 }
 ```
 
-* 以上演示了对输出进行测试处理，包括以下函数```expectOutputString```，```expectOutputRegex```，```setOutputCallback```，```getActualOutput```
+* 以上演示了对输出进行测试处理，包括以下函数```expectOutputString```，```expectOutputRegex```，```setOutputCallback```，```getActualOutput```。
 
 ### 基境(fixture)
 
-* 在编写测试时，最费时的部分之一是编写代码来将整个场景设置成某个已知的状态，并在测试结束后将其复原到初始状态。这个已知的状态称为测试的基境(fixture)
+* 在编写测试时，最费时的部分之一是编写代码来将整个场景设置成某个已知的状态，并在测试结束后将其复原到初始状态。这个已知的状态称为测试的基境(fixture)；
 
-* PHPUnit在调用测试用例的各个时机提供了不同的方法来创建基境
+* PHPUnit在调用测试用例的各个时机提供了不同的方法来创建基境：
 
 ~/work/phpunit/test/TemplateMethodsTest.php
 
@@ -381,13 +390,13 @@ FAILURES!
 Tests: 2, Assertions: 2, Failures: 1.
 ```
 
-* 多个测试类之间需要共享基境的情况一般是由于设计的缺陷导致的（除了像数据库资源等的连接操作）
+* 多个测试类之间需要共享基境的情况一般是由于设计的缺陷导致的（除了像数据库资源连接等操作）。
 
 ### 组织测试
 
-* 在PHPUnit命令后跟随目录时，则会寻找对应目录下的*Test.php的文件
+* 在PHPUnit命令后跟随目录时，则会寻找对应目录下的*Test.php的文件；
 
-* 使用```--filter```来指明需要测试的方法，例如
+* 使用```--filter```来指明需要测试的方法，例如：
 
 ```shell
 $ phpunit.phar test/OutputTest.php --debug --filter OutputTest::testGet
@@ -405,9 +414,9 @@ OK (1 test, 1 assertion)
 
 #### 使用XML配置文件来编排测试顺序
 
-* PHPUnit 会优先从当前目录查找```phpunit.xml```或者```phpunit.xml.dist```，并读取找到的配置文件
+* PHPUnit 会优先从当前目录查找```phpunit.xml```或者```phpunit.xml.dist```，并读取找到的配置文件。
 
-* XML配置文件的例子
+* XML配置文件的例子：
 
 ```xml
 <phpunit bootstrap="./autoload.php">
@@ -419,7 +428,7 @@ OK (1 test, 1 assertion)
 </phpunit>
 ```
 
-* 可以在xml文件中指定运行测试用例的顺序
+* 可以在xml文件中指定运行测试用例的顺序：
 
 ```xml
 <phpunit bootstrap="./autoload.php">
@@ -434,7 +443,7 @@ OK (1 test, 1 assertion)
 
 ### 有风险的测试
 
-* 有风险的测试将会标记成R，例子如下
+* 有风险的测试将会标记成R，例子如下：
 
 ~/work/phpunit/test/RiskTest.php
 
@@ -532,11 +541,27 @@ class IncompleteTest extends TestCase{
 
 ### 数据库测试
 
+#### 四个阶段
+
+* 清理数据库
+
+> 由于不确定在测试前数据库中存在哪些数据，所以PHPUnit总是在开始时在指定的表上执行TRUNCATE
+
+* 建立基境(fixture)
+
+> PHPUnit随后将迭代所有指定的基境数据行并将其插入到对应的表里
+
+* 运行测试、验证结果、并拆除基境
+
+> 随后执行测试，并可使用assertDataSetsEqual()等断言来验证结果
+
+* 注意，不包括数据库构架，DDL(Data Definition Language)，诸如建表，触发器等的操作和建立，需要在测试之前使用其它方式预先建立完善。
+
 #### 准备阶段
 
 * 理解[php Trait](http://php.net/manual/zh/language.oop5.traits.php)
 
-* 准备DbUnit。目前可以通过composer依赖引入，或者直接下载DbUnit的方式使用DbUnit
+* 准备DbUnit。目前可以通过composer依赖引入，或者直接下载DbUnit的方式使用DbUnit：
 
 ```shell
 mkdir test/tools
@@ -545,7 +570,7 @@ wget https://phar.phpunit.de/dbunit.phar -O test/tools/dbunit.phar
 修改phpunit.xml，在phpunit节里加入 extensionsDirectory="test/tools"
 ```
 
-* 创建测试数据库表
+* 创建测试数据库表：
 
 ```sql
 create database test;
@@ -558,7 +583,7 @@ create table `test` (
 
 ```
 
-* 准备数据文件test/users.csv
+* 准备数据文件test/users.csv：
 
 ```csv
 d,name,astro
@@ -566,6 +591,839 @@ d,name,astro
 2,"soso", "soso2501@gmail.com"
 ```
 
-#### 基本测试
+#### 实例
 
+基本以上准备工作，以下为数据库测试样例：
+
+~/work/phpunit/test/DbUnitTest.php
+
+```php
+<?php
+use PHPUnit\Framework\TestCase;
+use PHPUnit\DbUnit\TestCaseTrait;
+use PHPUnit\DbUnit\DataSet\CsvDataSet;
+
+class DbUnitTest extends TestCase{
+	use TestCaseTrait;
+	static private $pdo = null;
+	private $conn = null;
+	public function getConnection(){
+		if (self::$pdo == null) {
+			self::$pdo = new PDO( $GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
+		}
+		$this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
+		return $this->conn;
+	}
+	public function getDataSet(){
+		$dataSet = new CsvDataSet();
+		$dataSet->addTable('test', dirname(__FILE__)."/users.csv");
+		return $dataSet;
+	}
+
+	public function testData(){
+		$dataSet = new CsvDataSet();
+		$dataSet->addTable('test', dirname(__FILE__)."/users.csv");
+		$queryTable = $this->getConnection()->createQueryTable(
+			    'test', 'select * from test'
+			);
+		$this->assertTablesEqual($dataSet->getTable("test"), $queryTable);
+	}
+}
+```
+
+TestCaseTrait定义了两个抽象方法getConnection()和getDataSet():
+
+* getConnection()
+
+> 设置数据库的连接，PDO对象为连接各种异构数据库提供了统一的接口层，getConnection()返回类型为IDatabaseConnection，可使用createDefaultDBConnection创建，第二个参数为数据库名
+
+* getDataSet()
+
+> 这个方法定义了数据库的基境，这其中有两个概念：DataSet(IDataSet)和DataTable(IDataTable)，样例中使用CsvDataSet创建一个数据集做为test表的基境
+
+以上的数据库配置使用配置文件phpunit.xml的形式给出：
+
+~/work/phpunit/phpunit.xml
+
+```xml
+<phpunit bootstrap="./autoload.php" beStrictAboutTestsThatDoNotTestAnything="false" extensionsDirectory="test/tools">
+	<testsuites>
+		<testsuite name="money">
+			<file>test/DbUnitTest.php</file>
+		</testsuite>
+	</testsuites>
+	<php>
+		<var name="DB_DSN" value="mysql:dbname=test;host=localhost" />
+		<var name="DB_USER" value="root" />
+		<var name="DB_PASSWD" value="root" />
+		<var name="DB_DBNAME" value="test" />
+	</php>
+</phpunit>
+```
+
+这样即可以灵活地配置数据库地址，也可以方便地使用不同的配置文件为不同环境做测试：
+
+```
+phpunit.phar --configuration phpunit-test.xml test/DbUnitTestExt.php
+```
+
+#### 数据集(DataSet)和数据表(DataTable)
+
+这两种数据的抽象使得不同源的数据之间可以相互操作，比较。
+
+创建DataSet有多种方式：
+
+* 从文件中创建
+
+> createFlatXmlDataSet, createXmlDataSet, createMySQLXMLDataSet, YamlDataSet, CsvDataSet<br/>
+> 这些方法都接受一个文件名做为参数，从指定格式的文件中创建数据集<br/>
+> 之前的例子中从csv文件中创建了一个DataSet
+
+* 从PHP数组创建
+
+> PHPUnit并没有提供一个直接从数组创建DataSet的类，但可以通过实现AbstractDataSet接口自行实现：
+
+~/work/phpunit/test/DbUnitTest.php
+
+```php
+<?php
+// ...skip other
+use PHPUnit\DbUnit\DataSet\AbstractDataSet;
+use PHPUnit\DbUnit\DataSet\DefaultTable;
+use PHPUnit\DbUnit\DataSet\DefaultTableMetaData;
+use PHPUnit\DbUnit\DataSet\DefaultTableIterator;
+
+// 自定义DataSet类
+class MyApp_DbUnit_ArrayDataSet extends AbstractDataSet {
+	/**
+	 * @var array
+	 */
+	protected $tables = array();
+
+	/**
+	 * @param array $data
+	 */
+	public function __construct(array $data){
+		foreach ($data as $tableName => $rows) {
+			$columns = array();
+			if (isset($rows[0])) {
+				$columns = array_keys($rows[0]);
+			}
+
+			$metaData = new DefaultTableMetaData($tableName, $columns);
+			$table = new DefaultTable($metaData);
+
+			foreach ($rows AS $row) {
+				$table->addRow($row);
+			}
+			$this->tables[$tableName] = $table;
+		}
+	}
+
+	protected function createIterator($reverse = FALSE)
+	{
+		return new DefaultTableIterator($this->tables, $reverse);
+	}
+
+	public function getTable($tableName)
+	{
+		if (!isset($this->tables[$tableName])) {
+			throw new InvalidArgumentException("$tableName is not a table in the current database.");
+		}
+		return $this->tables[$tableName];
+	}
+}
+```
+
+严格意义上，只要实现IDataSet接口即可，但IDataSet有5个抽象方法：
+
+```php
+<?php
+public function getTableNames();
+public function getTableMetaData($tableName);
+public function getTable($tableName);
+public function assertEquals(PHPUnit_Extensions_Database_DataSet_IDataSet $other);
+public function getReverseIterator();
+```
+
+而AbstractDataSet继承了IDataSet，并提供了更高一层的抽象，AbstractDataSet只要实现如下接口即可：
+
+```
+abstract protected function createIterator($reverse = false);
+```
+
+上例子中的getTable方法重载了AbstractDataSet中的实现，目的只是为了提高效率，把这个方法去掉也能跑得通。
+
+* 从数据库查询中创建(Query DataSet)
+
+> 使用QueryDataSet()类可以从数据库查询中创建数据集，也可以getConnection返回的对象提供的createQueryTable方法来创建数据集（如之前例子中给出）。<br/>
+> 以下例子中进行查询数据集和自定义数组数据集进行比较：
+
+~/work/phpunit/test/DbUnitTest.php
+
+```php
+<?php
+// skip other
+use PHPUnit\DbUnit\DataSet\QueryDataSet;
+
+class DbUnitExtTest extends TestCase{
+//skip other
+
+	public function testArrayAndQuery() {
+		$arrayDataSet = new MyApp_DbUnit_ArrayDataSet(array(
+			"test" => array(
+				array(
+					"id" => 1,
+					"name" => "liqingshou",
+					"astro" => "hello world"
+				),
+				array(
+					"id" => 2,
+					"name" => "soso",
+					"astro" => "soso2501@gmail.com"
+			),
+		)));
+		$queryDataSet = new QueryDataSet($this->getConnection());
+		$queryDataSet->addTable("test", "select * from test");
+		$this->assertTablesEqual($arrayDataSet->getTable("test"), $queryDataSet->getTable("test"));
+	}
+}
+```
+
+注意，assertTablesEqual进行两个ITable比较时，包括表名在内的数据都会比较，所以之前例子中如果把其中一个数据集的表名test改成其它的，则判断失败：
+
+```
+PHPUnit 6.4.4 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 7.0.22-0ubuntu0.16.04.1
+Configuration: /home/liqingshou/work/phpunit/phpunit.xml
+Extension:     phpunit/dbunit 3.0.0
+
+.F                                                                  2 / 2 (100%)
+
+Time: 154 ms, Memory: 8.00MB
+
+There was 1 failure:
+
+1) DbUnitExtTest::testArrayAndQuery
+Failed asserting that
++----------------------+----------------------+----------------------+
+| xxx                                                                |
++----------------------+----------------------+----------------------+
+|          id          |         name         |        astro         |
++----------------------+----------------------+----------------------+
+|          1           |      liqingshou      |     hello world      |
++----------------------+----------------------+----------------------+
+|          2           |         soso         |  soso2501@gmail.com  |
++----------------------+----------------------+----------------------+
+
+ is equal to expected
++----------------------+----------------------+----------------------+
+| test                                                               |
++----------------------+----------------------+----------------------+
+|          id          |         name         |        astro         |
++----------------------+----------------------+----------------------+
+|          1           |      liqingshou      |     hello world      |
++----------------------+----------------------+----------------------+
+|          2           |         soso         |  soso2501@gmail.com  |
++----------------------+----------------------+----------------------+
+
+.
+
+/home/liqingshou/work/phpunit/test/DbUnitTest.php:54
+
+FAILURES!
+Tests: 2, Assertions: 2, Failures: 1.
+```
+
+* 数据库数据集
+
+> getConnection()返回的对象不仅提供了之前说的createQueryTable()方法，还提供createDataSet(Array $tableNames = NULL)方法<br/>
+> 他通过指定表名集合返回数据库中这些表的所有数据的数据集。
+
+* 替换数据集(Replacement DataSet)
+
+> 在涉及到时间，系统参数等需要依据运行环境确认的数据库数据，在之前使用文件的数据集中无法实现<br/>
+> 但可以使用替换数据集间接实现：
+
+~/work/phpunit/test/DbUnitTest.php
+
+```php
+<?php
+use PHPUnit\DbUnit\DataSet\ReplacementDataSet;
+
+// skip other
+	public function testReplace(){
+		$dataSet = new CsvDataSet();
+		$dataSet->addTable('test', dirname(__FILE__)."/usersWithReplace.csv");
+		$rds = new ReplacementDataSet($dataSet);
+		$rds->addFullReplacement('##NAME##', "soso");
+		$dbDataSet = $this->getConnection()->createDataSet(array("test"));
+		$this->assertTablesEqual($dbDataSet->getTable("test"), $rds->getTable("test"));
+	}
+```
+
+~/work/phpunit/test/usersWithReplace.csv
+
+```csv
+id,name,astro
+1,"liqingshou","hello world"
+2,"##NAME##", "soso2501@gmail.com"
+```
+
+* 数据集筛选器(DataSet Filter)
+
+> 可筛选列，子集等：
+
+~/work/phpunit/test/DbUnitTest.php
+
+```php
+<?php
+use PHPUnit\DbUnit\DataSet\Filter;
+//skip other 
+
+	public function testFilter(){
+		$dbDataSet = $this->getConnection()->createDataSet(array("test"));
+		$filter = new Filter($dbDataSet);
+		$filter->setIncludeColumnsForTable("test", array("id"));
+
+		$queryDataSet = new QueryDataSet($this->getConnection());
+		$queryDataSet->addTable("test", "select id from test");
+
+		$this->assertTablesEqual($queryDataSet->getTable("test"), $filter->getTable("test"));
+	}
+```
+
+* 组合数据集
+
+> 使用多个DataSet组合成1个DataSet：
+
+~/work/phpunit/test/DbUnitTest.php
+
+```php
+<?php
+use PHPUnit\DbUnit\DataSet\CompositeDataSet;
+//skip other
+	public function testComposite(){
+		$composite = new CompositeDataSet();
+		$composite->addDataSet(new MyApp_DbUnit_ArrayDataSet(array(
+			"test" => array(
+				array(
+					"id" => 1,
+					"name" => "liqingshou",
+					"astro" => "hello world"
+				)
+		))));
+		$composite->addDataSet(new MyApp_DbUnit_ArrayDataSet(array(
+			"test" => array(
+				array(
+					"id" => 2,
+					"name" => "soso",
+					"astro" => "soso2501@gmail.com"
+			),
+		))));
+		$dataSet = new CsvDataSet();
+		$dataSet->addTable('test', dirname(__FILE__)."/users.csv");
+		$this->assertTablesEqual($composite->getTable("test"), $dataSet->getTable("test"));
+	}
+```
+
+#### TableSet的自定义实现
+
+只要实现了ITable的抽象接口，即为可用的TableSet：
+
+```php
+<?php
+public function getTableMetaData();
+public function getRowCount();
+public function getValue($row, $column);
+public function getRow($row);
+public function assertEquals(PHPUnit_Extensions_Database_DataSet_ITable $other);
+```
+
+之前用到的assertTablesEqual接收任何实现了ITable的对象
+
+与之对应assertDataSetsEqual接收任何实现了IDataSet的对象
+
+#### 数据库连接提供的方法
+
+> $this->getConnection会返回一个IDatabaseConnection的接口实现对象，此接口提供了以下这些方法
+
+```php
+<?php
+public function createDataSet(Array $tableNames = NULL);
+public function createQueryTable($resultName, $sql);
+public function getRowCount($tableName, $whereClause = NULL);
+```
+
+除了getRowCount，其它的方法都在之前的例子中出现了，以下例子重温一下：
+
+~/work/phpunit/test/DbUnitTest.php
+
+```php
+<?php
+//skip other
+
+	public function testConnection(){
+		$con = $this->getConnection();
+		$this->assertEquals($con->getRowCount("test", "id=1"), 1);
+		$dataSet = new CsvDataSet();
+		$dataSet->addTable('test', dirname(__FILE__)."/users.csv");
+		$this->assertDataSetsEqual($con->createDataSet(), $dataSet);
+		$this->assertTablesEqual($con->createQueryTable("test", "select * from test"), $dataSet->getTable("test"));
+	}
+```
+
+### 测试替身
+
+#### 桩件
+
+将对象替换成可返回配置值的测试替身的实践方法叫做上桩(stubbing)，这个替身称为桩件(stub)。
+
+使用桩件来替换实际情况中无法控制的对象或者组件，可以提高测试的效率和覆盖率。
+
+~/work/phpunit/test/MockTest.php
+
+```php
+<?php
+use PHPUnit\Framework\TestCase;
+
+class MockTest extends TestCase{
+	public function testStub(){
+		$stub = $this->createMock(HardObject::class);
+		$stub->method('hardJob')->willReturn("YES");
+		$this->assertEquals($stub->hardJob(), "YES");
+	}
+}
+
+class HardObject{
+	function hardJob(){
+		return "NO";
+	}
+}
+```
+
+对于桩件，phpunit的实现方式为继承了原来的类，重新实现了需要打桩的方法，
+
+所以对于final类或者类中的private, static, final方法，都无法上桩。
+
+上例中如果HardObject有method方法，也会失败，需要使用```$stub->expects($this- >any())->method('doSomething')->willReturn('foo');```来实现打桩。
+
+willReturn方法是will($this->returnValue($value))的简化形式，will方法还有其它的用途，支持更加丰富：
+
+~/work/phpunit/test/MockTest.php
+
+```php
+<?php
+class MockTest extends TestCase{
+//skip other
+	public function testReturn(){
+		$stub = $this->createMock(HardObject::class);
+		// 永远返回第一个参数值
+		$stub->method("hardJob")->will($this->returnArgument(0));
+		$this->assertEquals($stub->hardJob("OTHER"), "OTHER");
+
+		// 返回桩件本身
+		$stub1 = $this->createMock(HardObject::class);
+		$stub1->method("hardJob")->will($this->returnSelf());
+		$this->assertSame($stub1->hardJob(), $stub1);
+
+		// 定义对应参数对应返回值，map数组中每一组的最后一个值为返回值，前面的值都为参数
+		$map = [
+			["a", "b", "c", "d"],
+			["e", "f", "g", "h"],
+		];
+		$stub2 = $this->createMock(HardObject::class);
+		$stub2->method("hardJob")->will($this->returnValueMap($map));
+		$this->assertEquals($stub2->hardJob("a", "b", "c"), "d");
+		$this->assertEquals($stub2->hardJob("e", "f", "g"), "h");
+
+
+		// 将函数指定到另外一个函数
+		$stub3 = $this->createMock(HardObject::class);
+		$stub3->method("hardJob")->will($this->returnCallback("otherFunc"));
+		// 实际执行了otherFunc("OK")
+		$this->assertEquals($stub3->hardJob("OK"), "OTHER:OK");
+
+		// 每次调用依次返回给定的数组值
+		$stub4 = $this->createMock(HardObject::class);
+		$stub4->method("hardJob")->will($this->onConsecutiveCalls("a", 1, "tt", "YES"));
+		$this->assertEquals($stub4->hardJob(), "a");
+		$this->assertEquals($stub4->hardJob(), 1);
+		$this->assertEquals($stub4->hardJob(), "tt");
+		$this->assertEquals($stub4->hardJob(), "YES");
+
+		// 每次调用依次返回给定的数组值
+		$stub5 = $this->createMock(HardObject::class);
+		$stub5->method("hardJob")->will($this->throwException(new Exception("", 1111)));
+		try{
+			$stub5->hardJob();
+		}catch(Exception $e){}
+		$this->assertEquals($e->getCode(), 1111);
+	}
+}
+
+function otherFunc($a){
+	return "OTHER:$a";
+}
+```
+
+#### 仿件对象(Mock Object)
+
+将对象替换为能验证预期行为(例如断言某个方法必会被调用)的测试替身的实践方法称为模仿(mocking)。
+
+与桩件不同，仿件更倾向于验证预期的情况，而不仅仅是替换原对象的一些行为。
+
+以下以观察者模式来说明：
+
+```php
+<?php
+class MockTest extends TestCase{
+// skip other
+	public function testMock(){
+		// 为 Observer 类建立仿件对象
+		// 如果不调用setMethods方法的话，默认所有的方法都会被模仿，而调用了之后，其它的方法保留原来的功能
+		$observer = $this->getMockBuilder(Observer::class)->/*setMethods(["update"])->*/getMock();
+		// 预期一个update函数只调用一次(如果多次可以用$this->exactly(2))，并以something做为参数
+		$observer->expects($this->once())->method("update")->with($this->equalTo("something"));
+
+		$subject = new Subject("My subject");
+		$subject->attach($observer);
+		$subject->doSomething();
+
+		// 这里的with可以换成withConsecutive，他接收多个参数，每个参数为数组，即with的参数，表示多个可能的值
+		// with的第三个参数$this->anything()表示任意，也可以替换成更复杂的回调函数验证方式
+		// $this->callback(function($subject){ return is_callable([$subject, 'getName']) && $subject->getName() == 'My subject';})
+		$observer->expects($this->once())->method("reportError")->with($this->greaterThan(0), $this->stringContains("Something"), $this->anything());
+		$subject->doSomethingBad();
+	}
+}
+
+class Subject{
+	protected $observers = [];
+	protected $name;
+	public function __construct($name){
+		$this->name = $name;
+	}
+	public function getName(){
+		return $this->name;
+	}
+	public function attach(Observer $observer){
+		$this->observers[] = $observer;
+	}
+	public function doSomething(){
+		// 做点什么 // ...
+		// 通知观察者发生了些什么
+		$this->notify('something');
+	}
+	public function doSomethingBad(){
+		foreach ($this->observers as $observer) {
+			$observer->reportError(42, 'Something bad happened', $this);
+		}
+	}
+	protected function notify($argument){
+		foreach ($this->observers as $observer) {
+			$observer->update($argument);
+		}
+	}
+}
+
+class Observer
+{
+	public function update($argument){
+		// 做点什么。
+	}
+	public function reportError($errorCode, $errorMessage, Subject $subject){
+		// 做点什么。
+	}
+}
+```
+
+方法约束的匹配器除了once, exactly外，还有any, never, at这三个匹配器。
+
+仿件生成器getMockBuilder($type)支持链式调用，可以使用以下方法：
+
+> setMethods(array $methods) 可以在仿件生成器对象上调用，来指定哪些方法将被替换为可配置的测试替身。其他方法的行为不会有所改变。如果调用 setMethods(null)，那么没有方法会被替换。<br/>
+> setConstructorArgs(array $args) 可用于向原版类的构造函数(默认情况下不会被替换为伪实现)提供参数数组。<br/>
+> setMockClassName($name)可用于指定生成的测试替身类的类名。<br/>
+> disableOriginalConstructor()可用于禁用对原版类的构造方法的调用。<br/>
+> disableOriginalClone()可用于禁用对原版类的克隆方法的调用。<br/>
+> disableAutoload()可用于在测试替身类的生成期间禁用__autoload()。
+
+### 代码覆盖率分析
+
+#### 准备
+
+安装[xdebug](https://xdebug.org/docs/index.php?action=install)
+
+获取[PHP_CodeCoverage](https://github.com/sebastianbergmann/php-code-coverage)
+
+```shell
+composer require --dev phpunit/php-code-coverage
+```
+
+##### 代码覆盖率的衡量标准
+
+* <strong>行覆盖率(Line Coverage): </strong>按单个可执行行是否已执行到进行计量
+* <strong>函数与方法覆盖率(Function and Method Coverage):</strong> 按单个 函数或方法是否已调用到进行计量。仅当函数或方法的 所有可执行行全部已覆盖时 PHP_CodeCoverage 才将其视 为已覆盖
+* <strong>类与特质覆盖率(Class and Trait Coverage):</strong> 按单个类或特质 的所有方法是否全部已覆盖进行计量。仅当一个类或性 状的所有方法全部已覆盖时 PHP_CodeCoverage 才将其视 为已覆盖
+* <del><strong>Opcode 覆盖率(Opcode Coverage):</strong> 按函数或方法对应的每条 opcode 在运行测 试套件时是否执行到进行计量。一行(PHP的)代码通常 会编译得到多条 opcode。进行行覆盖率计量时，只要其 中任何一条 opcode 被执行就视为此行已覆盖</del>
+* <del><strong>分支覆盖率(Branch Coverage):</strong> 控制结构的分支进行计 量。测试套件运行时每个控制结构的布尔表达式求值为 true 和 false 各自计为一个分支</del>
+* <del><strong>路径覆盖率(Path Coverage):</strong> 按测试套件运行时函数或者方 法内部所经历的执行路径进行计量。一个执行路径指的 是从进入函数或方法一直到离开的过程中经过各个分支 的特定序列
+* <strong>变更风险反模式(CRAP)指 数(Change Risk Anti-Patterns (CRAP) Index):</strong> 是基于代码单元的圈复杂度(cyclomatic complexity)与代码覆盖率计算得出的。不太复杂并具有恰当测试覆盖率的代码将得出较低的CRAP指数。可以通过 编写测试或重构代码来降低其复杂性的方式来降低CRAP 指数
+
+#### 添加测试覆盖白名单文件
+
+创建一个mymath.php文件做为业务文件的例子：
+
+~/work/phpunit/mymath.php
+
+```php
+<?php
+class MyMath {
+	public static function add($a, $b){
+		return $a+$b;
+	}
+	public static function minus($a, $b){
+		return $a+$b;
+	}
+
+	public static function multiply($a, $b){
+		return $a * $b;
+	}
+
+	public static function division($a, $b){
+		if($b === 0){
+			return false;
+		}else{
+			return $a/$b;
+		}
+	}
+}
+```
+
+编写测试用例：
+
+~/work/phpunit/test/CoverageTest.php
+
+```php
+<?php
+use PHPUnit\Framework\TestCase;
+
+class CoverageTest extends TestCase{
+	public function testAdd(){
+		$this->assertEquals(MyMath::add(1,2),3);
+	}
+}
+```
+
+注意为了让这个测试用例能工作，需要把mymath.php加载进来：
+
+~/work/phpunit/autoload.php
+
+```php
+<?php
+include(__DIR__ . "/vendor/autoload.php");
+include(__DIR__ . "/mymath.php");
+```
+
+使用```--whitelist```来指定测试覆盖率的目标文件或者文件夹：
+
+```
+phpunit.phar test/CoverageTest.php --whitelist mymath.php --coverage-html /var/www/html/coverage/
+```
+
+其中```--coverage-html```表示将报告以html的形式输出到```/var/www/html/coverage```目录，如下图：（由于只测试了一个方法，所以目前覆盖率比较低）
+
+![coverage1](https://wx2.sinaimg.cn/mw1024/6a1f6674gy1flfh21kfu3j21kw0e9dj8.jpg)
+
+也可以使用xml配置来说明需要测试的白名单：
+
+~/work/phpunit/phpunit.xml
+
+```xml
+<phpunit bootstrap="./autoload.php" beStrictAboutTestsThatDoNotTestAnything="false" extensionsDirectory="test/tools">
+	<testsuites>
+		<testsuite name="money">
+			<file></file>
+			<directory suffix=".php"> ./test/</directory>
+		</testsuite>
+	</testsuites>
+	<php>
+		<var name="DB_DSN" value="mysql:dbname=test;host=localhost" />
+		<var name="DB_USER" value="root" />
+		<var name="DB_PASSWD" value="root" />
+		<var name="DB_DBNAME" value="test" />
+	</php>
+
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true" addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./</directory>
+			<file></file>
+			<exclude>
+				<directory suffix=".php">./vendor</directory>
+				<file>./test/tmp.php</file>
+			</exclude>
+		</whitelist>
+	</filter>
+	<logging>
+		<log type="coverage-html" target="/var/www/html/coverage/" />
+	</logging>
+
+</phpunit>
+```
+
+#### 跳过的代码块覆盖统计
+
+对被测试目标添加@codeCoverageIgnore可以跳过覆盖检查，或者在代码块中使用@codeCoverageIgnoreStart 与 @codeCoverageIgnoreEnd来跳过代码块检查：
+
+~/work/phpunit/mymath.php
+
+```php
+<?php
+//skip other
+	/**
+	 * @codeCoverageIgnore
+	 */
+	public static function multiply($a, $b){
+		return $a * $b;
+	}
+
+	public static function division($a, $b){
+		// @codeCoverageIgnoreStart
+		if($b === 0){
+			return false;
+		}else{
+			// @codeCoverageIgnoreEnd
+			return $a/$b;
+		}
+	}
+```
+
+#### 代码覆盖率的报告欣赏
+
+此报告不管从完整程度到页面的精美程度都可以说非常地另人满意
+
+![coverage2](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1flfh26pfdlj21kw1axajt.jpg)
+
+### 常用断言
+
+~/work/phpunit/vendor/phpunit/phpunit/src/Framework/Assert.php
+
+```php
+<?php
+    public static function assertArrayHasKey($key, $array, $message = '')
+    public static function assertArraySubset($subset, $array, $strict = false, $message = '')
+    public static function assertArrayNotHasKey($key, $array, $message = '')
+    public static function assertContains($needle, $haystack, $message = '', $ignoreCase = false, $checkForObjectIdentity = true, $checkForNonObjectIdentity = false)
+    public static function assertAttributeContains($needle, $haystackAttributeName, $haystackClassOrObject, $message = '', $ignoreCase = false, $checkForObjectIdentity = true, $checkForNonObjectIdentity = false)
+    public static function assertNotContains($needle, $haystack, $message = '', $ignoreCase = false, $checkForObjectIdentity = true, $checkForNonObjectIdentity = false)
+    public static function assertAttributeNotContains($needle, $haystackAttributeName, $haystackClassOrObject, $message = '', $ignoreCase = false, $checkForObjectIdentity = true, $checkForNonObjectIdentity = false)
+    public static function assertContainsOnly($type, $haystack, $isNativeType = null, $message = '')
+    public static function assertContainsOnlyInstancesOf($classname, $haystack, $message = '')
+    public static function assertAttributeContainsOnly($type, $haystackAttributeName, $haystackClassOrObject, $isNativeType = null, $message = '')
+    public static function assertNotContainsOnly($type, $haystack, $isNativeType = null, $message = '')
+    public static function assertAttributeNotContainsOnly($type, $haystackAttributeName, $haystackClassOrObject, $isNativeType = null, $message = '')
+    public static function assertCount($expectedCount, $haystack, $message = '')
+    public static function assertAttributeCount($expectedCount, $haystackAttributeName, $haystackClassOrObject, $message = '')
+    public static function assertNotCount($expectedCount, $haystack, $message = '')
+    public static function assertAttributeNotCount($expectedCount, $haystackAttributeName, $haystackClassOrObject, $message = '')
+    public static function assertEquals($expected, $actual, $message = '', $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
+    public static function assertAttributeEquals($expected, $actualAttributeName, $actualClassOrObject, $message = '', $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
+    public static function assertNotEquals($expected, $actual, $message = '', $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
+    public static function assertAttributeNotEquals($expected, $actualAttributeName, $actualClassOrObject, $message = '', $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false)
+    public static function assertEmpty($actual, $message = '')
+    public static function assertAttributeEmpty($haystackAttributeName, $haystackClassOrObject, $message = '')
+    public static function assertNotEmpty($actual, $message = '')
+    public static function assertAttributeNotEmpty($haystackAttributeName, $haystackClassOrObject, $message = '')
+    public static function assertGreaterThan($expected, $actual, $message = '')
+    public static function assertAttributeGreaterThan($expected, $actualAttributeName, $actualClassOrObject, $message = '')
+    public static function assertGreaterThanOrEqual($expected, $actual, $message = '')
+    public static function assertAttributeGreaterThanOrEqual($expected, $actualAttributeName, $actualClassOrObject, $message = '')
+    public static function assertLessThan($expected, $actual, $message = '')
+    public static function assertAttributeLessThan($expected, $actualAttributeName, $actualClassOrObject, $message = '')
+    public static function assertLessThanOrEqual($expected, $actual, $message = '')
+    public static function assertAttributeLessThanOrEqual($expected, $actualAttributeName, $actualClassOrObject, $message = '')
+    public static function assertFileEquals($expected, $actual, $message = '', $canonicalize = false, $ignoreCase = false)
+    public static function assertFileNotEquals($expected, $actual, $message = '', $canonicalize = false, $ignoreCase = false)
+    public static function assertStringEqualsFile($expectedFile, $actualString, $message = '', $canonicalize = false, $ignoreCase = false)
+    public static function assertStringNotEqualsFile($expectedFile, $actualString, $message = '', $canonicalize = false, $ignoreCase = false)
+    public static function assertIsReadable($filename, $message = '')
+    public static function assertNotIsReadable($filename, $message = '')
+    public static function assertIsWritable($filename, $message = '')
+    public static function assertNotIsWritable($filename, $message = '')
+    public static function assertDirectoryExists($directory, $message = '')
+    public static function assertDirectoryNotExists($directory, $message = '')
+    public static function assertDirectoryIsReadable($directory, $message = '')
+    public static function assertDirectoryNotIsReadable($directory, $message = '')
+    public static function assertDirectoryIsWritable($directory, $message = '')
+    public static function assertDirectoryNotIsWritable($directory, $message = '')
+    public static function assertFileExists($filename, $message = '')
+    public static function assertFileNotExists($filename, $message = '')
+    public static function assertFileIsReadable($file, $message = '')
+    public static function assertFileNotIsReadable($file, $message = '')
+    public static function assertFileIsWritable($file, $message = '')
+    public static function assertFileNotIsWritable($file, $message = '')
+    public static function assertTrue($condition, $message = '')
+    public static function assertNotTrue($condition, $message = '')
+    public static function assertFalse($condition, $message = '')
+    public static function assertNotFalse($condition, $message = '')
+    public static function assertNull($actual, $message = '')
+    public static function assertNotNull($actual, $message = '')
+    public static function assertFinite($actual, $message = '')
+    public static function assertInfinite($actual, $message = '')
+    public static function assertNan($actual, $message = '')
+    public static function assertClassHasAttribute($attributeName, $className, $message = '')
+    public static function assertClassNotHasAttribute($attributeName, $className, $message = '')
+    public static function assertClassHasStaticAttribute($attributeName, $className, $message = '')
+    public static function assertClassNotHasStaticAttribute($attributeName, $className, $message = '')
+    public static function assertObjectHasAttribute($attributeName, $object, $message = '')
+    public static function assertObjectNotHasAttribute($attributeName, $object, $message = '')
+    public static function assertSame($expected, $actual, $message = '')
+    public static function assertAttributeSame($expected, $actualAttributeName, $actualClassOrObject, $message = '')
+    public static function assertNotSame($expected, $actual, $message = '')
+    public static function assertAttributeNotSame($expected, $actualAttributeName, $actualClassOrObject, $message = '')
+    public static function assertInstanceOf($expected, $actual, $message = '')
+    public static function assertAttributeInstanceOf($expected, $attributeName, $classOrObject, $message = '')
+    public static function assertNotInstanceOf($expected, $actual, $message = '')
+    public static function assertAttributeNotInstanceOf($expected, $attributeName, $classOrObject, $message = '')
+    public static function assertInternalType($expected, $actual, $message = '')
+    public static function assertAttributeInternalType($expected, $attributeName, $classOrObject, $message = '')
+    public static function assertNotInternalType($expected, $actual, $message = '')
+    public static function assertAttributeNotInternalType($expected, $attributeName, $classOrObject, $message = '')
+    public static function assertRegExp($pattern, $string, $message = '')
+    public static function assertNotRegExp($pattern, $string, $message = '')
+    public static function assertSameSize($expected, $actual, $message = '')
+    public static function assertNotSameSize($expected, $actual, $message = '')
+    public static function assertStringMatchesFormat($format, $string, $message = '')
+    public static function assertStringNotMatchesFormat($format, $string, $message = '')
+    public static function assertStringMatchesFormatFile($formatFile, $string, $message = '')
+    public static function assertStringNotMatchesFormatFile($formatFile, $string, $message = '')
+    public static function assertStringStartsWith($prefix, $string, $message = '')
+    public static function assertStringStartsNotWith($prefix, $string, $message = '')
+    public static function assertStringEndsWith($suffix, $string, $message = '')
+    public static function assertStringEndsNotWith($suffix, $string, $message = '')
+    public static function assertXmlFileEqualsXmlFile($expectedFile, $actualFile, $message = '')
+    public static function assertXmlFileNotEqualsXmlFile($expectedFile, $actualFile, $message = '')
+    public static function assertXmlStringEqualsXmlFile($expectedFile, $actualXml, $message = '')
+    public static function assertXmlStringNotEqualsXmlFile($expectedFile, $actualXml, $message = '')
+    public static function assertXmlStringEqualsXmlString($expectedXml, $actualXml, $message = '')
+    public static function assertXmlStringNotEqualsXmlString($expectedXml, $actualXml, $message = '')
+    public static function assertEqualXMLStructure(DOMElement $expectedElement, DOMElement $actualElement, $checkAttributes = false, $message = '')
+    public static function assertThat($value, Constraint $constraint, $message = '')
+    public static function assertJson($actualJson, $message = '')
+    public static function assertJsonStringEqualsJsonString($expectedJson, $actualJson, $message = '')
+    public static function assertJsonStringNotEqualsJsonString($expectedJson, $actualJson, $message = '')
+    public static function assertJsonStringEqualsJsonFile($expectedFile, $actualJson, $message = '')
+    public static function assertJsonStringNotEqualsJsonFile($expectedFile, $actualJson, $message = '')
+    public static function assertJsonFileEqualsJsonFile($expectedFile, $actualFile, $message = '')
+    public static function assertJsonFileNotEqualsJsonFile($expectedFile, $actualFile, $message = '')
+    public static function attribute(Constraint $constraint, $attributeName)
+````
+
+### 参考文档
+
+[在线文档](https://phpunit.de/manual/current/zh_cn/index.html)
+
+[pdf下载](https://pan.baidu.com/s/1kVGc1mB)
 
