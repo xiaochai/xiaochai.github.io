@@ -5,8 +5,8 @@ date: 2017-11-14
 categories:
   - Tech
 description: 
-image: 
-image-sm: 
+image: https://wx2.sinaimg.cn/mw1024/6a1f6674ly1flmki0igidj20v01gc4ds.jpg
+image-sm: https://wx2.sinaimg.cn/mw1024/6a1f6674ly1flmki0igidj20v01gc4ds.jpg
 ---
 谈到TCP连接，三次握手这个名词都会大多数人的脑海里浮现。
 
