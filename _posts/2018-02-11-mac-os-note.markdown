@@ -5,8 +5,8 @@ date: 2018-02-11
 categories:
   - Tech
 description: 
-image: https://images.apple.com/cn/macos/high-sierra/overview/technology/image_large_2x.jpg
-image-sm: https://images.apple.com/cn/macos/high-sierra/overview/technology/image_large.jpg
+image: http://wx3.sinaimg.cn/large/6a1f6674gy1foenv8xrctj21fo0w8dp5.jpg
+image-sm: https://wx3.sinaimg.cn/mw1024/6a1f6674gy1foenv8xrctj21fo0w8dp5.jpg
 ---
 
 * macOS版本：10.13.3 High Sierra
@@ -15,7 +15,7 @@ image-sm: https://images.apple.com/cn/macos/high-sierra/overview/technology/imag
 
 1. 下载安装完VirtualBox(版本号5.2.6 r120293)
 
-2. 使用另外下载好的ubuntu-17.10.1-server-amd64.iso安装Guest OS Ubuntu17.10
+2. 使用另外下载好的ubuntu-17.10.1-server-amd64.iso安装Ubuntu17.10 (Guest OS)
 
 3. 从Settings=>Shared Folders=>点击添加按钮=> 选择宿主机文件夹（如/Users/liqingshou/Work）=> 文件夹名称（随意，如Work）=> 勾起Auto-mount（自动挂载）和Make Permanent（永久创建）
 
@@ -27,7 +27,9 @@ image-sm: https://images.apple.com/cn/macos/high-sierra/overview/technology/imag
 
 * <strong>下载Extendsion Pack: Oracle_VM_VirtualBox_Extension_Pack-5.2.6-120293.vbox-extpack，并双击安装</strong>
 
-* <strong>启动Guest，在菜单上找到Device=>Insert Guest Additions CD Image</strong>
+* <strong>启动Ubuntu</strong>
+
+* <strong>在VirtualBox的菜单上找到Device=>Insert Guest Additions CD Image</strong>
 
 如果出现 Unable to insert the virtual optical disk ...提示，如下图
 
@@ -42,13 +44,13 @@ image-sm: https://images.apple.com/cn/macos/high-sierra/overview/technology/imag
 
 * <strong>在Ubuntu系统里挂载CD</strong>
 
-```
+```shell
 sudo mount /dev/cdrom /media/cdrom/
 ```
 
 * <strong>运行Guest Additions，完成后重启</strong>
 
-```
+```shell
 sudo ./VBoxLinuxAdditions.run
 ```
 
@@ -56,21 +58,21 @@ sudo ./VBoxLinuxAdditions.run
 
 执行以下命令，则整个目录就被挂载到work目录下
 
-```
+```shell
 $ mkdir work
 $ sudo mount -t vboxsf Work ./work
 ```
 
 如果出现如下报错
 
-```
+```shell
 mount: wrong fs type, bad option, bad superblock on /dev/sdb1, missing codepage or helper program, or other error
 	   In some cases useful info is found in syslog - try dmesg | tail or so.
 ```
 
 可以使用以下命令，使用扩展里的mount.vboxsf工具
 
-```
+```shell
 sudo ln -sf  /opt/VBoxGuestAdditions-5.2.6/other/mount.vboxsf /sbin/mount.vboxsf
 ```
 
@@ -82,7 +84,7 @@ sudo ln -sf  /opt/VBoxGuestAdditions-5.2.6/other/mount.vboxsf /sbin/mount.vboxsf
 
 * <strong>执行以下命令</strong>
 
-```
+```shell
 test@ubuntu:~$ umask && id
 0002
 uid=1000(test) gid=1000(test) groups=1000(test),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),110(lxd),114(lpadmin),115(sambashare)
@@ -93,11 +95,9 @@ test@ubuntu:~$ sudo mount.vboxsf -o umask=002,gid=1000,uid=1000 Work ./work
 
 * <strong>将配置加入/etc/fstab，实现启动后自动执行</strong>
 
-```
+```shell
 Work /home/test/work vboxsf umask=002,gid=1000,uid=1000
 ```
-
-
 
 #### 参考
 
@@ -120,11 +120,11 @@ Work /home/test/work vboxsf umask=002,gid=1000,uid=1000
 
 registry.dat位于家目录下```~/Library/Application Support/Beyond Compare/registry.dat```，记录了注册和试用相关的信息，只要删除此文件，试用周期重新计算，达到无限试用的目的
 
-* <strong>替换Beyond Compare的启动文件，在启动时删除</strong>
+* <strong>替换Beyond Compare的启动文件，在启动时删除registry.dat</strong>
 
 找到对应的启动文件，使用新的脚本文件替换之
 
-```
+```shell
 cd Applications/Beyond\ Compare.app/Contents/MacOS/
 mv BCompare BCompare.real
 touch BCompare
@@ -135,9 +135,7 @@ chmod +x BCompare
 
 ```shell
 #!/bin/bash
-
 rm "/Users/$(whoami)/Library/Application Support/Beyond Compare/registry.dat"
-
 "`dirname "$0"`"/BCompare.real
 ```
 
@@ -151,7 +149,7 @@ rm "/Users/$(whoami)/Library/Application Support/Beyond Compare/registry.dat"
 
 #### nginx
 
-```
+```shell
 brew install nginx
 ```
 
@@ -161,7 +159,7 @@ brew install nginx
 
 常用命令
 
-```
+```shell
 nginx
 nginx -s stop
 nginx -s reload
@@ -169,7 +167,7 @@ nginx -s reload
 
 #### php
 
-```
+```shell
 brew install homebrew/php/php-version
 brew install homebrew/php/php71 --with-fpm
 brew install homebrew/php/php71-xdebug
@@ -180,7 +178,7 @@ brew services restart homebrew/php/php71
 
 /usr/local/etc/php/7.1/conf.d/ext-xdebug.ini
 
-```
+```ini
 [xdebug]
 zend_extension="/usr/local/opt/php71-xdebug/xdebug.so"
 xdebug.idekey="macgdbp"
@@ -200,7 +198,9 @@ xdebug.remote_handler="dbgp"
 ### PHPStorm的配置
 
 PHPStorm 2017.3.4
+
 PHP(local) 7.1.7
+
 PHP(remote) 7.1
 
 #### 配置PHP环境
@@ -213,7 +213,7 @@ PHP(remote) 7.1
 
 ![phpInterete2](http://wx2.sinaimg.cn/large/6a1f6674gy1foe4hz3u68j21kw0nq7cc.jpg)
 
-配置远程的解释器，注意使用远程PHP运行时，需要配置Deployment(Tools=>Deplyment)或者配置Path Mapping(如果配置了Deployment会自动补上Path Mapping)
+配置远程的解释器，注意使用远程PHP运行时，需要配置Deployment(Tools=>Deplyment)或者配置Path Mapping(如果配置了Deployment会自动补上Path Mapping)。远程执行的原理是ssh到对应的机器上执行，并把结果返回输出到终端
 
 ![remoteInterprete](http://wx3.sinaimg.cn/large/6a1f6674gy1foe4hyefgtj215w11c43u.jpg)
 
@@ -239,7 +239,7 @@ Preferences => Languages & Frameworks => PHP => Composer
 
 也可以自己往composer.json里补充内容，然后在composer.json上右键=>Composer=>Update
 
-```
+```json
 {
     "repositories":[
       {
