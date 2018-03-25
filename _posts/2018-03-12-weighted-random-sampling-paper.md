@@ -32,7 +32,7 @@ image-sm: http://wx1.sinaimg.cn/large/6a1f6674gy1fpp4if4yrvj20xc0kitd1.jpg
 
 &nbsp;&nbsp;&nbsp;&nbsp;1： for $$k = 1$$ to $$m$$ do <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;2： &nbsp;&nbsp;&nbsp;&nbsp;元素$$v_i$$在第$$k$$回合被选出来的概率为$$p_i(k)=\frac{w_i}{\sum_{s_j\in V-S} w_j}$$<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;3： &nbsp;&nbsp;&nbsp;&nbsp;元从$$V-S$$中选出$$v_i$$，然后插入到S中<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;3： &nbsp;&nbsp;&nbsp;&nbsp;从$$V-S$$中选出$$v_i$$，然后插入到S中<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;4： End-For
 
 <br/>
@@ -68,7 +68,7 @@ WRS方法的关键工作如下，姑且称之为算法A:
 <strong>输出：存储有$$m$$个元素的加权随机抽样结果的蓄水池空间$$R$$</strong>
 
 &nbsp;&nbsp;&nbsp;&nbsp;1: 将$$V$$的前m个元素直接插入$$R$$<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;2: 对于$$v_i\in R$$：计算关键值（key）$$k_i = U_i^{\frac{1}{w_i}}$$，其中$$u_i=random(0,1)$$<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;2: 对于$$v_i\in R$$：计算关键值（key）$$k_i = u_i^{\frac{1}{w_i}}$$，其中$$u_i=random(0,1)$$<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;3: 让$$i$$依次等于$$m+1, m+2, ... , n$$，执行4到7步骤<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;4: &nbsp;&nbsp;&nbsp;&nbsp;计算$$R$$中的最小关键值做为当前的阈值$$T$$<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;5: &nbsp;&nbsp;&nbsp;&nbsp;计算$$v_i$$的关键值$$k_i = u_i^{\frac{1}{w_i}}$$，其中$$u_i = random(0,1)$$<br/>
