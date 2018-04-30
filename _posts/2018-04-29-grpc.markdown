@@ -1,0 +1,532 @@
+---
+layout: post
+title: "使用gRPC创建简单聊天程序"
+date: 2018-04-29
+categories:
+  - Tech
+description: 
+image: /assets/images/grpc.svg
+image-sm: /assets/images/grpc.svg
+---
+
+作为一篇gRPC调研的总结，本篇主要介绍了gRPC在go语言上的使用方式，并着重记录了如何使用gRPC创建一个简单的聊天程序。
+
+### gRPC介绍
+
+gRPC是Google开源的一款远程进程调用(RPC)框架。它使用http/2传输协议，使用Protocol Buffer作为编码协议。
+
+这使得框架本身就带有全双工，消息压缩，节省带宽，跨语言等特性。
+
+### 环境准备
+
+在安装好go语言环境的情况下，还要额外安装以下工具和库。
+
+#### 获取gRPC库
+
+```shell
+go get -u google.golang.org/grpc
+```
+
+#### 安装Protocol Buffer v3相关工具
+
+##### 下载protoc编译工具
+
+可以在[github](https://github.com/google/protobuf/releases)上下载现成的二进制包。
+
+解压，并将protoc命令工具移入PATH环境变量中。
+
+##### 下载go语言的protoc插件
+
+protoc需要对应语言的插件才能把pb文件转换成对应的语言，所以下载完protoc之后，需要下载pb的go语言插件：
+
+```shell
+go get -u github.com/golang/protobuf/protoc-gen-go
+```
+
+同样，将protoc-gen-go加入到PATH环境变量。
+
+### pb文件定义
+
+#### 简单例子
+
+pb中可以使用service关键字定义对应的RPC服务集合，并使用rpc关键字定义对应的方法名、接收参数和返回参数；
+
+例如，我们要定义聊天服务，并定义一个交换姓名的RPC接口，可以定义如下pb文件:
+
+```protobuf
+service ChatService{
+	rcp ExchangeNames(Names) returns (Names);
+}
+
+message Names {
+	string firstName = 1;
+	string secondName = 2;
+}
+```
+
+以上定义了一个聊天的服务ChatService，这个服务中有一个方法叫ExchangeNames，是用来交换用户的名字信息，它接收和返回的Message都为Names类型。
+
+
+#### 不同的方法类型
+
+##### Unary RPCs
+
+以上定义的ExchangeNames是最简单的一种方法类型，称之为一元RPC(Unary RPCs);
+
+这类方法十分简单，接收一个参数，然后返回另外一个参数，与平常的方法调用无异。
+
+##### Stream RPCs
+
+grpc支持流类型(stream)，不管是参数还是返回值。
+
+如下发送和接收对方的聊天用户列表：
+
+```protobuf
+service ChatService{
+	rpc GetList(Count) returns (stream Names);
+	rpc SendList(stream Names) returns (Count);
+}
+
+message Count {
+    int32 count = 1;
+    int32 offset = 2;
+}
+```
+
+##### Bidirectional streaming RPCs
+
+如果接收参数和发送参数都为流，则这种方法被称之为Bidirectional streaming RPCs。
+
+例如聊天接口定义如下：
+
+```
+service ChatService{
+	rpc Chat(stream Msg) returns (stream Msg);
+}
+message Msg {
+	string sender;
+	string msg;
+}
+```
+
+### 编译pb文件到go代码
+
+以以上的pb文件定义的service作为例子，一步一步实现这些gRPC服务。
+
+#### 创建项目
+
+在GOPATH的src下建立目录grpc_chat作为项目的根目录，我们要在这个目录下依次建立聊天的服务端程序和客户端程序。
+
+##### 创建目录结构
+
+```
+grpc_chat
+├── client
+├── grpc_chat
+└── server
+```
+
+其中grpc_chat为pb文件和对应的编译完成的go文件所在目录;
+
+client和server分别为客户端程序和服务端程序。
+
+##### 创建pb文件
+
+我们将之前介绍的pb文件写入grpc_chat/grcp_chat.proto文件中:
+
+```protobuf
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.grpc_chat";
+option java_outer_classname = "GrpcChat";
+
+package grpc_chat;
+
+service ChatService{
+	rpc ExchangeNames(Names) returns (Names);
+	rpc GetList(Count) returns (stream Names);
+	rpc SendList(stream Names) returns (Count);
+	rpc Chat(stream Msg) returns (stream Msg);
+}
+
+message Count {
+    int32 count = 1;
+    int32 offset = 2;
+}
+
+message Names {
+	string firstName = 1;
+	string secondName = 2;
+}
+
+message Msg {
+	string sender = 1;
+	string msg = 2;
+}
+```
+
+其中前置的几行内容是protobuf编译各个语言所需求要的额外信息；
+
+如```synctax = "proto3"```表示使用3版本的语法编译，而option中的内容为java所需要的额外信息。
+
+
+##### 编译pb文件
+
+进入项目根目录，执行以下命令:
+
+```shell
+protoc -I ./grpc_chat --go_out=plugins=grpc:./grpc_chat ./grpc_chat/grpc_chat.proto
+```
+
+以上命令也可以使用[go:generate](https://blog.golang.org/generate)来实现。
+
+关于protc和protoc_gen_go这两个程序的参数可以分别参考[这里](https://github.com/google/protobuf)和[这里](https://github.com/golang/protobuf)
+
+运行完成之后，会在grpc_chat目录下生成grpc_chat.pb.go文件，这样编译protobuf的工作就完成了。
+
+### 创建grpc server
+
+在创建grpc服务之前，我们需要一个可以用来服务的结构体：
+
+```go
+import (
+	pb "grpc_chat/grpc_chat"
+	"context"
+	"log"
+)
+
+var MyNames = &pb.Names{}
+
+var MyFriends = []*pb.Names{}
+
+type chatService struct{}
+
+func (cs *chatService) ExchangeNames(ctx context.Context, names *pb.Names) (*pb.Names, error){
+	MyFriends = append(MyFriends, names);
+	log.Printf("%s %s is comming for exchange names\n", names.FirstName, names.SecondName)
+	return MyNames, nil;
+}
+```
+
+其中方法签名涵意一会儿会细说。
+
+接下来，我们使用这个chatService起一个grpc服务：
+
+```go
+import (
+	pb "grpc_chat/grpc_chat"
+	"context"
+	"log"
+	"google.golang.org/grpc/reflection"
+	"net"
+	"google.golang.org/grpc"
+)
+
+var Listen = ":8080"
+
+func startService(){
+	lis, err := net.Listen("tcp", ":17000")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	s := grpc.NewServer()
+	pb.RegisterChatServiceServer(s, &chatService{})
+	reflection.Register(s)
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+}
+
+func main(){
+	go startService()
+	select{}
+}
+```
+
+虽然我们已经写完了主要代码，但目前程序还跑不起来，因为chatService只实现了我们定义的一个方法，其它三个方法还没有实现。
+
+可以通过查看生成的grpc_chat/grcp_chat.pb.go来查看其它三个函数的签名:
+
+```go
+type ChatServiceServer interface {
+	ExchangeNames(context.Context, *Names) (*Names, error)
+	GetList(*Count, ChatService_GetListServer) error
+	SendList(ChatService_SendListServer) error
+	Chat(ChatService_ChatServer) error
+}
+```
+
+所以我们把剩下的三个方法定义完成:
+
+```go
+func (cs *chatService)GetList(c *pb.Count, gls pb.ChatService_GetListServer)error{
+	// todo
+	return nil
+}
+func (cs *chatService)SendList(sls pb.ChatService_SendListServer)error {
+	// todo
+	return nil
+}
+
+func (cs *chatService)Chat(scs pb.ChatService_ChatServer) error{
+	// todo
+	return nil
+}
+```
+
+我们把之前的内容添加到server/main.go文件里，那么go run server/main.go之后，我们就起了一个grpc的service。
+
+
+### 创建gprc client
+
+```
+package main
+
+import (
+	"google.golang.org/grpc"
+	"flag"
+	pb "grpc_chat/grpc_chat"
+	"log"
+	"time"
+	"context"
+)
+var (
+	Server string
+	MyNames = &pb.Names{}
+	client pb.ChatServiceClient
+)
+
+func init(){
+	flag.StringVar(&Server, "server", "127.0.0.1:8080", "grpc server address")
+	flag.StringVar(&MyNames.FirstName, "fn", "", "first name")
+	flag.StringVar(&MyNames.SecondName, "sn", "", "second name")
+	flag.Parse()
+
+	if conn, err := grpc.Dial(Server, grpc.WithInsecure()); err != nil {
+		log.Fatal("connect to server failed", err)
+	}else{
+		client = pb.NewChatServiceClient(conn)
+	}
+}
+
+func main(){
+	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Second)
+	defer cancel()
+	sNames, err := client.ExchangeNames(ctx, MyNames);
+	if err != nil {
+		log.Fatalf("%v.ExchangeNames(_) = _, %v", client, err)
+	}
+	log.Printf("greet ok, server name: %s %s\n", sNames.FirstName, sNames.SecondName)
+}
+
+```
+
+client调用服务的代码很简单，首先创建一个连接，使用```pb.NewChatServiceClient(conn)```即创建一个client。
+
+再在这个client上就可以调用我们之前定义的4个方法了。
+
+这个client只调用了ExchangeNames方法。
+
+### 运行测试
+
+开两个终端，先在一个终端上运行server：
+
+```
+go run server/main.go -fn=lee -sn=server
+```
+
+再在另外一个终端上运行client：
+
+```
+go run client/main.go -fn=lee -sn=client
+```
+
+顺利的话，可以看到server输出：
+```
+2018/04/30 13:26:53 lee client is comming for exchange names
+```
+
+在client端看到：
+
+```
+2018/04/30 13:26:53 greet ok, server name: lee server
+```
+
+所以对于Unary grpcs，实现起来比较简单。而且调用远程的函数与调用本地函数没有多大的差别，这就体现了rpc的优势，只需要知道服务端的函数签名和服务地址，剩下的就像调用本地函数一样调用。
+
+
+### 完善成聊天程序
+
+我们预想的聊天程序是这样，分成服务端和客户端两部分，服务端负责连接各个客户端，并转发各端间的消息，当然服务端也可以发送消息到各个client
+
+客户端可以发送消息，也可以获取现有的好友列表，通过在命令很输入不同的指令完成，并且客户端把接收到的消息在终端上输出
+
+#### 服务端的实现
+
+之前还差三个服务端函数没有实现，现在依次实现
+
+##### GetList
+
+getlist函数代表了4种rpc类型中服务端发送结果为流(server-side streaming)的情况
+
+
+
+```go
+func (cs *chatService) GetList(c *pb.Count, gls pb.ChatService_GetListServer) error {
+	MyFriendsLock.RLock();
+	defer MyFriendsLock.RUnlock();
+	if c.Offset > int32(len(MyFriends)) {
+		return errors.New("no more friends")
+	}
+	count := c.Offset+c.Count;
+	if count > int32(len(MyFriends)){
+		count = int32(len(MyFriends)
+	}
+	sendNames := MyFriends[c.Offset:count]
+	for _, names := range sendNames {
+		if err := gls.Send(names); err != nil{
+			return err;
+		}
+	}
+	return nil
+}
+```
+
+##### SendList
+
+SendList代表了客户端发送参数为流(client-side streaming)的情况
+
+```go
+
+
+```
+
+在这个例子中，SendList并没有实质意义，只是为了演示一种rpc的类型
+
+##### Chat
+
+Chat函数为双向流rpc(Bidirectional streaming RPC)
+
+```go
+```
+##### 小结
+从以上4个例子可以知道，对于server端来说
+
+* 在发送参数和接口参数都不为流时，函数签名与pb中申请大体一致，只是接收参数的第一个位置多了一个context
+
+* 当为server-side stream时，参数中会带有一个可以send对应类型的stream，在实现中多次调用send方法
+
+* 当为client-side stream时，参数中会带有一个可以Recv对应类型的stream，在实现中多次调用Recv方法获取客户端流内容，在读取到EOF时，调用SendAndClose方法，将返回值写回客户端
+
+* 当两端都为流时，可以开启读写协程，来各自接收了发送对应内容
+
+#### 客户端实现
+
+客户端实现与服务端大体一致，原理上其实在传输数据阶段，两端的地位是一致的，所以对应的实现不再细说
+
+```go
+
+var sendMsg = make(chan string, 10);
+
+func chat() {
+	stream, err := client.Chat(context.Background())
+	if err != nil {
+		log.Fatalf("%v.Chat(_) = _, %v", client, err)
+	}
+	waitc := make(chan struct{})
+	// 读协程
+	go func() {
+		for {
+			in, err := stream.Recv()
+			if err == io.EOF {
+				close(waitc)
+				return
+			}
+			if err != nil {
+				log.Fatalf("Failed to receive a msg : %v", err)
+			}
+			log.Printf(">>>>%s:%s", in.GetSender(), in.GetMsg())
+		}
+	}()
+	// 写协程
+loop2:
+	for {
+		select {
+		case s := <-sendMsg:
+			if s == "exit" {
+				stream.CloseSend();
+				return;
+			}
+			stream.Send(&pb.Msg{
+				MyNames.FirstName + "." + MyNames.SecondName,
+				s,
+			})
+		case <-waitc:
+			break loop2
+		}
+	}
+}
+
+func get() {
+	stream, err := client.GetList(context.Background(), &pb.Count{10, 0});
+	if err != nil {
+		log.Fatalf("getlist error :%v", err)
+	}
+	for {
+		in, err := stream.Recv()
+		if err == io.EOF {
+			return
+		}
+		if err != nil {
+			log.Printf("Failed to receive a list : %v", err)
+			return
+		}
+		log.Printf("==names===%s:%s", in.FirstName, in.SecondName)
+	}
+}
+func send() {
+	stream, err := client.SendList(context.Background())
+	if err != nil {
+		log.Fatalf("send list error :%v", err)
+	}
+	for i := 0; i < 10; i++ {
+		err := stream.Send(&pb.Names{strconv.Itoa(i), strconv.Itoa(i)})
+		if err != nil {
+			log.Print("send error:", err)
+			return
+		}
+	}
+	c, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Println("closeAndRecv failed:", err)
+	} else {
+		log.Println("send success", c.Count, c.Offset);
+	}
+}
+func input() {
+	for {
+		var cmd, s string
+		fmt.Scan(&cmd, &s)
+		fmt.Println(cmd, s);
+		switch cmd {
+		case "get":
+			get()
+		case "send":
+			send()
+		case "msg":
+			sendMsg <- s;
+		case "exit":
+			os.Exit(0);
+		}
+	}
+}
+
+```
+
+以上程序代码，可以在[github]()上找到
+
+
+### 添加证书校验与身份校验
+
+
