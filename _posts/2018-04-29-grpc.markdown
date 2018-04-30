@@ -99,7 +99,7 @@ message Count {
 
 例如聊天接口定义如下：
 
-```
+```protobuf
 service ChatService{
 	rpc Chat(stream Msg) returns (stream Msg);
 }
@@ -238,9 +238,16 @@ func startService(){
 	}
 }
 
-func main(){
-	go startService()
-	select{}
+func init() {
+	flag.StringVar(&MyNames.FirstName, "fn", "", "first name")
+	flag.StringVar(&MyNames.SecondName, "sn", "", "second name")
+	flag.StringVar(&Listen, "l", ":8080", "listen address")
+	flag.Parse()
+}
+
+func main() {
+	go startService();
+	select {};
 }
 ```
 
@@ -280,7 +287,7 @@ func (cs *chatService)Chat(scs pb.ChatService_ChatServer) error{
 
 ### 创建gprc client
 
-```
+```go
 package main
 
 import (
@@ -324,25 +331,26 @@ func main(){
 
 client调用服务的代码很简单，首先创建一个连接，使用```pb.NewChatServiceClient(conn)```即创建一个client。
 
-再在这个client上就可以调用我们之前定义的4个方法了。
+再在这个client上就可以调用我们之前定义的四个方法了。
 
-这个client只调用了ExchangeNames方法。
+这个例子中，client只调用了ExchangeNames方法。
 
 ### 运行测试
 
 开两个终端，先在一个终端上运行server：
 
-```
+```shell
 go run server/main.go -fn=lee -sn=server
 ```
 
 再在另外一个终端上运行client：
 
-```
+```shell
 go run client/main.go -fn=lee -sn=client
 ```
 
 顺利的话，可以看到server输出：
+
 ```
 2018/04/30 13:26:53 lee client is comming for exchange names
 ```
@@ -358,19 +366,17 @@ go run client/main.go -fn=lee -sn=client
 
 ### 完善成聊天程序
 
-我们预想的聊天程序是这样，分成服务端和客户端两部分，服务端负责连接各个客户端，并转发各端间的消息，当然服务端也可以发送消息到各个client
+我们预想的聊天程序是这样，分成服务端和客户端两部分，服务端负责连接各个客户端，并转发各端间的消息，当然服务端也可以发送消息到各个client。
 
-客户端可以发送消息，也可以获取现有的好友列表，通过在命令很输入不同的指令完成，并且客户端把接收到的消息在终端上输出
+客户端通过在命令很输入不同的指令，可以发送消息，获取现有的好友列表等，并且客户端把接收到的消息在终端上输出。
 
 #### 服务端的实现
 
-之前还差三个服务端函数没有实现，现在依次实现
+之前还差三个服务端函数没有实现，现在依次实现。
 
 ##### GetList
 
-getlist函数代表了4种rpc类型中服务端发送结果为流(server-side streaming)的情况
-
-
+GetList函数代表了4种rpc类型中服务端发送结果为流(server-side streaming)的情况：
 
 ```go
 func (cs *chatService) GetList(c *pb.Count, gls pb.ChatService_GetListServer) error {
@@ -399,31 +405,104 @@ SendList代表了客户端发送参数为流(client-side streaming)的情况
 
 ```go
 
-
+// 实际无意义，用来接收客户端发上来的列表
+func (cs *chatService) SendList(sls pb.ChatService_SendListServer) error {
+	var ReciveNames []*pb.Names;
+	for {
+		names, err := sls.Recv()
+		if err == io.EOF {
+			return sls.SendAndClose(&pb.Count{
+				int32(len(ReciveNames)),
+				0,
+			})
+		}
+		if err != nil {
+			return err
+		}
+		ReciveNames = append(ReciveNames, names)
+		log.Println("send :", names.FirstName, names.SecondName)
+	}
+}
 ```
 
-在这个例子中，SendList并没有实质意义，只是为了演示一种rpc的类型
+在这个例子中，SendList并没有实质意义，只是为了演示一种rpc的类型。
 
 ##### Chat
 
-Chat函数为双向流rpc(Bidirectional streaming RPC)
+Chat函数为双向流rpc(Bidirectional streaming RPC)：
 
 ```go
+// 用于记录有多少客户端在chat
+type Clients struct {
+	sync.RWMutex
+	Msg map[pb.ChatService_ChatServer]chan *pb.Msg
+}
+var clients = &Clients{Msg: map[pb.ChatService_ChatServer]chan *pb.Msg{}}
+
+func (c *Clients) add(scs pb.ChatService_ChatServer, sendMsg chan *pb.Msg) {
+	clients.Lock()
+	clients.Msg[scs] = sendMsg
+	clients.Unlock()
+}
+
+func (c *Clients) del(scs pb.ChatService_ChatServer) {
+	clients.Lock()
+	delete(clients.Msg, scs)
+	clients.Unlock()
+}
+
+// 聊天双向流rpc
+func (cs *chatService) Chat(scs pb.ChatService_ChatServer) error {
+	sendMsg := make(chan *pb.Msg, 10)
+	clients.add(scs, sendMsg)
+	defer func() {
+		clients.del(scs)
+	}()
+	waitc := make(chan struct{})
+	go func() {
+		for {
+			in, err := scs.Recv()
+			if err == io.EOF {
+				close(waitc)
+				return
+			}
+			if err != nil {
+				log.Printf("receive error : %v\n", err)
+				close(waitc)
+				return
+			}
+			log.Printf(">>>>%s:%s\n", in.GetSender(), in.GetMsg())
+			broadMsg(in)
+		}
+	}()
+loop2:
+	for {
+		select {
+		case s := <-sendMsg:
+			scs.Send(s)
+		case <-waitc:
+			break loop2
+		}
+	}
+	return nil
+}
 ```
+
 ##### 小结
-从以上4个例子可以知道，对于server端来说
 
-* 在发送参数和接口参数都不为流时，函数签名与pb中申请大体一致，只是接收参数的第一个位置多了一个context
+从以上4个例子可以知道，对于server端来说:
 
-* 当为server-side stream时，参数中会带有一个可以send对应类型的stream，在实现中多次调用send方法
+* 在发送参数和接口参数都不为流时，函数签名与pb中申明大体一致，只是接收参数的第一个位置多了一个context;
 
-* 当为client-side stream时，参数中会带有一个可以Recv对应类型的stream，在实现中多次调用Recv方法获取客户端流内容，在读取到EOF时，调用SendAndClose方法，将返回值写回客户端
+* 当为server-side stream时，参数中会带有一个可以send对应类型的stream，在实现中多次调用send方法;
 
-* 当两端都为流时，可以开启读写协程，来各自接收了发送对应内容
+* 当为client-side stream时，参数中会带有一个可以Recv对应类型的stream，在实现中多次调用Recv方法获取客户端流内容，在读取到EOF时，调用SendAndClose方法，将返回值写回客户端;
+
+* 当两端都为流时，可以开启读写协程，来各自接收和发送对应内容。
 
 #### 客户端实现
 
-客户端实现与服务端大体一致，原理上其实在传输数据阶段，两端的地位是一致的，所以对应的实现不再细说
+客户端实现与服务端大体一致，原理上其实在传输数据阶段，两端的地位是一致的，所以对应的实现也大体一致，不再细说:
 
 ```go
 
@@ -524,9 +603,147 @@ func input() {
 
 ```
 
-以上程序代码，可以在[github]()上找到
+以上程序代码，可以在[github](https://github.com/xiaochai/batman/tree/master/GrpcChat)上找到, 
 
+### 运行效果
+
+以下为开了一个server和三个client的运行效果：
+![grpc_chat](http://wx1.sinaimg.cn/large/6a1f6674ly1fqv434auc1j21kw0wj1ag.jpg)
 
 ### 添加证书校验与身份校验
 
+#### 添加TLS认证
 
+##### 生成私钥和自签名证书
+
+生成私钥:
+
+```
+openssl genrsa -out server.key 2048
+
+
+生成自签名证书：
+
+```
+openssl req -new -x509 -sha256 -key server.key -out server.pem -days 3650
+```
+
+这样，在当前目录下，我们就有了私钥(server.key)和公钥(server.pem)。
+
+##### 服务中添加认证
+
+```go
+package main
+
+import (
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc"
+	"log"
+	pb "grpc_chat/grpc_chat"
+
+	"net"
+	"google.golang.org/grpc/grpclog"
+	"context"
+	"fmt"
+	"time"
+)
+
+type tlsService struct{}
+
+func (ts *tlsService) SendMsg(ctx context.Context, msg *pb.Msg) (*pb.Msg, error) {
+	log.Printf("%s >>> %s\n", msg.Sender, msg.Msg);
+	return &pb.Msg{"server", "receive"}, nil
+}
+
+func server() {
+	listen, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		grpclog.Fatalf("failed to listen: %v", err)
+	}
+
+	// TLS认证
+	creds, err := credentials.NewServerTLSFromFile("./server.pem", "./server.key")
+	if err != nil {
+		grpclog.Fatalf("Failed to generate credentials %v", err)
+	}
+
+	// 实例化grpc Server, 并开启TLS认证
+	s := grpc.NewServer(grpc.Creds(creds))
+
+	// 注册HelloService
+	pb.RegisterTlsServiceServer(s, &tlsService{})
+
+	go s.Serve(listen)
+}
+
+func client() {
+	creds, err := credentials.NewClientTLSFromFile("./server.pem", "a.com");
+	if err != nil {
+		log.Fatalln("NewClientTLSFromFile error", err)
+	}
+	conn, _ := grpc.Dial("localhost:8080", grpc.WithTransportCredentials(creds))
+	// error handling omitted
+	client := pb.NewTlsServiceClient(conn)
+	msg, err := client.SendMsg(context.Background(), &pb.Msg{"client", "hello server"})
+	fmt.Println(msg, err)
+}
+
+func main() {
+	server();
+	time.Sleep(time.Second)
+	client();
+}
+```
+
+##### 运行
+
+```
+➜  grpc_chat go run tls/main.go
+2018/05/01 00:53:28 client >>> hello server
+sender:"server" msg:"receive"  <nil>
+```
+
+#### 添加身份验证
+
+rpc身份认证的原理是，客户端将信息通过以meta的形式传递给服务端；服务端使用Interceptor在每一次请求到来的时候校验这些meta信息，以完成身份认证：
+
+##### 在客户端请求的时候带上metadata
+
+```go
+	ctx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("auth", "pass1234"))
+	msg, err := client.SendMsg(ctx, &pb.Msg{"client", "hello server"})
+```
+
+##### 在服务端认证metadata
+
+```go
+func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	md, ok := metadata.FromIncomingContext(ctx);
+	if !ok {
+		return nil, errors.New("unaryInterceptor FromIncomingContext not ok ")
+	}else if pass, ok := md["pass"]; !ok || pass[0] != "pass123" {
+		return nil, errors.New("auth failed");
+	}
+	return handler(ctx, req)
+}
+```
+
+将以上定义的拦截器注册到对应的server中：
+
+```go
+	s := grpc.NewServer(grpc.Creds(creds), grpc.UnaryInterceptor(unaryInterceptor))
+```
+
+此时，如果客户端的请求未带pass这一metadata，则调用方法时，会返回报错：rpc error: code = Unknown desc = auth failed。
+
+
+<hr/>
+##### 参考
+
+[Golang gRPC实践 连载四 gRPC认证](https://segmentfault.com/a/1190000007933303)
+
+[openssl genrsa能够单独生成私钥还能推导出公钥的原因](https://blog.csdn.net/caomiao2006/article/details/7470637)
+
+[grpc-golang实现账号and密码认证](http://www.cnblogs.com/xiaouisme/p/7149374.html)
+
+[完整代码](https://github.com/xiaochai/batman/tree/master/GrpcChat)
