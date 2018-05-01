@@ -620,6 +620,7 @@ func input() {
 
 ```
 openssl genrsa -out server.key 2048
+```
 
 
 生成自签名证书：
@@ -695,6 +696,10 @@ func main() {
 }
 ```
 
+可以看出，只是在NewServer和Dial时添加一个选项。
+
+基于TLS的加密称之为Channel加密，他是针对这条连接上的所有请求。面之后要介绍的认证，是对每一次的请求做校验。
+
 ##### 运行
 
 ```
@@ -705,7 +710,7 @@ sender:"server" msg:"receive"  <nil>
 
 #### 添加身份验证
 
-rpc身份认证的原理是，客户端将信息通过以meta的形式传递给服务端；服务端使用Interceptor在每一次请求到来的时候校验这些meta信息，以完成身份认证：
+gRPC身份认证的原理是，客户端将信息通过以metadata的形式传递给服务端；服务端使用Interceptor在每一次请求到来的时候校验这些metadata信息，以完成身份认证：
 
 ##### 在客户端请求的时候带上metadata
 
@@ -721,7 +726,7 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 	md, ok := metadata.FromIncomingContext(ctx);
 	if !ok {
 		return nil, errors.New("unaryInterceptor FromIncomingContext not ok ")
-	}else if pass, ok := md["pass"]; !ok || pass[0] != "pass123" {
+	}else if pass, ok := md["pass"]; !ok || pass[0] != "pass1234" {
 		return nil, errors.New("auth failed");
 	}
 	return handler(ctx, req)
@@ -734,8 +739,168 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 	s := grpc.NewServer(grpc.Creds(creds), grpc.UnaryInterceptor(unaryInterceptor))
 ```
 
-此时，如果客户端的请求未带pass这一metadata，则调用方法时，会返回报错：rpc error: code = Unknown desc = auth failed。
+如果客户端的请求中未带pass这一metadata，则调用方法时，会返回报错：rpc error: code = Unknown desc = auth failed。
 
+
+### 在PHP中使用gRPC客户端请求go服务
+
+#### 准备工作
+
+##### 安装gRPC和protobuf扩展
+
+```shell
+$ sudo pecl install grpc
+$ sudo pecl install protobuf
+```
+
+##### 安装编译pb所要使用的protoc的PHP插件
+
+
+```shell
+$ git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
+$ cd grpc
+$ git submodule update --init
+$ make grpc_php_plugin
+```
+
+安装完成后将目录下的bins/opt/grpc_php_plugin复制到一个方便方便获取的位置，这个位置在后面还需要用到，我把他拷贝到了${HOME}/Bin目录下。
+
+#### 创建项目依赖
+
+在之前的grpc_chat项目目录下，创建名为php的目录，并做为php项目的根目录。
+
+在项目下添加composer.json，将需要要到的grpc和protobuf加入到项目依赖中，整个文件看起来是这样：
+
+```json
+{
+    "name": "grpc_chat/php",
+    "require": {
+        "grpc/grpc": "^1.10",
+        "google/protobuf": "^v3.3.0"
+
+    },
+    "authors": [
+        {
+            "name": "xiaochai",
+            "email": "soso2501@gmail.com"
+        }
+    ]
+}
+```
+
+执行```composer install```。
+
+#### 编译pb文件到PHP代码
+
+```shell
+➜  protoc --proto_path=./grpc_chat/   --php_out=./php   --grpc_out=./php   --plugin=protoc-gen-grpc=${HOME}/Bin/grpc_php_plugin ./grpc_chat/tls.proto ./grpc_chat/grpc_chat.proto
+```
+
+这样，就在php目录下生成了GPBMetadata和Grpc_chat两个目录
+
+
+#### 编写client代码
+
+在php目录下创建main.php：
+
+```php
+<?php
+include "vendor/autoload.php";
+
+include(__DIR__ . "/Grpc_chat/ChatServiceClient.php");
+include(__DIR__ . "/Grpc_chat/Count.php");
+include(__DIR__ . "/Grpc_chat/Msg.php");
+include(__DIR__ . "/Grpc_chat/Names.php");
+include(__DIR__ . "/Grpc_chat/TlsServiceClient.php");
+include(__DIR__ . "/GPBMetadata/GrpcChat.php");
+include(__DIR__ . "/GPBMetadata/Tls.php");
+
+
+$client = new Grpc_chat\ChatServiceClient("127.0.0.1:8080", ["credentials" => Grpc\ChannelCredentials::createInsecure()]);
+$p = new Grpc_chat\Names();
+$p->setFirstName("LL");
+$p->setSecondName("EEE");
+
+list($reply, $status) = $client->ExchangeNames($p)->wait();
+var_dump($status, $reply->getFirstName(), $reply->getSecondName());
+```
+
+先使用go起一个服务端：
+
+```shell
+go run server/main.go -fn=lee -sn=server
+```
+
+然后执行main.php文件:
+
+```shell
+➜  php php main.php
+class stdClass#13 (3) {
+  public $metadata =>
+  array(0) {
+  }
+  public $code =>
+  int(0)
+  public $details =>
+  string(0) ""
+}
+string(3) "lee"
+string(6) "server"
+```
+
+达到预期的结果。
+
+
+#### 添加认证信息
+
+```php
+<?php
+
+include "vendor/autoload.php";
+
+include(__DIR__ . "/Grpc_chat/ChatServiceClient.php");
+include(__DIR__ . "/Grpc_chat/Count.php");
+include(__DIR__ . "/Grpc_chat/Msg.php");
+include(__DIR__ . "/Grpc_chat/Names.php");
+include(__DIR__ . "/Grpc_chat/TlsServiceClient.php");
+include(__DIR__ . "/GPBMetadata/GrpcChat.php");
+include(__DIR__ . "/GPBMetadata/Tls.php");
+
+
+$override = "a.com";
+$tlsClient = new Grpc_chat\TlsServiceClient("127.0.0.1:8080",
+    [
+        "credentials" => Grpc\ChannelCredentials::createSsl(file_get_contents(__DIR__ . "/../server.pem")),
+        'grpc.ssl_target_name_override' => $override,
+        'grpc.default_authority' => $override,
+    ]
+);
+
+$msg = new Grpc_chat\Msg();
+$msg->setSender("phpclient");
+$msg->setMsg("hello");
+list($reply, $status) = $tlsClient->SendMsg($msg, ["auth"=>["pass1234"]])->wait();
+var_dump($reply->getSender(), $reply->getMsg(), $status);
+```
+
+运行结果：
+
+```
+➜  php php tls.php
+string(6) "server"
+string(7) "receive"
+class stdClass#13 (3) {
+  public $metadata =>
+  array(0) {
+  }
+  public $code =>
+  int(0)
+  public $details =>
+  string(0) ""
+}
+```
+
+使用流程与go语言类似，需要注意的是TLS需要servername 信息，这块如果不填写（即```grpc.ssl_target_name_override```和```grpc.default_authority```选项），则会报连接失败，导致问题定位困难。
 
 <hr/>
 ##### 参考
