@@ -1,0 +1,625 @@
+---
+layout: post
+comments: true
+title: "Docker的实际使用"
+date: 2018-05-23
+categories:
+  - Tech
+description: 
+image: http://wx2.sinaimg.cn/large/6a1f6674gy1fseinzpx4uj218g0p0aef.jpg
+image-sm: https://wx2.sinaimg.cn/mw1024/6a1f6674gy1fseinzpx4uj218g0p0aef.jpg
+---
+### 原理
+
+docker使用[Union FS]()作为分层镜像技术的基础。具体的, 在ubuntu上使用aufs，在centos下使用的是devicemapper。而已经打入Linux内核的[Overlay FS](https://docs.docker.com/storage/storagedriver/overlayfs-driver/)也已经得到docker支持。
+
+[Linux Namesapce](https://en.wikipedia.org/wiki/Linux_namespaces)为容器间提供了环境隔离，而[Linux CGroups](https://en.wikipedia.org/wiki/Cgroups)为容器间的CPU、内存等资源使用进行隔离和分配。
+
+### docker镜像
+
+#### Docker Registry
+
+注意Docker Registry与Repository的区别，Repository是具体的镜像，称之为仓库名。具体的版本号称之为标签(tag)，格式为Respository:Tag，标识一个镜像。
+
+如ubuntu:16.04，仓库名为ubuntu，标签为16.04。如果没有标签，则默认为latest标签。
+
+Docker常用的Registry为[docker hub](https://hub.docker.com/)，也可以自己使用[Docker Registry](https://store.docker.com/images/registry/)搭建私有的仓库。
+
+Docker Registry只提供了api实现，可以使用第三方的[VMWare Harbor](https://github.com/vmware/harbor)或者[Sonatype Nexus](https://www.sonatype.com/nexus-repository-sonatype)来搭建图形界面。
+
+#### 获取镜像
+
+* 加速镜像
+
+[官方中国](registry.docker-cn.com)、 [Dao加速器](https://www.daocloud.io/mirror#accelerator-doc)
+
+##### 从docker hub上获取镜像
+
+```
+docker pull ubuntu
+```
+
+* 常用的docker镜像都可以在[docker hub](https://hub.docker.com/)上直接找到，很方便地就可以拉取到本地直接使用。
+
+##### 从第三方来源获取镜像
+
+```
+docker pull docker.elastic.co/elasticsearch/elasticsearch:5.6.9
+```
+
+#### 镜像管理
+
+```shell
+docker image COMMAND
+```
+
+可以用来管理docker镜像
+
+##### docker image ls
+
+列出所有本地的镜像，使用 ```-a``` 时中间镜像(intermediate images)也会罗列出来。
+
+此命令与 ```docker images``` 一致
+
+##### docker image prune
+
+删除所有不使用的镜像，这里不使用的镜像包含两种:
+
+*虚悬镜像(dangling images)*
+
+默认prune只会删除这些镜像，所谓虚悬镜像，是在本镜像的标签被新镜像所使用，导致本镜像的仓库名和标签为&lt;none&gt;。这些镜像已经不再使用，可以放心删除
+
+*未使用的镜像*
+
+如果prune命令添加 ```-a``` 参数，那么将不仅仅删除虚悬镜像，其它没有启动的所有镜像都会被删除
+
+##### docker image rm
+
+删除指定的镜像，使用 ```-f``` 可以杀掉对应的container，强制删除镜像，此命令与 ```docker rm```，```docker rmi``` 命令一致。
+
+可以使用其它命令与rm结合，完成更复杂的删除任务:
+
+```shell
+docker image rm $(docker image ls -q -f before=mongo:3.2)
+```
+
+### 容器(Container)
+
+容器是镜像的运行时体现，可以有如下状态：创建、启动、停止、删除、暂停
+
+#### 运行
+
+```shell
+docker run -it --rm ubuntu:16.04 /bin/bash
+```
+
+以上命令会下载对应的镜像（如果本地不存在的话），并运行镜像进入交互模式，直接打开一个终端与容器交互。
+
+容器的一般执行流程如下：
+
+	1. 检查本地是否存在指定的镜像，不存在就从公有仓库下载
+	2. 利用镜像创建并启动一个容器
+	3. 分配一个文件系统，并在只读的镜像层外面挂载一层可读写层
+	4. 从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去
+	5. 从地址池配置一个 ip 地址给容器
+	6. 执行用户指定的应用程序
+	7. 执行完毕后容器被终止
+
+<strong>-it</strong>: 
+
+i是将标准输入打开，而t是打开一个tty与用户交互，一般这两个选项都同时使用。但如果使用管道作为输入，则只能指定-i参数，如
+
+```shell
+echo /etc/passwd |docker run -i ubuntu wc
+```
+
+<strong>--rm</strong>: 
+
+默认情况下容器运行结束之后，并不会清除对应的文件系统，这样可以通过查看容器内的数擗、重启容器等方式调试各种问题。但如果仅仅是简单运行前台命令，这样无用的容器会浪费存储空间。参数```--rm```将会在容器运行结束之后，清理掉对应的文件系统数据。
+
+##### 其它常用参数
+
+<strong>-p</strong>: 
+
+将容器内的端口映射到主机上，如```docker run -p 8080:80 nginx```，将镜像里的80端口映射到主机上8080上，这样容器外面就可以通过主机ip:8080来访问nginx服务了。也可以使用 ```-P``` 参数来映射所有端口，但所使用的主机ip是随机的，可以使用```docker ps```或者```docker port CONTAIINER_ID```来查看具体的映射关系。
+
+可以在端口前添加host表示要监听端口的ip，也可以在端口之后添加上对应的协议(tpc/udp)，比如 ```-p 127.0.0.1:8080:80/tcp```。
+
+<strong>-d</strong>: 
+
+在后台启动容器，启动后只会输出对应的container id。
+
+<strong>-v</strong>: 
+
+将主机上的目录映射到容器中。
+
+```shell
+docker run -it -v "$(pwd)":/workspace maven /bin/bash
+```
+以上命令可以很方便的做出maven环境，在容器中的/workspace目录即为主机上的当前目录。这样，就可以在容器里打包各种java应用了。
+
+<strong>\-\-name</strong>:
+
+为启动的容器起一个名字，可以使用以下命令修改容器名字：
+
+```
+docker container rename CONTAINER_ID new_name
+```
+
+
+#### 容器管理
+
+```
+docker container ls
+```
+
+列出所有运行中的容器，与 ```docker ps``` 一致。可以使用 ```-a``` 参数将已经退出的容器也罗列出来。
+
+##### 进入容器
+
+对于一个运行中的容器，可以使用attach或者exec命令进入到窗口中：
+
+```
+docker attach CONTAINER_ID
+```
+
+使用attach到指定容器上之后，会接管容器的标准输入输出和错误输出，但需要注意的是，如果结束掉此attach，那么容器也会随之结束，所以一般很少使用。
+
+```
+docker exec -it CONTAINER_ID /bin/bash
+```
+
+与attach不同，exec的退出并不会导致容器退出
+
+##### 状态切换
+
+```
+docker container COMMAND CONTAINER_ID
+```
+
+以上命令中 COMMAND 可选如下值:
+
+<strong>kill</strong>:
+
+杀死对应的容器
+
+<strong>start/restart/stop/pause/unpause</strong>:
+
+启动，重启，停止，暂停，恢复对应的容器。stop与kill的区别：stop会发送TERM信号，如果在 -s 指定的时间内没有响应，执行kill操作，而kill是直接发送-9信号。
+
+##### 删除对应容器
+
+```
+docker container rm CONATINAER_ID
+```
+
+##### 获取容器输出日志
+
+```
+docker [container] logs CONTAINER_ID
+```
+
+使用 ```-f``` 持续监听输出。
+
+##### 容器的保存和提交
+
+每一次run一个镜像都会创建一个全新的文件系统，之前运行的镜像里的数据都不会保存下来。那么如果已经在容器里创建了相关的环境，并且想每一次运行都保留有上一次的运行环境怎么办呢？
+
+首先，需要看一下对应容器的改动情况，是否是预期的，删除不必要的文件和改动：
+
+```
+docker diff CONTAINER_ID
+```
+
+然后，使用commit 命令，将容器里的改动，保存成镜像:
+
+```
+docker commit --author "Xiaochai <soso2501@gmail.com" --message "modify some enviroment" CONTAINER_ID [REPOSITORY[:TAG]]
+```
+
+其中REPOSITORY为仓库名，比如nginx之类的，TAG为标签，可以是版本号，也可以是自定义的标签。
+
+提交完成之后，使用 ```docker image ls``` 就可以看到刚才提交的镜像了。像使用正常镜像的方式使用此镜像即可。
+
+```docker history REPOSITORY:TAG``` 命令，可以找到历史的提交记录。
+
+
+注意：由于 docker commit 无法保留这些文件添加的原因，使用的命令等，对于使用者来说完全黑盒，所以更推荐使用docker file的方式来构建镜像。
+
+### Dockerfile
+
+Dockerfile是一系列构建镜像的指令构成的文件。
+
+以下Dockerfile，用于构建jekyll的环境，并运行对应的服务：
+
+```dockerfile
+FROM ubuntu
+
+COPY ./xiaochai.github.io /data/xiaochai.github.io
+
+RUN apt-get update && apt-get install -y git ruby ruby-dev nodejs libffi-dev gcc make locales\
+		&& cd /data/xiaochai.github.io \
+		&& gem install bundle bundler \
+		&& bundle install\
+		&& rm -rf /var/lib/apt/lists/* \
+		&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
+
+ENV CLUSTER docker
+WORKDIR /data/xiaochai.github.io
+CMD ["bundle", "exec", "jekyll", "serve", "-H" , "0.0.0.0"]
+```
+
+#### 指令列表
+
+##### FROM指定基础镜像
+
+在此镜像基础上进行定制。
+
+对于一些静态编译的程序，不需要任何的运行时支持，可以使用 ```FROM scratch``` 指令，他是一个不存在的镜像，接下来写的指令会作为第一层存在。像go语言开发的应用特别适合这种方式，它打出来的镜像体积更加小巧。
+
+##### RUN执行命令
+
+用于执行命令。由于每一条RUN指令都会创建一层，所以一般都是将多条合并成一条，使用 ```&&``` 来连接，换行可以使用 ```\```来处理，使用 ```#``` 来注释。
+
+##### ENV指令
+
+用于创建环境变量。
+
+##### WORKDIR修改工作目录
+
+修改工作目录，如果目录不存在，会创建。以后各层都将以此目录做为工作目录。
+
+##### COPY复制文件
+
+将指定路径的文件复制到镜像中，注意，由于开始的时候，客户端只会把 ```docker build``` 指定的目录传输到docker server（即context），所以复制的源路径不能是context之外的文件。
+
+##### CMD容器启动命令
+
+CMD命令即容器运行的进程，程序及参数以数组形式给出。CMD启动命令会被 ```docker run``` 指定的命令替换。
+
+CMD命令运行的程序退出后，对应的容器也就结束。
+
+##### VLOUMN 定义匿名卷
+
+为了防止运行时用户忘记将动态文件所保存目录挂载为卷，在 Dockerfile 中，我们可以事先指定某些目录挂载为匿名卷，这样在运行时如果用户不指定挂载，其应用也可以正常运行，不会向容器存储层写入大量数据。
+
+##### EXPOSE声明端口
+
+仅仅是声明端口，不并不会直接在主机上打开对应的端口。
+
+
+##### USER 指定当前用户
+
+
+##### HEALTHCHECK 健康检查
+
+```
+HEALTHCHECK --interval=30s --timeout=30s --interval=3 CMD curl -fs http://localhost/ || exit 1
+HEALTHCHECK NONE
+```
+
+以上 ```--interval``` 表示每一次检查的间隔， ```--timeout``` 每一次检查的超时时间，```--interval``` 被定义为unhealthy的连续失败次数，CMD后跟着实际要执行的命令。
+
+如果命令返回0表示成功，1表示失败，2为保留，不要返回2。
+
+健康状态在 ```docker container ls``` 的STATUS一栏可以看到。
+
+如果状态检查失败了，需要调试或者查看原因，可以使用以下命令查看:
+
+```
+ docker inspect --format '{{json .State.Health}}' CONTAINER_ID
+```
+
+例子:
+
+```
+from nginx
+
+run apt-get update && apt-get install curl -y
+
+healthcheck --interval=1s --timeout=1s --retries=1 cmd curl -fs 'http://localhost' || exit 1
+
+cmd ["nginx", "-g", "daemon off;"]
+```
+
+##### ONBUILD子镜像作准备
+
+ONBUILD不会对当前构建造成影响，而对于子镜像，会首先执行父镜像ONBUILD指定的指令，这种执行关系只会持续一层。
+
+ONBUILD后面可以跟任何docker的的指令。
+
+
+
+### 数据卷的使用
+
+由于目前实际中使用的都为简单的 ```-v``` 参数，所以数据卷今后用到了再补充。
+
+```
+docker volume COMMAND
+```
+
+### 网络互联
+
+```
+docker network create -d bridge my-net
+```
+
+创建一个桥接的网络 my-net；
+
+运行两个容器，并都加入到这个网络中:
+
+```
+docker run -it --rm --network my-net --name myubuntu1 ubuntu 
+docker run -it --rm --network my-net --name myubuntu2 ubuntu 
+```
+
+这样，这两个容器就可以通过名字互相访问到对方了。
+
+```
+ping myubuntu2
+```
+
+注意：其实所有本地的docker容器都会默认连接到一个虚拟网桥上面，所以即使没有配置网络，也可以通过ip来互联。
+
+### Docker Compose
+
+创建docker-compose.yml
+
+```ymal
+version: '3'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.9
+    environment:
+      - "discovery.type=single-node"
+    ports:
+      - "9200:9200"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.6.9
+    ports:
+      - "5601:5601"
+```
+
+运行如下命令，将项目起动：
+
+```
+docker-compose -f docker-compose.yml up
+```
+
+#### 常用的docker-compose命令
+
+```
+docker-compose -f docker-compose.yml ps
+docker-compose -f docker-compose.yml restart/stop/start/pause/unpause
+docker-compose -f docker-compose.yml logs
+```
+
+#### 配置文件格式
+
+docker-compose的配置文件可配置服务的网络，挂载数据卷，环境变量，依赖等，可以参考[官方手册](https://docs.docker.com/compose/compose-file/#short-syntax)。
+
+
+### Docker Swarm
+
+#### 基本概念
+
+<strong>节点(node)</strong>:
+
+节点即运行docker swarm mode的主机，分为管理节点（manager）和工作节点（worker）；
+
+大多数命令只能在管理节点上运行，它负责Swarm 集群的管理，同一时间可以有多个管理节点，但只有一个节点能成为leader，内部通过raft协议保持一致性。
+
+<strong>任务(task)</strong>:
+
+任务是Swarm 中的最小的调度单位，目前来说就是一个单一的容器。
+
+<strong>服务(services)</strong>:
+
+服务是一组任务的集合，比如一个nginx服务，运行有三个实例，那么每一个task就是一个任务，而这三个任务组成的nginx称之为服务。
+
+服务有两种模式：replicated services 按照一定规则在各个工作节点上运行指定个数的任务；global services 每个工作节点上运行一个任务。
+
+通过 ```--mode=replicated``` 或者 ```--mode=global``` 指定。
+
+![nodes](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1fsehr2jvv1j20m80fctas.jpg)
+
+#### 配置Swarm集群
+
+如果有多个主机，直接在多个主机上配置即可，但如果想在一台机器上尝试使用Swarm，有两种方式：1. 只起一个管理节点，不带worker节点；2. 使用docker-machine启动多个docker虚拟主机，来模拟多个节点。
+
+我们使用第二种方式来做为例子。
+
+
+##### 创建管理节点
+
+```shell
+docker-machine create -d virtualbox manager
+docker-machine ls
+docker-machine ssh manager
+docker swarm init --advertise-addr 192.168.99.100
+```
+
+运行最后一个命令时，会有以下输出
+
+```
+Swarm initialized: current node (i5chkldlhjz7z108ibokpn8me) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-49cziwm4ukm8q9wfpbwzqmknuvwclws8jbtamewdht6wij28tr-3bcfx6145jg7jlycmm9b130nb 192.168.99.100:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+```
+
+记录下token和相关信息，join时需要用到。
+
+以上，管理节点创建完成了，使用以下命令可以看到目前节点的状态。
+
+```
+docker node ls
+```
+
+##### 创建工作节点
+
+
+```
+docker-machine create -d virtualbox worker1
+docker-machine ssh worker1
+docker swarm join --token SWMTKN-1-49cziwm4ukm8q9wfpbwzqmknuvwclws8jbtamewdht6wij28tr-3bcfx6145jg7jlycmm9b130nb 192.168.99.100:2377
+```
+
+此时，在管理节点上运行 ```docker node ls ``` 已经可以看到多了一个工作节点。
+
+同理，再创建一个worker节点worker2:
+
+```
+docker-machine create -d virtualbox worker2
+docker-machine ssh worker2
+docker swarm join --token SWMTKN-1-49cziwm4ukm8q9wfpbwzqmknuvwclws8jbtamewdht6wij28tr-3bcfx6145jg7jlycmm9b130nb 192.168.99.100:2377
+```
+
+至此，含有三个节点的Swarm网络就创建完成了。
+
+##### 创建服务
+
+```
+docker service create --replicas 3 -p 80:80 --name nginx nginx
+```
+
+以上命令创建了一个nginx服务，含有三个复制任务，对外监听80端口，使用镜像nginx:latest，名字为nginx，使用任意三台主机的ip访问80服务，都可以访问成功了。
+
+在管理节点上运行 ```docker service ls``` 或者 ```docker service ps nginx``` 可以查看服务的状态，而在各个节点上运行 ```docker ps``` 也可以看到每一个节点都起一个nginx容器。
+
+```docker service logs nginx``` 可以查看对应服务的日志；
+
+```docker service scale nginx=5``` 可以对服务进行扩容和缩容。
+
+
+##### 删除服务，并闭Swarm mode
+
+```docker service rm nginx``` 可以删除对应的服务；
+
+在worker节点上执行 ```docker swarm leave```， 对应的节点将退出Swarm网络，此时mange节点会对服务进行调整，以满足对应的任务数量。
+
+```
+$ docker@manager:~$  docker service ps nginx
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE                ERROR               PORTS
+7ks7zwzrm62j        nginx.1             nginx:latest        manager             Running             Running about a minute ago
+tjcphmadhlfl         \_ nginx.1         nginx:latest        worker2             Shutdown            Running about a minute ago
+u6o8f9jbm3wa        nginx.2             nginx:latest        manager             Running             Running 10 minutes ago
+po60t2cpplcr        nginx.3             nginx:latest        worker1             Running             Running 9 minutes ago
+```
+
+而在manage节点上，必须使用 ```docker swarm leave --force``` 来退出swarm模式。
+
+#### 在集群中使用compose文件
+
+以启动wordpress为例子，使用compose文件来启动一组服务(Stack)：
+
+stack.yml
+
+```yaml
+version: "3"
+
+services:
+  wordpress:
+    image: wordpress
+    ports:
+      - 80:80
+    networks:
+      - overlay
+    environment:
+      WORDPRESS_DB_HOST: "db:3306"
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    deploy:
+      mode: replicated
+      replicas: 3
+
+  db:
+    image: mysql:5.7.22
+    networks:
+       - overlay
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    networks:
+       - overlay
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  portainer:
+    image: portainer/portainer
+    networks:
+      - overlay
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - "9000:9000"
+    command: -H unix:///var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  db-data:
+networks:
+  overlay:
+```
+
+运行以下命令，即可将这些服务一并起起来:
+
+```
+docker stack deploy -c stack.yml wordpress
+```
+
+可以通过 ```docker stack ls``` 或者 ```docker stack ps wordpress``` 来查看这些服务的状态。
+
+要停止这些服务，只要运行 ```docker stack down wordpress``` 即可。
+
+我们在服务里添加了visualizer和portainer可视化页面，在浏览器中输入任意主机的ip:8080或者ip:9000即可看到各个服务的状态。
+
+![visualizer](https://wx1.sinaimg.cn/mw1024/6a1f6674gy1fsehr3o0rvj214k186jxt.jpg)
+
+![portainer.io](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1fseigv6iyfj21kw0vbdp8.jpg)
+
+
+
+#### 参考
+
+[Docker Documentation](https://docs.docker.com/engine/reference/run/)
+
+[Docker入门到实践](https://yeasy.gitbooks.io/docker_practice/image/commit.html)
+
+[Dockerfile 指令 ONBUILD介绍](https://www.cnblogs.com/51kata/p/5265107.html)
+
+[DOCKER基础技术：AUFS](https://coolshell.cn/articles/17061.html)
+
+[DOCKER基础技术：LINUX NAMESPACE](https://coolshell.cn/articles/17010.html)
+
+[DOCKER基础技术](https://www.jianshu.com/p/8713be866ba0)
+
+[Docker 数据卷之进阶篇](https://www.cnblogs.com/sparkdev/p/8504050.html)
+
+[mysql8.0 caching_sha2_password的坑](https://liaozixu.com/article/java/the-pit-of-mysql80-cachingsha2password.html)
+
+[Portainer.io](https://portainer.io/install.html)
