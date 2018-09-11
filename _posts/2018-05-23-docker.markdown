@@ -623,3 +623,5 @@ docker stack deploy -c stack.yml wordpress
 [mysql8.0 caching_sha2_password的坑](https://liaozixu.com/article/java/the-pit-of-mysql80-cachingsha2password.html)
 
 [Portainer.io](https://portainer.io/install.html)
+
+[使用 docker 对容器资源进行限制](http://cizixs.com/2017/08/04/docker-resources-limit)
