@@ -176,7 +176,7 @@ Raft是用来管理我们在第二节中描述的复制日志的算法。图2汇
 <tr><td >term</td><td>当前任期号，为了让候选者更新任期值</td></tr>
 <tr><td >voteGranted</td><td>当投给此候选者时返回true</td></tr>
 <tr><td class="special-title" colspan="2">接收者实现</td></tr>
-<tr><td colspan="2">1. 如果term < currentTerm 返回false(5.1节)</td></tr>
+<tr><td colspan="2">1. 如果term &lt; currentTerm 返回false(5.1节)</td></tr>
 <tr><td colspan="2">2. 如果voteFor是空值或者是candidateId，并且候选者的日志至少与接收者日志一样新，则投票给这个候选者</td></tr>
 </table>
 
