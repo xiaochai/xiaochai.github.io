@@ -204,7 +204,6 @@ Raft是用来管理我们在第二节中描述的复制日志的算法。图2汇
 <tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;如果成功: 更新这个跟随者的nextIndex和matchIndex(5.3节)</td></tr>
 <tr><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;如果由于日志不一致失败了，则减小nextIndex并重试(5.3节)</td></tr>
 <tr><td colspan="2">4. 如果存在一个N值 ，N > commitIndex，并且大多数的matchIndex[i] 大于等于 N，并且log[N].term == currentTerm，将commmitIndex设置成N(5.3节，5.4节)</td></tr>
-</td></tr>
 </table>
 
 <center>图2: 算法的简要汇总(不包括成员角色变化和日志压缩)。第一个格子描述了一系列独立重复触发的服务器行为规则。表中的章节表示对应的特性将在此章节进行讨论。算法的更精确描述参考[31]。</center>
