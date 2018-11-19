@@ -5,8 +5,8 @@ date: 2017-08-17
 categories:
   - Tech
 description: 
-image: http://image.phpcomposer.com/logo/phpcomposer.png
-image-sm: http://image.phpcomposer.com/logo/phpcomposer.png
+image: https://wx1.sinaimg.cn/mw1024/6a1f6674ly1fxdndm2io8j208209wwhj.jpg
+image-sm: https://wx1.sinaimg.cn/mw1024/6a1f6674ly1fxdndm2io8j208209wwhj.jpg
 ---
 
 为了更加系统地了解Composer，完整地阅读了官方文档，并记录在此，供后续参考。
