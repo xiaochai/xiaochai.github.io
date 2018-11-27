@@ -32,8 +32,8 @@ $$\class{myMJSmall}{y \in \{0,1\}}$$
 ##### 预测函数/逻辑回归(Logistic Regression)
 
 $$\class{myMJSmall}{h_\theta(x) = g(\theta^Tx) \\
-	g(z) = \frac{1}{1-e^{-z}} \\ 
-	即 h_\theta(x) = \frac{1}{1-e^{-\theta^Tx}}}$$
+	g(z) = \frac{1}{1+e^{-z}} \\ 
+	即 h_\theta(x) = \frac{1}{1+e^{-\theta^Tx}}}$$
 
 > $$ 0 \le h_\theta(x) \le 1 $$<br/>
 > $$g(z)$$称为S型函数（Sigmoid function）或逻辑函数（Logistic function）<br/>
