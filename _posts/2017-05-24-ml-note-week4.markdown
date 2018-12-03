@@ -188,7 +188,7 @@ $$\class{myMJSmall}{
 *同理，我们可以得到如下*
 
 $$\class{myMJSmall}{
-NOR: \Theta^{(1)} = \begin{bmatrix} -30  & 20 &  20 \end{bmatrix} \\
+NOR: \Theta^{(1)} = \begin{bmatrix} 10  & -20 &  -20 \end{bmatrix} \\
 OR: \Theta^{(1)} = \begin{bmatrix}-10 & 20 & 20\end{bmatrix}
 }$$
 
