@@ -688,7 +688,7 @@ canvas9.click();
 
 输入你的函数(js function):
 <br/>
-<input placeholder="return a = function (sita){return 1+Math.sqrt(Math.pow(4*Math.sin(4*sita),2))}" style="width:80%" id="func" />
+<input placeholder="function (sita){return 1+Math.sqrt(Math.pow(4*Math.sin(4*sita),2))}" style="width:80%" id="func" />
 <button id="gen"> 生成</button>
 
 <canvas id="c10" width="320px" height="320px" style="border:1px solid lightgrey;">
@@ -699,7 +699,11 @@ canvas9.click();
 var canvas10 = document.getElementById("c10");
 var c10 = new FuncDraw(canvas10);
 document.getElementById("gen").onclick = function(){
-	var func = eval(document.getElementById("func").value);
+    var v = document.getElementById("func").value
+    if(v != undefined && v != ""){
+        v = "b=" + v;
+    }
+	var func = eval(v);
 	if(func == undefined || func.length == 0){
 		func = function (sita){return 1+Math.sqrt(Math.pow(4*Math.sin(4*sita),2))};
 	}

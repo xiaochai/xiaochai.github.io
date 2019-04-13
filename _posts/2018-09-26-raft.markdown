@@ -6,8 +6,8 @@ date: 2018-09-26
 categories:
   - Tech
 description: Raft是用来管理日志复制的一种一致性算法。他和(multi-)Paxos算法在结果和效率上一致，但整体结构不同，这使得Raft更容易理解，也更容易构建实际的系统。为了增强理解性，Raft将一致性算法分成了几个关键的部分，例如领导者选举，日志复制，安全性，并且他强制实行了一些更严格的一致性策略来减少需要考虑的状态。从学生学习调研的结果上显示Raft比Paxos更容易学习。Raft同时还提供了修改集群成员配置的机制，他使用了一种重叠多数成员的算法来保证安全性。
-image: https://raft.github.io/logo/annie-solo.png
-image-sm: https://raft.github.io/logo/annie-solo.png
+image: http://wx1.sinaimg.cn/large/6a1f6674ly1g2145ueppyj20vj0u0wlg.jpg
+image-sm: http://wx1.sinaimg.cn/large/6a1f6674ly1g2145ueppyj20vj0u0wlg.jpg
 ---
 <style>
 center{
