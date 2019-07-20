@@ -18,7 +18,7 @@ profile_img:
 profile: 
 social:
   github: https://github.com/xiaochai
-  weibo: http://weibo.com/lqso
+  weibo: https://weibo.com/lqso
 
 # Build settings
 include: ["_categories"]

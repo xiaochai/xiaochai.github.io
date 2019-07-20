@@ -5,7 +5,7 @@ date: 2018-02-11
 categories:
   - Tech
 description: 
-image: http://wx3.sinaimg.cn/large/6a1f6674gy1foenv8xrctj21fo0w8dp5.jpg
+image: https://wx3.sinaimg.cn/large/6a1f6674gy1foenv8xrctj21fo0w8dp5.jpg
 image-sm: https://wx3.sinaimg.cn/mw1024/6a1f6674gy1foenv8xrctj21fo0w8dp5.jpg
 ---
 
@@ -33,14 +33,14 @@ image-sm: https://wx3.sinaimg.cn/mw1024/6a1f6674gy1foenv8xrctj21fo0w8dp5.jpg
 
 如果出现 Unable to insert the virtual optical disk ...提示，如下图
 
-![insertCDError](http://wx3.sinaimg.cn/large/6a1f6674gy1foe4hxenkuj20l40aw0ue.jpg)
+![insertCDError](https://wx3.sinaimg.cn/large/6a1f6674gy1foe4hxenkuj20l40aw0ue.jpg)
 
 可以使用以下方法解决：
 
 > 先关闭虚拟机，在Storage下找到对应的光盘，解绑对应的内容，然后再新建一个新的空光盘<br/>
 > 现在执行以上步骤应该可以顺利通过了
 
-![removeAttach](http://wx2.sinaimg.cn/large/6a1f6674gy1foe4hybkd2j20zo0tqaf3.jpg)
+![removeAttach](https://wx2.sinaimg.cn/large/6a1f6674gy1foe4hybkd2j20zo0tqaf3.jpg)
 
 * <strong>在Ubuntu系统里挂载CD</strong>
 
@@ -207,15 +207,15 @@ PHP(remote) 7.1
 
 新建项目时，选择或创建解释器
 
-![phpInterprete](http://wx2.sinaimg.cn/large/6a1f6674gy1foe4i0e80ij21kw0nz4qp.jpg)
+![phpInterprete](https://wx2.sinaimg.cn/large/6a1f6674gy1foe4i0e80ij21kw0nz4qp.jpg)
 
 在已经有项目中选择解释器：Preferences=> Languages & Frameworks => PHP
 
-![phpInterete2](http://wx2.sinaimg.cn/large/6a1f6674gy1foe4hz3u68j21kw0nq7cc.jpg)
+![phpInterete2](https://wx2.sinaimg.cn/large/6a1f6674gy1foe4hz3u68j21kw0nq7cc.jpg)
 
 配置远程的解释器，注意使用远程PHP运行时，需要配置Deployment(Tools=>Deplyment)或者配置Path Mapping(如果配置了Deployment会自动补上Path Mapping)。远程执行的原理是ssh到对应的机器上执行，并把结果返回输出到终端
 
-![remoteInterprete](http://wx3.sinaimg.cn/large/6a1f6674gy1foe4hyefgtj215w11c43u.jpg)
+![remoteInterprete](https://wx3.sinaimg.cn/large/6a1f6674gy1foe4hyefgtj215w11c43u.jpg)
 
 #### 配置Composer
 
@@ -225,7 +225,7 @@ PHP(remote) 7.1
 
 Preferences => Languages & Frameworks => PHP => Composer
 
-![composer](http://wx1.sinaimg.cn/large/6a1f6674gy1foe4hykjirj21k612egrf.jpg)
+![composer](https://wx1.sinaimg.cn/large/6a1f6674gy1foe4hykjirj21k612egrf.jpg)
 
 * <strong>初始化Composer: Tools => Composer => Init Composer</strong>
 
@@ -233,7 +233,7 @@ Preferences => Languages & Frameworks => PHP => Composer
 
 * <strong>使用Composer安装依赖</strong>
 
-![composer-install](http://wx4.sinaimg.cn/large/6a1f6674gy1foe4hxbsw2j20sw0k0dhg.jpg)
+![composer-install](https://wx4.sinaimg.cn/large/6a1f6674gy1foe4hxbsw2j20sw0k0dhg.jpg)
 
 安装完成后会自动补到composer.json文件中
 
@@ -259,7 +259,7 @@ Preferences => Languages & Frameworks => PHP => Composer
 
 Preferences => Languages & Frameworks => PHP => Test Frameworks => 选择添加 => PHPUnit Local
 
-![phpunit](http://wx2.sinaimg.cn/large/6a1f6674gy1foe4hyetfrj21k612e0yh.jpg)
+![phpunit](https://wx2.sinaimg.cn/large/6a1f6674gy1foe4hyetfrj21k612e0yh.jpg)
 
 注意：如果是远程的PHP解释器，那么PHPUnit也应该是远程的
 
@@ -269,19 +269,19 @@ Preferences => Languages & Frameworks => PHP => Test Frameworks => 选择添加 
 
 接着，在tests目录下创建测试文件，不管在文件上，或者在文件里的类名、函数名上点击，都可以出现运行测试用例的菜单，只是执行的用例范围不同
 
-![testcase](http://wx3.sinaimg.cn/large/6a1f6674gy1foe4jdbti4j21kw0mena5.jpg)
+![testcase](https://wx3.sinaimg.cn/large/6a1f6674gy1foe4jdbti4j21kw0mena5.jpg)
 
 #### 运行配置
 
 配置一个PHP Web Server，Run => Edit Configurations
 
-![webserver](http://wx1.sinaimg.cn/large/6a1f6674gy1foe4jagbquj21kw0pfgrz.jpg)
+![webserver](https://wx1.sinaimg.cn/large/6a1f6674gy1foe4jagbquj21kw0pfgrz.jpg)
 
 设置调试端口，与xdebug配置的端口一致：Preferences=>Languages & Frameworks => PHP => Debug => Xdebug下的Debug port
 
 选择刚新建的PHP Web Server(localhost)，选择调试，如果有打断点的话，就会在对应的断点停住了
 
-![debug](http://wx3.sinaimg.cn/large/6a1f6674gy1foe4hzdb0lj21kw0t9aln.jpg)
+![debug](https://wx3.sinaimg.cn/large/6a1f6674gy1foe4hzdb0lj21kw0t9aln.jpg)
 
 #### 参考
 

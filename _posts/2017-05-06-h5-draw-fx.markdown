@@ -5,8 +5,8 @@ date: 2017-5-6
 categories:
   - Tech
 description: 
-image: http://wx4.sinaimg.cn/large/6a1f6674ly1ffcsacbkv8j21io10g7w2.jpg
-image-sm: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1ffcsacbkv8j21io10g7w2.jpg
+image: https://wx4.sinaimg.cn/large/6a1f6674ly1ffcsacbkv8j21io10g7w2.jpg
+image-sm: https://wx4.sinaimg.cn/mw1024/6a1f6674ly1ffcsacbkv8j21io10g7w2.jpg
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -239,7 +239,7 @@ ctx.fill();
 
 画出来的效果和放大500%后的效果:
 
-![图片](http://wx2.sinaimg.cn/mw690/6a1f6674ly1ffbgjcsl5tj203i02sweb.jpg) ![图片](http://wx1.sinaimg.cn/mw690/6a1f6674ly1ffbgjdo6ouj205m06qaa0.jpg)
+![图片](https://wx2.sinaimg.cn/mw690/6a1f6674ly1ffbgjcsl5tj203i02sweb.jpg) ![图片](https://wx1.sinaimg.cn/mw690/6a1f6674ly1ffbgjdo6ouj205m06qaa0.jpg)
 
 #### 画出函数
 
@@ -472,7 +472,7 @@ function(x){
 
 我们假定直角坐标系的原点为极点，x轴的正方向部分为极轴，则平面内的点(θ, r)如图所示。
 
-![图片](http://wx4.sinaimg.cn/orj360/6a1f6674ly1ffck07e3gtj20lm0g274k.jpg)
+![图片](https://wx4.sinaimg.cn/orj360/6a1f6674ly1ffck07e3gtj20lm0g274k.jpg)
 
 从图上也可以很清楚地看出两个坐标系的转换关系
 

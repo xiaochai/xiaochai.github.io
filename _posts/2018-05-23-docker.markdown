@@ -6,7 +6,7 @@ date: 2018-05-23
 categories:
   - Tech
 description: 
-image: http://wx2.sinaimg.cn/large/6a1f6674gy1fseinzpx4uj218g0p0aef.jpg
+image: https://wx2.sinaimg.cn/large/6a1f6674gy1fseinzpx4uj218g0p0aef.jpg
 image-sm: https://wx2.sinaimg.cn/mw1024/6a1f6674gy1fseinzpx4uj218g0p0aef.jpg
 ---
 ### 原理

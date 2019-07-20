@@ -94,7 +94,7 @@ h_\theta(x) =
 > 由于SVM的决策边界总是有很大的间距，所以SVM也叫大间距分类算法<br/>
 > 如果有一些异点（outlier），为了不影响大间距的特性，我们可以减小$$C$$的值
 
-![svm](http://wx4.sinaimg.cn/mw1024/6a1f6674ly1fghn2wxprrj21e00mkn0o.jpg)
+![svm](https://wx4.sinaimg.cn/mw1024/6a1f6674ly1fghn2wxprrj21e00mkn0o.jpg)
 
 #### 大间距分类背后的数学原理
 

@@ -5,8 +5,8 @@ date: 2017-6-04
 categories:
   - Tech
 description: 
-image: http://wx3.sinaimg.cn/mw1024/6a1f6674ly1fg9acp6hn9j21js0xugud.jpg
-image-sm: http://wx3.sinaimg.cn/mw1024/6a1f6674ly1fg9acp6hn9j21js0xugud.jpg
+image: https://wx3.sinaimg.cn/mw1024/6a1f6674ly1fg9acp6hn9j21js0xugud.jpg
+image-sm: https://wx3.sinaimg.cn/mw1024/6a1f6674ly1fg9acp6hn9j21js0xugud.jpg
 ---
 <style>
 .myMJSmall {
@@ -86,7 +86,7 @@ $$
 > 选出最优的模型和最优的$$\lambda$$<br/>
 > 使用测试集合，来评估选出来的模型和$$\lambda$$值的泛化能力
 
-![lambda](http://wx3.sinaimg.cn/mw1024/6a1f6674ly1fg9jmx5tp1j21kw0qitf1.jpg)
+![lambda](https://wx3.sinaimg.cn/mw1024/6a1f6674ly1fg9jmx5tp1j21kw0qitf1.jpg)
 
 ##### 学习曲线(Learning Curves)
 

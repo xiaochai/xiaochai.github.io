@@ -5,8 +5,8 @@ date: 2017-07-14
 categories:
   - Tech
 description: 
-image: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
-image-sm: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
+image: https://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
+image-sm: https://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
 ---
 <style>
 .myMJSmall {
@@ -56,15 +56,15 @@ image-sm: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
 
 > 与之前的行人检测类似，使用一堆有文字和没有文字的小矩形图片样本训练出模型<br/>
 
-![](http://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwqvvc5j20gy0aeah7.jpg)
+![](https://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwqvvc5j20gy0aeah7.jpg)
 
 > 使用滑动窗口，检测对应矩形是否含有文字，使用不同的灰度区块来表示含有文字的概率，如下图<br/>
 
-![](http://wx1.sinaimg.cn/mw690/6a1f6674ly1fhkvwnvsm5j20lc0da754.jpg)
+![](https://wx1.sinaimg.cn/mw690/6a1f6674ly1fhkvwnvsm5j20lc0da754.jpg)
 
 > 展开处理（expansion operator），对于某一个白色的点，如果他的附近有白点，那么就把附近的点变成白色<br/>
 
-![](http://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwn4a4gj20lc0d2t9h.jpg)
+![](https://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwn4a4gj20lc0d2t9h.jpg)
 
 > 找出大块的白色区域，即为文字区域
 
@@ -72,7 +72,7 @@ image-sm: http://wx4.sinaimg.cn/mw1024/6a1f6674ly1fhjw68qh8lj21kq0yktm5.jpg
 
 > 使用那些图片中间为字母分隔的样本做为正样本，那些空白、或者只有一个字符的图片做为负样本，则使用这些样本训练的模型，可以正确分隔字符
 
-![](http://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwxwx46j21bm0qwds6.jpg)
+![](https://wx2.sinaimg.cn/mw690/6a1f6674ly1fhkvwxwx46j21bm0qwds6.jpg)
 
 
 #### 人工合成数据（Artificial Data Synthesis）

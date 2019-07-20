@@ -6,8 +6,8 @@ date: 2019-03-03
 categories:
   - Reading
 description: 
-image: http://wx1.sinaimg.cn/large/6a1f6674ly1g08o55f3fxj20lc0sgq3w.jpg
-image-sm: http://wx1.sinaimg.cn/large/6a1f6674ly1g08o55f3fxj20lc0sgq3w.jpg
+image: https://wx1.sinaimg.cn/large/6a1f6674ly1g08o55f3fxj20lc0sgq3w.jpg
+image-sm: https://wx1.sinaimg.cn/large/6a1f6674ly1g08o55f3fxj20lc0sgq3w.jpg
 ---
 
 ### 第一章 学会提出好问题
