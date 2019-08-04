@@ -1900,15 +1900,144 @@ public class StarManager {
 
 ### 原型模式（Prototype pattern）
 
+当创建给定类的实例的过程很昂贵或很复杂时，可以使用原型模式从现有的对象复制生成。
+
+例如，一个对象需要在一个高代价的数据库操作之后被创建。我们可以缓存该对象，在下一个请求时返回它的克隆，在需要的时候更新数据库，以此来减少数据库调用。
+
+原型模式在java中可以理解成实现Cloneable接口或者clone方法。
+
+```java
+public class Sum implements Cloneable {
+    private int total;
+
+    public Sum(int max) {
+        for(int i=0;i<max;i++){
+            total += i;
+        }
+    }
+
+    public int getTotal() {
+        return total;
+    }
+    @Override
+    public Sum clone() throws CloneNotSupportedException{
+        return (Sum)super.clone();
+    }
+}
+
+public class SumPool {
+    private HashMap<Integer, Sum> pool;
+
+    public SumPool() {
+        this.pool = new HashMap<>();
+    }
+
+    public Sum getSum(int i) {
+        try {
+            if (pool.get(i) != null) {
+                return pool.get(i).clone();
+            }
+        }catch (CloneNotSupportedException e){
+        }
+        System.out.println("create new " + i);
+        Sum sum = new Sum(i);
+        pool.put(i, sum);
+        return sum;
+    }
+}
+public class PrototypeTest {
+    @Test
+    public void test() {
+        SumPool sumPool = new SumPool();
+        System.out.printf("%d,%d,%d,%d",
+                sumPool.getSum(100).getTotal(),
+                sumPool.getSum(10000).getTotal(),
+                sumPool.getSum(100).getTotal(),
+                sumPool.getSum(10000).getTotal());
+    }
+}
+
+```
 
 ---
 
 ### 访问者模式
 
+访问者模式是将作用于某种数据结构中的各元素的操作分离出来封装成独立的类，使其在不改变数据结构的前提下可以添加作用于这些元素的新的操作，为数据结构中的每个元素提供多种访问方式。它将对数据的操作与数据结构进行分离，是行为类模式中最复杂的一种模式。
 
----
+由于一般使用在多种不同子类的遍历中，所以经常配合[双重分发](http://zhuanlan.51cto.com/art/201807/578177.htm)使用。多重分发是在类内部通过accept方法和this这个确定类型的参数，调用到visitor真正函数上来。
 
-### 解释器模式
+#### 优点
+
+扩展性好。能够在不修改对象结构中的元素的情况下，为对象结构中的元素添加新的功能。
+复用性好。可以通过访问者来定义整个对象结构通用的功能，从而提高系统的复用程度。
+灵活性好。访问者模式将数据结构与作用于结构上的操作解耦，使得操作集合可相对自由地演化而不影响系统的数据结构。
+符合单一职责原则。访问者模式把相关的行为封装在一起，构成一个访问者，使每一个访问者的功能都比较单一。
+
+#### 缺点
+
+增加新的元素类很困难。在访问者模式中，每增加一个新的元素类，都要在每一个具体访问者类中增加相应的具体操作，这违背了“开闭原则”。
+破坏封装。访问者模式中具体元素对访问者公布细节，这破坏了对象的封装性。
+违反了依赖倒置原则。访问者模式依赖了具体类，而没有依赖抽象类。
+
+
+#### 例子
+
+```java
+public abstract class Element {
+    protected String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public abstract void accept(Visitor visitor);
+}
+public class ElementA extends Element {
+    public ElementA() {
+        name = "A";
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+public class ElementB extends Element {
+    public ElementB() {
+        name = "B";
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+}
+public class Visitor {
+    public void visit(ElementA elementA){
+        System.out.println("访问到A--->" + elementA.getName());
+    }
+    public void visit(ElementB elementB){
+        System.out.println("访问到B--->" + elementB.getName());
+    }
+
+}
+public class VisitorTest {
+    @Test
+    public void test(){
+        List<Element> list = new ArrayList<>();
+        Visitor visitor = new Visitor();
+        list.add(new ElementA());
+        list.add(new ElementB());
+        for(Element t: list){
+            t.accept(visitor);
+        }
+
+    }
+}
+```
+
+[参考](http://c.biancheng.net/view/1397.html)
 
 
 ---
