@@ -1284,7 +1284,7 @@ quitSort1 [] = []
 quitSort1 (x:xs) = quitSort1 min ++ [x] ++ quitSort1 max
                   where min = filter (<x) xs;max = filter (>=x) xs
 
--- 归并排序，即将两个已经排好充的列表合并成一个有序的列表
+-- 归并排序，即将两个已经排好序的列表合并成一个有序的列表
 mergeSort :: Ord a => [a] -> [a]
 -- 辅助函数，将两个有序的列表合并成一个
 mergeSortList ::Ord a => [a] -> [a] -> [a]
@@ -2485,7 +2485,7 @@ showExp (Plus a b) = "(" ++ showExp a ++ "+" ++ showExp b ++ ")"
 showExp (Sub a b) = "(" ++ showExp a ++ "-" ++ showExp b ++ ")"
 showExp (Mult a b) = "(" ++ showExp a ++ "*" ++ showExp b ++ ")"
 showExp (Div a b) = "(" ++ showExp a ++ "/" ++ showExp b ++ ")"
--- 将列表分成两部分，这两部分的数据可以执行四则运算，然后再对长度dddgf1的列表再递归划分
+-- 将列表分成两部分，这两部分的数据可以执行四则运算，然后再对长度大于1的列表再递归划分
 divide :: [a] -> [([a],[a])]
 divide xs = [(take n xs, drop n xs)| n<- [1..(length xs -1)]]
 -- 根据元组，拼合成四则运算
@@ -3925,4 +3925,260 @@ Prelude Data.Time> do{ ti<- getCurrentTime ; print $ utctDay ti}
 
 ### 记录器Monad
 
-记录器Monad(Writer Monad)，是在计算一个类型值的同时，还会使用另外一个类型记录下中间过程。其定义在Control.Monad.Writer中
+记录器Monad(Writer Monad)，是在计算一个类型值的同时，还会使用另外一个类型记录下中间过程。其定义在Control.Monad.Writer中。
+
+例如我们要在x轴上移动某一个点并标记移动过程，可以使用Writer Monad来处理：
+
+```haskell
+import Control.Monad.Writer
+
+left, right :: Int -> Writer String Int
+left x = writer (x -1 , "move left\n")
+right x = writer (x +1 , "move right\n")
+
+move :: Int -> Writer String Int
+move x = do
+    a <- left x
+    b <- left a
+    right b
+-- *Main> move 3
+-- WriterT (Identity (2,"move left\nmove left\nmove right\n"))
+```
+
+对于其结果，可以看出虽然返回的的是Writer类型，但是却输出为WriterT，这是由于在最新版本的Haskell中Writer是使用WriterT来定义。
+
+对于Writer类型，如果第一个类型（即之前的String）实现了Monoid类型类，此时的Writer才是一个Monad类型，才可以使用do表达式来处理。
+
+writer是构造Writer类型的方便的函数。
+
+这里如何理解do里的语句呢？有一个简单的理解方式就是把do转化为\>\>=运算。如之前的move函数，可以写成```move x = left x >>= left >>= right```，而Writer的\>\>=实现大致为如下：
+
+```haskell
+instance (Monoid w) => Monad (Writer w) where
+    return x  = Writer (x mempty)
+    (Writer (x,v)) >>= f = let (Writer (y, v')) = f x in
+                           Writer (y, v `mappend` v')
+```
+
+从之前的例子可以看出Writer Monad总是返回计算的结果，而并没有在程序背后保持某一状态，这是与之后介绍的State Monad区别的地方。
+
+#### MonadWriter
+
+```haskell
+class (Monoid w, Monad m) => MonadWriter w m | m -> w where
+    tell :: w -> m ()
+    listen :: m a -> m (a, w)
+    pass :: m (a, w -> w) -> m a
+```
+
+tell函数只是记录的追加，并不会进行计算，而listen的结果会同时返回计算结果和记录，pass则会对记录器Monad输入一个函数：
+
+```haskell
+-- tell只是在记录中追加，@todo 关于tell函数的原理以及与do结合使用的原理，目前还搞不懂
+*Main> do {tell "first move left twice ,then move right\n"; a <- left 3; b <- left a; right b}
+WriterT (Identity (2,"first move left twice ,then move right\nmove left\nmove left\nmove right\n"))
+-- listen将参数做为值返回
+*Main> do {a <- left 10; listen $ right a}
+WriterT (Identity ((10,"move right\n"),"move left\nmove right\n"))
+--  @todo 这里的pass参数不太明白为什么这样写。。
+*Main Data.Char> do{ a<- left 100; b<-pass $writer ((a-1, map toUpper), "pass run");left b}
+WriterT (Identity (97,"move left\nPASS RUNmove left\n"))
+```
+
+以下归并排序的例子，使用Writer Monad来记录排序的过程：
+
+```haskell
+-- 归并排序，即将两个已经排好序的列表合并成一个有序的列表
+-- 辅助函数，将两个有序的列表合并成一个
+mergeSortList ::Ord a => [a] -> [a] -> [a]
+mergeSortList [] a = a
+mergeSortList a [] = a
+mergeSortList (x:xs) (y:ys) | x > y = y : mergeSortList (x:xs) ys
+                            | otherwise = x : mergeSortList xs (y:ys)
+-- 显示多个空格缩进的函数
+indent :: Int -> ShowS
+indent n = showString $ replicate (4 * n) ' '
+-- 显示空行
+nl :: ShowS
+nl = showChar '\n'
+-- 归并排序，并记录过程
+mergeSort :: Int -> [Int] -> Writer String [Int]
+mergeSort _ [] = return []
+mergeSort _ s@[_] = return s
+mergeSort l s@xs = do
+    tell $ (indent l.showString "mergesort: ".shows s.nl) ""
+    let (ll,rl) = splitAt (length xs `div` 2) xs
+    tell $ (indent (l+1).showString "merge".shows ll.shows rl.nl) ""
+    liftM2 mergeSortList (mergeSort (l+2) ll) (mergeSort (l+2) rl)
+-- 运行结果
+-- *Main> putStrLn $ execWriter $  mergeSort 0 [5,4,3,6]
+-- mergesort: [5,4,3,6]
+--     merge[5,4][3,6]
+--         mergesort: [5,4]
+--             merge[5][4]
+--         mergesort: [3,6]
+--             merge[3][6]
+```
+
+### 读取器Monad
+
+```haskell
+import Control.Monad.Reader
+
+readLen :: Reader [a] Int
+readLen = reader $ \x -> length x
+
+readHead :: Reader [a] a
+readHead = reader $ \(x:_) -> x
+
+-- *Main> runReader readLen "abcdefg"
+-- 7
+-- *Main> runReader readHead "abcdefg"
+-- 'a'
+```
+
+使用reader函数产生一个Monad Reader，其接受一个函数作为参数，使用runReader运行函数获取对应的结果。
+
+#### MonadReader
+
+MonadReader提供了ask和local函数，ask是获取到当前的Monad Reader，而local接收一个函数，是将第二个参数的Reader应用一次这个函数。如以下例子：
+
+```haskell
+test :: Reader [Int] [Int]
+test = do
+    xs <- local (map (+1)) ask
+    ys <- ask
+    return ys
+-- *Main> runReader test [1,2,3]
+-- [1,2,3]
+```
+
+例子中xs的值为```[2,3,4]```，而ys的值为```[1,2,3]```。
+
+库中提供了两个封装的函数withReader和mapReader函数来处理以上例子中的情况，我们从两个例子分析中来加深映像：
+
+```
++1 读取器： reader (+1)
+使用withReader函数，将现有的读取器应用一个新函数，使其成为一个新的读取器：withReader (*2) $ reader (+1)，注意这个读取器会先应用后传入的函数，即*2,再应用+1
+使用这个新的读取器：
+*Main> runReader (withReader (*2) $ reader (+1)) 10
+21
+
+而mapReader与local的功能类似，他不会生成一个新的Reader，只是将Reader应用函数f：
+*Main> runReader (mapReader (*2) $ reader (+1)) 10
+22
+```
+
+#### 带变量绑定的表达式
+
+```haskell
+-- 带变量绑定的表达式
+data Exp = Val Int |
+           Var String |
+           Add Exp Exp |
+           Decl Bind Exp deriving (Show, Eq)
+type Bind = (String, Int)
+type Env = [Bind]
+
+updateEnv :: Bind -> Env -> Env
+updateEnv = (:)
+
+resolve :: Exp -> Reader Env (Maybe Int)
+resolve (Val i) = return (Just i)
+resolve (Var s) = do
+    env <- ask
+    case lookup s env of
+        Nothing -> return Nothing
+        Just v -> return (Just v)
+resolve (Add e1 e2) = do
+    re1 <- resolve e1
+    case re1 of
+        Nothing -> return Nothing
+        Just a -> do
+            re2 <- resolve e2
+            case re2 of
+                Nothing -> return Nothing
+                Just b -> return (Just (a+b))
+resolve (Decl b e) = local (updateEnv b) (resolve e)
+
+-- *Main> runReader (resolve (Decl ("x", 3) (Decl ("y", 5) (Add (Var "y") (Add (Var "x") (Var "z"))))) ) [("z", 4)]
+-- Just 12
+```
+
+### 状态Monad
+
+状态Monad所接收的参数也是一个函数，传入一个状态，返回一个值和新状态的二元组。
+
+通过遍历标记二叉树的方式，我们来看一下状态Monad的使用：
+
+```haskell
+import Control.Monad.State
+
+data Tree a = Leaf a | Node (Tree a) a (Tree a) deriving (Show, Eq)
+-- 不使用状态Monad时的程序
+labelTree :: Tree a -> Tree (a, Int)
+labelTree t = fst $ ntAux t 0
+
+ntAux :: Tree a -> Int -> (Tree (a,Int), Int)
+ntAux (Leaf a) n = (Leaf (a, n), n+1)
+ntAux (Node l a r) n = let (lt, n') = ntAux l (n+1) in
+                       let (rt, n'') = ntAux r n' in
+                       (Node lt (a, n) rt, n'')
+
+-- 使用状态Monad来处理
+labelTree' :: Tree a -> Tree (a, Int)
+labelTree' t = evalState (ntAux' t) 0
+increase :: State Int Int
+increase = state $ \i -> (i, i+1)
+ntAux' :: Tree a -> State Int (Tree (a, Int))
+ntAux' (Leaf a) = do
+    n1 <- increase
+    return (Leaf (a, n1))
+ntAux' (Node l n r) = do
+    n1 <- increase
+    lt <- ntAux' l
+    rt <- ntAux' r
+    return (Node lt (n, n1) rt)
+-- *Main> labelTree' $ Node (Node (Leaf 5) 3 (Leaf 2)) 7 (Leaf 9)
+-- Node (Node (Leaf (5,2)) (3,1) (Leaf (2,3))) (7,0) (Leaf (9,4))
+-- *Main> labelTree $ Node (Node (Leaf 5) 3 (Leaf 2)) 7 (Leaf 9)
+-- Node (Node (Leaf (5,2)) (3,1) (Leaf (2,3))) (7,0) (Leaf (9,4))
+```
+
+与传统的方法不同的是，程序中不再管理当前的值，而是代理给了状态Monad来管理。
+
+
+#### 使用状态Monad实现栈结构
+
+```haskell
+-- 使用状态Monad来实现栈结构
+type Stack = [Int]
+pop :: State Stack Int
+pop = state $ \(x:xs) -> (x, xs)
+push :: Int -> State Stack ()
+push n = state $ \xs -> ((), n:xs)
+peek :: State Stack Int
+peek = state $ \(x:xs) -> (x, x:xs)
+
+test :: State Stack Int
+test = do
+    push 1
+    push 2
+    push 3
+    a1 <- pop
+    a2 <- pop
+    return (a1 + a2)
+-- *Main> runState test []
+-- (5,[1])
+```
+
+#### 状态Monad、FunApp单位半群和读取器Monad的关系(略)
+
+#### MonadState状态类(略)
+
+#### 基于栈的计算器(略)
+
+#### 随机数的生成(略)
+
+---
+<br/>
