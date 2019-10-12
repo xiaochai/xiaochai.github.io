@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Haskell"
-date: 2019-8-21
+title: 《Hashkell函数式编程入门》读书笔记
+date: 2019-10-11
 categories:
-  - Tech
+  - Reading
 description: 笔者对于函数式编程纯属完全的门外汉，但一直想窥觑其一隅。故开坑精读《Hashkell函数式编程入门》以求入门，以此笔记为据。以至于此文大量初级知识，博君见笑。
 image: /assets/images/haskell.jpg
 image-sm: /assets/images/haskell.jpg
@@ -4307,3 +4307,317 @@ tMS = do
 
 ## QuickCheck简介
 
+需要下载QuickCheck包```cabal update;cabal install QuickCheck```，这个测试库可以在一定程序上生成测试用例。
+
+```haskell
+import Test.QuickCheck
+
+prop_even x y = even (x+y) == (even x == even y)
+-- 自动生成100个测试用例，并测试通过
+-- *Main> quickCheck prop_even
+-- +++ OK, passed 100 tests.
+
+prop_reverse xs ys = reverse ys ++ reverse xs == reverse (xs ++ ys)
+-- *Main> quickCheck prop_reverse
+-- +++ OK, passed 100 tests.
+
+prop_reverse_twice xs = (reverse.reverse) xs == xs
+-- *Main> quickCheck prop_reverse_twice 
+-- +++ OK, passed 100 tests. 
+
+-- 判断列表是否是有序
+ordered :: Ord a => [a] -> Bool
+ordered [] = True
+ordered [_] = True
+ordered (x:y:ys) = x <= y && ordered (y:ys)
+
+-- 选择排序，即每一次遍历取出最小的一个放在开头
+selectionSort :: Ord a => [a] -> [a]
+-- 辅助函数，从列表中取出最小的值，并删除这个元素
+selectionSortMin :: Ord a => [a] -> (a, [a])
+selectionSortMin [a] = (a, [])
+selectionSortMin (x:y:xs) |  x > y  = let (min, dest) = selectionSortMin(y:xs) in (min, x:dest) 
+                          | otherwise = let (min, dest) = selectionSortMin(x:xs) in (min, y:dest) 
+selectionSort [] = []
+selectionSort xs = let (min, dest) = selectionSortMin xs in min:selectionSort dest
+
+prop_sort xs = ordered $ selectionSort xs
+-- *Main> quickCheck prop_sort
+-- +++ OK, passed 100 tests.
+
+-- 在进行排序后的列表首元素为最小元素的测试时，如果没有限定列表不为空，则会出现失败的情况
+prop_headMin xs = head (selectionSort xs) == minimum xs
+-- *Main> quickCheck prop_headMin
+-- *** Failed! Exception: 'Prelude.head: empty list' (after 1 test):
+-- []
+
+-- 需要使用(==>)来限定测试集中不能有空列表
+prop_headMin' ::Ord a => [a] -> Property
+prop_headMin' xs = not (null xs) ==> head (selectionSort xs) == minimum xs
+-- *Main> quickCheck prop_headMin'
+-- +++ OK, passed 100 tests; 15 discarded.
+```
+
+除了使用quickCheck来进行测试外，如果需要展示更多的信息，可以使用verboseCheck：
+
+```haskell
+*Main> verboseCheck prop_even
+Passed:  
+0
+0
+...
+Passed:   
+15
+85
+
++++ OK, passed 100 tests.
+```
+
+### 测试数据生成器
+
+对于自定义的类型，可以实现Arbitray类型类来自动生成测试数据：
+
+```haskell
+class Arbitray a where
+    arbitray ::Gen a
+```
+
+另外库是提供了一些常用的函数来供使用：
+
+```haskell
+-- 从列表中的值中随机选取一个
+elements :: [a] -> Gen a
+-- 从一个范围内随机生成一个值
+choose :: System.Random.Random a => (a, a) -> Gen a
+-- 从多个生成 品随机抽取一个
+oneof :: [Gen a] -> Gen a
+```
+
+例如我们有一个算术表达式类型，我们需要随机生成一些算术表达式：
+
+```haskell
+newtype Exp = Exp String deriving (Show, Eq)
+-- Exp = Int | Exp op Exp
+instance Arbitrary Exp where
+    arbitrary = do
+        n <- choose (0,1) :: Gen Int
+        case n of
+            0 -> do
+                num <- choose (0,100) :: Gen Int
+                return $ Exp (show num)
+            1 -> do
+                op <- elements ["+", "-", "*", "/"]
+                Exp exp1 <- arbitrary :: Gen Exp
+                Exp exp2 <- arbitrary :: Gen Exp
+                return $ Exp (exp1 ++ op ++ exp2)
+-- *Main> sample (arbitrary :: Gen Exp)
+-- Exp "34"
+-- Exp "94"
+-- Exp "15"
+-- Exp "85-58*66"
+-- Exp "81-3+30-83"
+-- Exp "78+55/78*42+75/55+24/65*50/76*43+32*92*59*97/65/23/96*94/98/1*34-61/41*90+50+68"
+-- Exp "85"
+-- Exp "42+84"
+-- Exp "34"
+-- Exp "42"
+-- Exp "96*77*24+12/18"
+```
+
+---
+
+<br/>
+
+## 惰性求值简介
+
+### λ演算简介
+
+λ演算由数学家Alonzo Church引入，虽然简单，但可以看做是一个完整的编程语言：
+
+```
+Expression -> Constant
+            | Variable
+            | Expression Expression
+            | λ Variable. Expression
+```
+
+这其中Constant为常量；Variable为变量名称，约定使用小写字母；Expression Expression可以理解为函数应用；λ Variable. Expression则为λ函数定义，称为λ抽象。
+
+在λ函数定义中，如果变量x引入到函数体t中，则称x在t内被限定了，如果没有，则称些变量为游离的，没有游离变量的λ函数称之为闭合的，否则为开放。
+
+λ抽象默认为右结合性，而函数默认为左结合性，所以表达式λx. λy. λz.x y z为(λx. (λy. (λz.(x y) z )))
+
+之前我们讨论过λ表达式的转换和简化，这里复习一下：
+
+α替换（α-conversion）：α替换是指在命名不冲突的前提下可以将函数的参数重新命名。
+
+β简化（β-reduction）：β简化是指将参数应用于函数体。
+
+η简化（η-reduction）：η简化可以消除冗余的λ表达式。
+
+如果一个λ表达式不能再进行β简化，则称之为β常态形式(β-normal form)，简写为β-nf，如果连η简化也不能进行，称之为βη-nf。
+
+### ⊥ Bottom
+
+⊥表示不可能完成的计算结果。在haskell中可以表示为forever的结果、异常、undefined等等。
+
+在使用data来定义类型时，会自动添加⊥值来表示计算的失败或者不可终止，例如我们可以说 1 `div` 0 = ⊥。包含⊥值的类型称之为lifted。
+
+newtype不会引入⊥：
+
+```haskell
+newtype N = N Int
+data D = D Int
+
+n (N i) = 42
+d (D i) = 42
+
+-- *Main> n undefined
+-- 42
+-- *Main> d undefined
+-- *** Exception: Prelude.undefined
+-- CallStack (from HasCallStack):
+--   error, called at libraries/base/GHC/Err.hs:78:14 in base:GHC.Err
+--   undefined, called at <interactive>:3:3 in interactive:Ghci2
+```
+
+可以看出包含⊥值的类型D在使用函数d求值时，由于d ⊥ = ⊥，所以会直接报错。
+
+如果一个函数是严格的，那么当且仅当f ⊥ = ⊥。即参数求值失败，则f的计算也会不成功。haskell为非严格语言，例如n ⊥ = 42。
+
+由于惰性求值，所以某些时候虽然参数为⊥，但结果并非⊥。
+
+```haskell
+-- 惰性求值对计算结果的影响
+data D2 = D2 !Int
+d2 (D2 i) = 42
+-- *Main> d2 (D2 undefined)
+-- *** Exception: Prelude.undefined
+-- CallStack (from HasCallStack):
+--   error, called at libraries/base/GHC/Err.hs:78:14 in base:GHC.Err
+--   undefined, called at <interactive>:14:8 in interactive:Ghci1
+-- *Main> d (D undefined)
+-- 42
+```
+
+在const函数中直接返回第一个参数的值，而不会求值第二个参数，而seq在返回第二个参数之前，会严格计算第一个参数的值，如果第一个参数为⊥，则返回值也为⊥。
+
+```haskell
+*Main> const 1 undefined
+1
+*Main> seq undefined 1
+*** Exception: Prelude.undefined
+CallStack (from HasCallStack):
+  error, called at libraries/base/GHC/Err.hs:78:14 in base:GHC.Err
+  undefined, called at <interactive>:24:5 in interactive:Ghci8
+```
+
+### 表达式形态与trunk
+
+关于WHNF、HNF、NF这些的区别可以参考[这里](https://www.jianshu.com/p/dcafa69219f7)。
+
+NF值那些已经不能简化了的表达式，而WHNF指的是那些最外层的表达式是一个值构造器或者是匿名函数。
+
+可以看出WHNF包含了NF。这些概念在分析哪些表达需要立刻求值，哪些表达可以延后求值上很重要。
+
+
+```haskell
+-- 以下是NF
+42
+(2, "hello")
+\x -> (x + 1)
+--以下不是NF
+1 + 2                 -- 我们可以把它求值为 3
+(\x -> x + 1) 2       -- 我们可以应用这个函数
+"he" ++ "llo"         -- 我们可以应用 (++)
+(1 + 1, 2 + 2)        -- 我们可以对 1 + 1 以及 2 + 2求值
+-- 以下是WHNF
+(1 + 1, 2 + 2) -- 最外层是一个值构造器 (,)
+\x -> 2 + 2 -- 最外层是一个匿名函数的抽象
+'h' : ("e" ++ "llo") -- 最外层是一个值构造器 (:)
+-- 以下不是WHNF
+1 + 2 -- 最外层是 (+) 函数的调用
+(\x -> x + 1) 2 -- 最外层是匿名函数 (\x -> x + 1) 的调用
+"he" ++ "llo" -- 最外层是 (++) 函数的调用
+```
+
+
+trunk意为形实替换程序，指的是以一段程序来代表一些函数的参数或者一些结果。这个表达式与环境形成了一个无参数的闭包，包含了所有计算结果所需要的所有信息。在惰性求值中会尽量延后对表达式的求值，而是以trunk形式来代替，在必要时根据这个闭包环境来求值。
+
+在GHCi中使用:sprint命令可以在打印结果时不严格地求值，对于未求出的部分使用下划线表示，@todo 这块在我的GHCi上并不能很好的体现，先略过。
+
+### 求值策略
+
+引用求值：call by value，即在调用一个函数前，先把参数的值求出后再传入函数，这也是最常见的方式。
+
+按名调用：call by name，即将参数直接替换到函数体中，如果这个参数在函数体里没有参与计算，则这个参数就不会被计算。
+
+常序求值：normal order evaluation，从左边最外侧的不在λ函数定义内部的式子开始计算。
+
+
+---
+
+<br/>
+
+## 并行与并发编程
+
+并发编程相关的包为monad-par，可以通过```cabal install monad-par```安装。
+
+我们通过f (g x) (h x)这个表达中的g x 和 h x的并行计算来展示haskell中并发编程的要点。
+
+这时里假定这两个并行计算的函数都是绑定某个数是否为素数，而f为这两个素数的乘积，如果不是素数返回0.
+
+```haskell
+import Control.Monad.Par
+isPrime ::Integer -> Bool
+isPrime 2 = True
+isPrime n = n > 1 && all (\x -> (n `mod` x) /= 0)  (takeWhile (\x -> x * x < n) $ 2:[3,5..])
+
+generateKey :: Integer -> Integer -> Integer
+generateKey x y = runPar $ do
+    k1 <- new
+    k2 <- new
+    -- 不知道为什么下面这句话会报错
+    -- [k1,k2] <- sequence [new, new]
+    fork $ put k1 (isPrime x)
+    fork $ put k2 (isPrime y)
+    p1 <- get k1
+    p2 <- get k2
+    return $ if p1 && p2 then x * y *10 else 0
+
+
+main = print $ generateKey 2646507710984041 1066818132868207
+-- main = do 
+--     print $ isPrime 2646507710984041
+--     print $ isPrime 1066818132868207
+--     print $ 2646507710984041 * 1066818132868207 *10
+```
+
+
+### 轻量级线程
+
+
+```haskell
+import Control.Concurrent
+import Control.Monad
+import System.IO
+main :: IO ()
+main = do
+    hSetBuffering stdout LineBuffering
+    _ <- forkIO $ replicateM_ 20 (putStrLn "thread 1")
+    _ <- forkIO $ replicateM_ 20 (putStrLn "thread 2")
+    return ()
+```
+
+--
+<br/>
+
+## 结语
+
+haskell这本书一直都想看完，但每一次都是看完几章节之后就放弃了。这大概源于函数式编程语言的不习惯与对算法问题以及数学问题及思维的不敏感。
+
+这次强制以笔记的形式大概读完了，从头到尾也花了将近2个月的时间，但中间有很多略过的以及不甚理解的部分，并非没有细细琢磨，而是实在需要更多的练习与实践才能形成一种对语言的条件反射。
+
+另外对于函数式编程的诸多优点，我可能只理解了纯函数、惰性求值等并不深入的部分，而更加本质化的，更加深入化的一面，如同之前所说，需要在有机会实践或者从事这方面时才能更进一步了解。
+
+本书的结尾草草结束，最后一章节的内容省略了一大半，出于多种原因，细细品味的动力确实不足，只能以此草草结束。这篇文章这本书或者这是我函数式编程的开端，当然也可能是最后的一次这么系统的学习了。
