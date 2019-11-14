@@ -1105,13 +1105,13 @@ public class MenuItem extends MenuComponent {
         Menu menuA = new Menu("A");
         Menu menuB = new Menu("B");
         Menu menuC = new Menu("C");
-        menuA.add(new DesignPatterns.Restaurent.Combine.MenuItem("拉面", "兰州拉面", 9.9));
-        menuB.add(new DesignPatterns.Restaurent.Combine.MenuItem("尖椒腊肉盖饭", "尖椒腊肉盖饭", 11.9));
+        menuA.add(new designpatterns.restaurent.combine.MenuItem("拉面", "兰州拉面", 9.9));
+        menuB.add(new designpatterns.restaurent.combine.MenuItem("尖椒腊肉盖饭", "尖椒腊肉盖饭", 11.9));
 
 
         Menu menuCDrink = new Menu("C Drink");
-        menuCDrink.add(new DesignPatterns.Restaurent.Combine.MenuItem("啤酒", "哈尔滨啤酒", 99.9));
-        menuC.add(new DesignPatterns.Restaurent.Combine.MenuItem("羊肉串", "羊肉串", 5.9));
+        menuCDrink.add(new designpatterns.restaurent.combine.MenuItem("啤酒", "哈尔滨啤酒", 99.9));
+        menuC.add(new designpatterns.restaurent.combine.MenuItem("羊肉串", "羊肉串", 5.9));
         menuC.add(menuCDrink);
 
         all.add(menuA);
