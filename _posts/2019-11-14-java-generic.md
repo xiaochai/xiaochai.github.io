@@ -837,7 +837,7 @@ System.out.println(Arrays.toString(s));
 String[] s = dummy.<String>get().split(" ");
 ```
 
-查了[java官方的Specification](https://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.12)，发现对于方法调用，本来就支持在调用的方法前面添加非通配符的类型参数。
+查了[Java官方的Specification](https://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.12)，发现对于方法调用，本来就支持在调用的方法前面添加非通配符的类型参数。
 
 > MethodInvocation:<br/>
 > &nbsp;&nbsp;  MethodName ( ArgumentListopt )<br/>
@@ -861,7 +861,7 @@ String[] s = dummy.<String>get().split(" ");
 
 [Java的类型擦除](https://www.hollischuang.com/archives/226)
 
-[java为什么要用类型擦除实现泛型?](http://www.pulpcode.cn/2017/12/30/why-java-generic-use-type-eraser/)
+[Java为什么要用类型擦除实现泛型?](http://www.pulpcode.cn/2017/12/30/why-java-generic-use-type-eraser/)
 
 [Java中的协变与逆变](https://extremegtr.github.io/2016/07/11/Covariance-And-Contravariance-In-Java/)
 
