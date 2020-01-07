@@ -232,7 +232,7 @@ $ sysctl -w net.ipv4.tcp_tw_recycle=1
 $ for ((i=0;i<10;i++)); do curl   http://192.168.1.111; done;
 ```
 
-使用netstat持续观察TIME_WAIT的数量，发现这些TIME_STAMP持续时间特别短，1秒都不到就全部消失了。而把recycle重新关闭再试一下请求，TIME_WAIT又回来了。
+使用netstat持续观察TIME_WAIT的数量，发现这些TIME_WAIT持续时间特别短，1秒都不到就全部消失了。而把recycle重新关闭再试一下请求，TIME_WAIT又回来了。
 
 这说明如果开启了recycle选项，则TIME_WAIT的端口可以快速回收，他与reuse的不同在于reuse在netstat中还能看到TIME_WAIT，只是可以复用这些端口，而recycle是直接回收了，使用netstat已经看不到了。
 
