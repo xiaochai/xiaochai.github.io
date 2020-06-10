@@ -1624,11 +1624,16 @@ DNS实现容易，但也有缺点：一般在网络的各个环节都有DNS的�
 
 <br/>
 
+
+演化式架构师，着眼于大方向上的规划，适应变化，而不应该从一开始设计出一个完美的系统。
+
 在组内建立战略目标，原则和实践
 
 开发维护代码模板
 
 技术债务管理
+
+架构师的治理，不仅仅是服务治理，还包括对目标和实现进行监督
 
 好的服务甚至好的代码：松耦合、高内聚
 
@@ -1689,9 +1694,9 @@ Serverless是在目前的Paas更进一步的的平台服务，一般分为BaaS�
 
 > 在 PaaS 上最广泛使用的技术就要数 Docker 了，因为使用容器可以很清晰的描述应用程序，并保证环境一致性。管理云上的容器，可以称为是 CaaS（Container as a Service），如 GCE（Google Container Engine）。也可以基于 Kubernetes、Mesos 这类开源软件构件自己的 CaaS，不论是直接在 IaaS 构建还是基于 PaaS。
 
->BaaS（Backend as a Service）后端即服务，一般是一个个的 API 调用后端或别人已经实现好的程序逻辑，比如身份验证服务 Auth0，这些 BaaS 通常会用来管理数据，还有很多公有云上提供的我们常用的开源软件的商用服务，比如亚马逊的 RDS 可以替代我们自己部署的 MySQL，还有各种其它数据库和存储服务。
+> BaaS（Backend as a Service）后端即服务，一般是一个个的 API 调用后端或别人已经实现好的程序逻辑，比如身份验证服务 Auth0，这些 BaaS 通常会用来管理数据，还有很多公有云上提供的我们常用的开源软件的商用服务，比如亚马逊的 RDS 可以替代我们自己部署的 MySQL，还有各种其它数据库和存储服务。
 
-> FaaS（Functions as a Service）函数即服务，FaaS 是无服务器计算的一种形式，当前使用最广泛的是 AWS 的 Lambada。
+> FaaS（Functions as a Service）函数即服务，FaaS 是无服务器计算的一种形式，当前使用最广泛的是 AWS 的 Lambda。
 
 Serverless离我们并不远，腾讯小程序云就结合了BaaS和FaaS为我们提供Serverless服务，使得我们不用写服务端也能在小程序里支持用户状态维护、上传文件等多样化的操作。
 
@@ -1712,6 +1717,8 @@ Serverless离我们并不远，腾讯小程序云就结合了BaaS和FaaS为我�
 
 [DDD领域驱动设计基本理论知识总结](https://www.cnblogs.com/netfocus/archive/2011/10/10/2204949.html)
 
+[领域驱动设计(DDD)](https://www.cnblogs.com/Leo_wl/p/3866629.html)
+
 [漫画：什么是中台](https://juejin.im/post/5d995f82f265da5ba308389d)
 
 [中台战略全解读（一）：中台的发展与进化](https://www.infoq.cn/article/7z0JSGIIxFydDYS5tWfO)
@@ -1721,6 +1728,8 @@ Serverless离我们并不远，腾讯小程序云就结合了BaaS和FaaS为我�
 [Serverless Handbook——无服务架构实践手册](https://jimmysong.io/serverless-handbook/)
 
 [SOA和微服务架构的区别？](https://www.zhihu.com/question/37808426)
+
+[ESB和SOA到底是什么？](https://zato.io/docs/intro/esb-soa-cn.html)
 
 [Dropwizard](http://dropwizard.io) -
 
