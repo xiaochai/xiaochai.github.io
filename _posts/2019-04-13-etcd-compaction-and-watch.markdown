@@ -5,8 +5,8 @@ date: 2019-04-13
 categories:
   - Tech
 description: 
-image: https://wx2.sinaimg.cn/large/6a1f6674ly1g2145tpmz1j20sf0al74r.jpg
-image-sm: https://wx2.sinaimg.cn/large/6a1f6674ly1g2145tpmz1j20sf0al74r.jpg
+image: /assets/images/sina/76e06f9d99be00dd644156d641b0b065.jpg
+image-sm: /assets/images/sina/76e06f9d99be00dd644156d641b0b065.jpg
 ---
 
 etcd作为优秀的分布式key-value存储系统，被广泛应用于服务发现、配置管理等需要提供稳定可靠的分布式服务的场景中。

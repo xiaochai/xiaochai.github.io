@@ -6,37 +6,37 @@ categories:
   - Life
   - Gallery
 description: 
-image: https://wx3.sinaimg.cn/large/6a1f6674gy1flan6sfvw0j21kw2cmnpf.jpg
-image-sm: https://wx3.sinaimg.cn/mw1024/6a1f6674gy1flan6sfvw0j21kw2cmnpf.jpg
+image: /assets/images/sina/49eed0287213cdaa2e8962142d3beb0f.jpg
+image-sm: /assets/images/sina/a2a8cbdd18fe2b1824ea98bb7861848a.jpg
 thumbs:
-- https://wx2.sinaimg.cn/mw690/6a1f6674gy1flan7qfodbj21kw1i51hl.jpg
-- https://wx3.sinaimg.cn/mw690/6a1f6674gy1flan6r680rj21kw23ve81.jpg
-- https://wx4.sinaimg.cn/mw690/6a1f6674gy1flan6qq2s8j21kw0ydhdt.jpg
-- https://wx4.sinaimg.cn/mw690/6a1f6674gy1flan6u9aerj21kw23vqv5.jpg
-- https://wx2.sinaimg.cn/mw690/6a1f6674gy1flan6ruy7dj21kw1gb4qq.jpg
-- https://wx2.sinaimg.cn/mw690/6a1f6674gy1flan6s07stj21kw28gqv6.jpg
-- https://wx3.sinaimg.cn/mw690/6a1f6674gy1flan6sfvw0j21kw2cmnpf.jpg
-- https://wx2.sinaimg.cn/mw690/6a1f6674gy1flan6pekvkj20sg0sgn4x.jpg
+- /assets/images/sina/7e1d8cdbac10e551500da730bb6e1f3d.jpg
+- /assets/images/sina/62efa6e3c21498a9e6a6c140872847ae.jpg
+- /assets/images/sina/099ff91a597d6624c671e1be42eb6a5a.jpg
+- /assets/images/sina/74b89f9bb7ba2736699795f67d8be2b5.jpg
+- /assets/images/sina/9ecc0779d9a607493413b30067efd754.jpg
+- /assets/images/sina/84ae05da9246eb0007d2e24f19d191c6.jpg
+- /assets/images/sina/58a7fa01715babf0d879afc420860e00.jpg
+- /assets/images/sina/ec85287020eceecfa7782de8052deab5.jpg
 ---
 
 家搬顺义已经两月有余，屋内大大小小的细节修整了不少，家具家电也陆续置办齐全，总算看起来像一个温馨的家了。
 
-![屋顶](https://wx2.sinaimg.cn/mw1024/6a1f6674gy1flan7qfodbj21kw1i51hl.jpg)
-![窗](https://wx2.sinaimg.cn/mw1024/6a1f6674gy1flan6q1hz3j21kw1yf4qp.jpg)
+![屋顶](/assets/images/sina/25a09da132b9ec9c4691327b19bdf7c4.jpg)
+![窗](/assets/images/sina/fdf3b9ef1b1e90a4bae74f0e94ee281d.jpg)
 
 今年算是经历丰富的一年，从年初购房，新房装修，再到后来的拍婚纱照，办婚礼。人生大事了结了一多半了。
 
 年终如果有总结的话，今年的说头格外多。若是时间富足，定要聊聊这一年经历中的感悟，个中体会，定会娓娓道来。
 
-![花](https://wx1.sinaimg.cn/mw1024/6a1f6674gy1flan6u9aerj21kw23vqv5.jpg)
+![花](/assets/images/sina/340934ae3378d7a48ec3fca4c70f74fe.jpg)
 
 今年国庆回福州，由于身上肩负着办婚礼的使命，略有期待，也略有压力和紧张。还算一切顺利，其中的一段不完美的插曲算是与不完美的生活相互呼应。
 
 只是福州还是如此美丽，乌山，三坊，七巷与榕城。
 
-![墙](https://wx2.sinaimg.cn/mw1024/6a1f6674gy1flan6ruy7dj21kw1gb4qq.jpg)
-![榕树](https://wx2.sinaimg.cn/mw1024/6a1f6674gy1flan6s07stj21kw28gqv6.jpg)
-![根](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1flan6sfvw0j21kw2cmnpf.jpg)
+![墙](/assets/images/sina/1f34577f6870d7e1fe374ecf786c20c9.jpg)
+![榕树](/assets/images/sina/b0325a46e941d68b2f05bbc58ad23b5a.jpg)
+![根](/assets/images/sina/a2a8cbdd18fe2b1824ea98bb7861848a.jpg)
 
 毕竟工作北京，生活顺义，节后生活缓解许多。
 
@@ -44,10 +44,10 @@ thumbs:
 
 也可以说工作还算得心，新家略有温馨，朋友还是一见如故，同事也玩得开心。
 
-![1988](https://wx1.sinaimg.cn/mw1024/6a1f6674gy1flan6pcv47j20tz16idmk.jpg)
-![合照](https://wx2.sinaimg.cn/mw1024/6a1f6674gy1flan6pekvkj20sg0sgn4x.jpg)
+![1988](/assets/images/sina/0fee59ac85278187f3b5623df2cbbb61.jpg)
+![合照](/assets/images/sina/acc52f55d4ab23b792b8128bc7a4ee7a.jpg)
 
 这里也有满天云彩，这里还有飞机滑行！
 
-![360](https://wx4.sinaimg.cn/mw1024/6a1f6674gy1flan6qq2s8j21kw0ydhdt.jpg)
-![飞机](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1flan6r680rj21kw23ve81.jpg)
+![360](/assets/images/sina/8bbd1b7481d9123cabc78314b0843922.jpg)
+![飞机](/assets/images/sina/74b2ef3ab16e382837c78ad735b4399f.jpg)

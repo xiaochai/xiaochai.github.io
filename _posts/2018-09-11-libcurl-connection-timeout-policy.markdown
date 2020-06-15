@@ -123,7 +123,7 @@ curl: (7) couldn't connect to host
 
 使用wireshark查看耗时较长的请求当时的发包情况：
 
-![wireshark](https://wx3.sinaimg.cn/large/6a1f6674ly1fv5ql2azu3j21kw0gagyx.jpg)
+![wireshark](/assets/images/sina/1970bdbc18e4b6672013fa2e937119cf.jpg)
 
 可以看出，在往10.143.153.63发送sync包，并且在250ms没有返回的时候，又向另外一个ip 10.139.230.68发起了请求了，他进行了重试！
 

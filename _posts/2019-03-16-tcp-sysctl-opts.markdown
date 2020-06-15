@@ -5,8 +5,8 @@ date: 2019-03-16
 categories:
   - Tech
 description: 
-image: https://wx2.sinaimg.cn/large/6a1f6674ly1g15qk4xcdej227s0j8jug.jpg
-image-sm: https://wx2.sinaimg.cn/large/6a1f6674ly1g15qk4xcdej227s0j8jug.jpg
+image: /assets/images/sina/9866755ff640532fe997d969c4e5a4ea.jpg
+image-sm: /assets/images/sina/9866755ff640532fe997d969c4e5a4ea.jpg
 ---
 
 在机器上执行以下任意命令，就可以看到这个此机器上的TIME_WAIT的数量：
@@ -65,11 +65,11 @@ TCP  A                                                     TCP B
 
 在使用tcpdump抓包中，可以很清晰地看到选项字段里带的TSval和TSecr：
 
-![tsval](https://wx2.sinaimg.cn/large/6a1f6674ly1g15qkwwzt1j21e20ew41m.jpg)
+![tsval](/assets/images/sina/02f7297d7110758faaecba2fec74fa97.jpg)
 
 而在没有开启时间戳选项(B没有开启)的交互中，A收到B的回包不带时间戳选项，后续再发的包，也就不再带时间戳选项了：
 
-![notsval](https://wx2.sinaimg.cn/large/6a1f6674ly1g15qk4wwt1j216e0doq61.jpg)
+![notsval](/assets/images/sina/257cc7f9eb4e181572da79f1960b7140.jpg)
 
 
 #### 注意点

@@ -5,8 +5,8 @@ date: 2017-5-22
 categories:
   - Tech
 description: 
-image: https://wx3.sinaimg.cn/large/6a1f6674ly1ffuf6qvvc8j21kw0u5n0z.jpg
-image-sm: https://wx3.sinaimg.cn/mw1024/6a1f6674ly1ffuf6qvvc8j21kw0u5n0z.jpg
+image: /assets/images/sina/b852fd131f1bfe22e47737833043076d.jpg
+image-sm: /assets/images/sina/c8b716450b06db26513f66e7943de993.jpg
 ---
 <style>
 .myMJSmall {

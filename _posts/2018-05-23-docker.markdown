@@ -6,8 +6,8 @@ date: 2018-05-23
 categories:
   - Tech
 description: 
-image: https://wx2.sinaimg.cn/large/6a1f6674gy1fseinzpx4uj218g0p0aef.jpg
-image-sm: https://wx2.sinaimg.cn/mw1024/6a1f6674gy1fseinzpx4uj218g0p0aef.jpg
+image: /assets/images/sina/850453bd7432f6683f75e778128a47cd.jpg
+image-sm: /assets/images/sina/fbf7f4386451df6aea290f7e5aff2bd0.jpg
 ---
 ### 原理
 
@@ -423,7 +423,7 @@ docker-compose的配置文件可配置服务的网络，挂载数据卷，环境
 
 通过 ```--mode=replicated``` 或者 ```--mode=global``` 指定。
 
-![nodes](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1fsehr2jvv1j20m80fctas.jpg)
+![nodes](/assets/images/sina/dcbb6dea9217566d9b2ecffaba4be66c.jpg)
 
 #### 配置Swarm集群
 
@@ -598,9 +598,9 @@ docker stack deploy -c stack.yml wordpress
 
 我们在服务里添加了visualizer和portainer可视化页面，在浏览器中输入任意主机的ip:8080或者ip:9000即可看到各个服务的状态。
 
-![visualizer](https://wx1.sinaimg.cn/mw1024/6a1f6674gy1fsehr3o0rvj214k186jxt.jpg)
+![visualizer](/assets/images/sina/bda4130d875e885279c0c22ac7969020.jpg)
 
-![portainer.io](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1fseigv6iyfj21kw0vbdp8.jpg)
+![portainer.io](/assets/images/sina/0c3f0821580d0b61e7d8e0435d1297b0.jpg)
 
 
 

@@ -609,7 +609,7 @@ func input() {
 ### 运行效果
 
 以下为开了一个server和三个client的运行效果：
-![grpc_chat](https://wx1.sinaimg.cn/large/6a1f6674ly1fqv434auc1j21kw0wj1ag.jpg)
+![grpc_chat](/assets/images/sina/37c5ebcb76b00b748399cf4c4a93b0d9.jpg)
 
 ### 添加证书校验与身份校验
 

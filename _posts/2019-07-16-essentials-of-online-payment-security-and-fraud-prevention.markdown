@@ -6,8 +6,8 @@ date: 2019-07-16
 categories:
   - Reading
 description: 风控即未来：网络支付安全和反欺诈原理（Essentials of Online Payment Security and Fraud Prevention）
-image: http://wx4.sinaimg.cn/large/6a1f6674ly1g56hzdupkpj20u019x788.jpg
-image-sm: http://wx4.sinaimg.cn/large/6a1f6674ly1g56hzdupkpj20u019x788.jpg
+image: /assets/images/sina/313bd97a332387976edc1d9bb0ebd017.jpg
+image-sm: /assets/images/sina/313bd97a332387976edc1d9bb0ebd017.jpg
 ---
 
 ### 第一章 了解在线支付
@@ -122,7 +122,7 @@ image-sm: http://wx4.sinaimg.cn/large/6a1f6674ly1g56hzdupkpj20u019x788.jpg
 
 信用卡资金流的参与主体：
 
-![参与主体](https://wx2.sinaimg.cn/mw690/6a1f6674ly1g56ixc6keoj20y00dejuz.jpg)
+![参与主体](/assets/images/sina/ce1337f84306c548f98451a2f2cae226.jpg)
 
 > <strong>1. 开设账户，得到信用卡和额度；</strong><br/>
 
@@ -136,7 +136,7 @@ image-sm: http://wx4.sinaimg.cn/large/6a1f6674ly1g56hzdupkpj20u019x788.jpg
 
 信用卡现金流的步骤如下图，后续会逐一讲解
 
-![步骤](https://wx1.sinaimg.cn/mw690/6a1f6674ly1g56iwxzbmqj20sn0bsn08.jpg)
+![步骤](/assets/images/sina/37865206893b330443c1aa00f594bb3f.jpg)
 
 #### 卡授权（Card Authentication）
 

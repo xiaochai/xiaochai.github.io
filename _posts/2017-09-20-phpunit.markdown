@@ -1235,7 +1235,7 @@ phpunit.phar test/CoverageTest.php --whitelist mymath.php --coverage-html /var/w
 
 其中```--coverage-html```表示将报告以html的形式输出到```/var/www/html/coverage```目录，如下图：（由于只测试了一个方法，所以目前覆盖率比较低）
 
-![coverage1](https://wx2.sinaimg.cn/mw1024/6a1f6674gy1flfh21kfu3j21kw0e9dj8.jpg)
+![coverage1](/assets/images/sina/8ffa2a2d242cd46d60137b8838c9fecc.jpg)
 
 也可以使用xml配置来说明需要测试的白名单：
 
@@ -1304,7 +1304,7 @@ phpunit.phar test/CoverageTest.php --whitelist mymath.php --coverage-html /var/w
 
 此报告不管从完整程度到页面的精美程度都可以说非常地另人满意
 
-![coverage2](https://wx3.sinaimg.cn/mw1024/6a1f6674gy1flfh26pfdlj21kw1axajt.jpg)
+![coverage2](/assets/images/sina/c856e3942cdde02c5d25b7b54f4e8591.jpg)
 
 ### 常用断言
 

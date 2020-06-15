@@ -5,8 +5,8 @@ date: 2018-03-12
 categories:
   - Tech
 description: 
-image: https://wx1.sinaimg.cn/large/6a1f6674gy1fpp4if4yrvj20xc0kitd1.jpg
-image-sm: https://wx1.sinaimg.cn/large/6a1f6674gy1fpp4if4yrvj20xc0kitd1.jpg
+image: /assets/images/sina/104e314a1bb1adaca4603a09c0bb811b.jpg
+image-sm: /assets/images/sina/104e314a1bb1adaca4603a09c0bb811b.jpg
 ---
 
 <style>

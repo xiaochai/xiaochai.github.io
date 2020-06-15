@@ -6,17 +6,17 @@ categories:
   - Journey
   - Gallery
 description: 
-image: https://ww3.sinaimg.cn/large/6a1f6674jw1elllqltqifj21kw11x4dp.jpg
-image-sm: https://ww3.sinaimg.cn/mw1024/6a1f6674jw1elllqltqifj21kw11x4dp.jpg
+image: /assets/images/sina/adaddde12c133e965bf37d7a8a4b4f74.jpg
+image-sm: /assets/images/sina/fbeba802f456c8e7608f4bdcd5672fa7.jpg
 thumbs:
-- https://ww1.sinaimg.cn/mw1024/6a1f6674jw1elllqqbvdtj21kw2l3ke4.jpg
-- https://ww2.sinaimg.cn/mw1024/6a1f6674jw1elllqu9hhsj21kw14i484.jpg
-- https://ww3.sinaimg.cn/mw1024/6a1f6674jw1elllr1wyvlj21kw2j8npa.jpg
-- https://ww3.sinaimg.cn/mw1024/6a1f6674jw1elllr2jungj21kw0redia.jpg
-- https://ww2.sinaimg.cn/mw1024/6a1f6674jw1elllr4x3qdj21kw0mzjz4.jpg
-- https://ww3.sinaimg.cn/mw1024/6a1f6674jw1elllr6uhuhj21kw0y3afw.jpg
-- https://ww2.sinaimg.cn/mw1024/6a1f6674jw1elllr94boyj21kw0xgn3x.jpg
-- https://ww4.sinaimg.cn/mw1024/6a1f6674jw1elllrf9i8ej21kw0vkdxa.jpg
+- /assets/images/sina/83508b25771b54eaeae27c89d1da394f.jpg
+- /assets/images/sina/35eec7d0e23ea088289e94cd6bf2ba20.jpg
+- /assets/images/sina/9fd55a72cf446a3000cff0a0a7d1777f.jpg
+- /assets/images/sina/b57cd097681daa7886fc4f6731891b2a.jpg
+- /assets/images/sina/28f77d1ea5b1dd38ddf4b2542dfefe96.jpg
+- /assets/images/sina/aae8a22d01802785a46831593f28bb9b.jpg
+- /assets/images/sina/dc6275f65935261f0deaf324983de814.jpg
+- /assets/images/sina/3f86badd428d995e6359284118026241.jpg
 ---
 以前都有修照片的习惯，每一次旅行，或者扫街回来，都会将当次的照片归类，整理。如果有值得修的好片子，也会对应的小修一把。
 
@@ -28,11 +28,11 @@ thumbs:
 
 本篇做为这个类别的开篇，整理了之前自己处理过的拙作, 勉励。
 
-![照片](https://ww1.sinaimg.cn/mw1024/6a1f6674jw1elllqqbvdtj21kw2l3ke4.jpg)
-![照片](https://ww2.sinaimg.cn/mw1024/6a1f6674jw1elllqu9hhsj21kw14i484.jpg)
-![照片](https://ww3.sinaimg.cn/mw1024/6a1f6674jw1elllr1wyvlj21kw2j8npa.jpg)
-![照片](https://ww3.sinaimg.cn/mw1024/6a1f6674jw1elllr2jungj21kw0redia.jpg)
-![照片](https://ww2.sinaimg.cn/mw1024/6a1f6674jw1elllr4x3qdj21kw0mzjz4.jpg)
-![照片](https://ww3.sinaimg.cn/mw1024/6a1f6674jw1elllr6uhuhj21kw0y3afw.jpg)
-![照片](https://ww2.sinaimg.cn/mw1024/6a1f6674jw1elllr94boyj21kw0xgn3x.jpg)
-![照片](https://ww4.sinaimg.cn/mw1024/6a1f6674jw1elllrf9i8ej21kw0vkdxa.jpg)
+![照片](/assets/images/sina/83508b25771b54eaeae27c89d1da394f.jpg)
+![照片](/assets/images/sina/35eec7d0e23ea088289e94cd6bf2ba20.jpg)
+![照片](/assets/images/sina/9fd55a72cf446a3000cff0a0a7d1777f.jpg)
+![照片](/assets/images/sina/b57cd097681daa7886fc4f6731891b2a.jpg)
+![照片](/assets/images/sina/28f77d1ea5b1dd38ddf4b2542dfefe96.jpg)
+![照片](/assets/images/sina/aae8a22d01802785a46831593f28bb9b.jpg)
+![照片](/assets/images/sina/dc6275f65935261f0deaf324983de814.jpg)
+![照片](/assets/images/sina/3f86badd428d995e6359284118026241.jpg)
