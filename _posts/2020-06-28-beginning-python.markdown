@@ -2841,6 +2841,32 @@ Your code has been rated at -8.00/10 (previous run: -8.00/10, +0.00)
 
 <br/>
 
+### 使用Jython扩展
+
+Jython是使用Java编写的Python解释器，所以扩展Jython只需要编写对应的Java类即可：
+
+```java
+public class JythonTest{
+    public void greeting(){
+        System.out.println("Hello");
+    }
+}
+```
+
+然后编译成class文件，并在运行Jython时指定对应的CLASSPATH，即可直接import对应的Java类了：
+
+```bash
+$ CLASSPATH=JythonTest.class jython
+Jython 2.7.2 (v2.7.2:925a3cc3b49d, Mar 21 2020, 10:03:58)
+[OpenJDK 64-Bit Server VM (Oracle Corporation)] on java13.0.2
+>>> import JythonTest
+>>> t = JythonTest()
+>>> t.greeting()
+Hello
+```
+
+### 扩展标准版本Python：CPython
+
 
 编写扩展思路与PHP写扩展的思路是一样的，只是Python中有一个swig工具可以简化这一部分的工作。
 
