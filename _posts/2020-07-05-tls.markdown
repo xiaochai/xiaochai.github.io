@@ -403,7 +403,7 @@ Extension: ec_point_formats (len=2)
         EC point format: uncompressed (0)
 ```
 
-#### [session_ticket(RFC4507)](https://tools.ietf.org/html/rfc4507) 
+#### [session_ticket(RFC5077)](https://tools.ietf.org/html/rfc5077) 
 
 附带之前服务端下发的ticket来加速协商的过程，如果服务端支持ticket需要在回包中带上此扩展，并且在Change Chiper Spec之前发送New Session Ticket类型的Handshake包。
 
@@ -919,6 +919,83 @@ Cipher Suites (46 suites)
 ### 使用session id 和session ticket 减少TTL次数
 
 
+session id用于复用连接信息来减少tls握手的次数，其机制是在server hello时返回sessionid，客户端在下次建立连接时发送的client hello包里可以包含此sessionid来恢复之前的会话。
+
+
+      Client                                                Server
+
+      ClientHello                   -------->
+                                                       ServerHello
+                                                [ChangeCipherSpec]
+                                    <--------             Finished
+      [ChangeCipherSpec]
+      Finished                      -------->
+      Application Data              <------->     Application Data
+
+服务端存储session id并存储与之对应的状态，如加密套件，master key等信息。如果服务端拿客户端传过来的sessionid能拿到对应的信息，就表示此session id有效，并尝试恢复会话。
+
+由于session id 是存储在服务端，所以需要解决多台机器共享session id的问题，一般来说在分布式系统中增加sessionid的共享 会带来一些麻烦。
+
+
+
+
+session ticket用来减少客户端和服务端协商密钥等信息的交互次数（由原来的两次交互减少为一次交互）。与此相关的插件sessionTicket以及NewSessionTicket消息来共同完成此工作。
+
+首先client hello会发送空的session ticket插件来表示支持session ticket。服务端如果希望使用此机制，会在server hello中返回空的session ticket扩展。接着在协商完成之后在Change Cipher Spec包之前发送New Session Ticket包
+
+```
+TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
+    Content Type: Handshake (22)
+    Version: TLS 1.2 (0x0303)
+    Length: 170
+    Handshake Protocol: New Session Ticket
+        Handshake Type: New Session Ticket (4)
+        Length: 166
+        TLS Session Ticket
+            Session Ticket Lifetime Hint: 0 seconds
+            Session Ticket Length: 160
+            Session Ticket: 0014a28214a3b4ad53eb7a7a48abf3df92ac921763557b0e…
+
+```
+
+其中包含的session ticket是将本次协商的结果状态（如加密套件，master secret等），使用只有服务端知道的密钥加密(nginx中的ssl_session_ticket_key配置)。对于这个session ticket，客户端会与主密钥、加密套件等状态信息保存在一起。
+
+Client                                               Server
+
+         ClientHello
+        (empty SessionTicket extension)-------->
+                                                         ServerHello
+                                     (empty SessionTicket extension)
+                                                        Certificate*
+                                                  ServerKeyExchange*
+                                                 CertificateRequest*
+                                      <--------      ServerHelloDone
+         Certificate*
+         ClientKeyExchange
+         CertificateVerify*
+         [ChangeCipherSpec]
+         Finished                     -------->
+                                                    NewSessionTicket
+                                                  [ChangeCipherSpec]
+                                      <--------             Finished
+         Application Data             <------->     Application Data
+
+下次发起请求时，会在client hello的session ticket 插件上带上此ticket，服务端尝试从中解析出对应主密钥，如果此ticket验证通过，则服务端就重用session状态，直接握手完成，开始发送Change cipher spec，当然服务端也可以再发一个新的NewSessionTicket。
+
+         Client                                                Server
+         ClientHello
+         (SessionTicket extension)      -------->
+                                                          ServerHello
+                                      (empty SessionTicket extension)
+                                                     NewSessionTicket(option)
+                                                   [ChangeCipherSpec]
+                                       <--------             Finished
+         [ChangeCipherSpec]
+         Finished                      -------->
+         Application Data              <------->     Application Data
+
+Ticket是明文传输的，其安全性是通过服务端的加密密钥来保证。如果这个ticket被第三方截获，由于其它无法解密，就无法得知主密钥，所以也就恢复会话了。
+
 ### 证书的吊销
 
 证书吊销的原因有很多，例如私钥泄漏，私钥被破解等。
@@ -980,6 +1057,9 @@ CRLs方式存在性能问题，随着被吊销的证书越来越多，CRL文件�
 
 [HTTPS 温故知新（六） —— TLS 中的 Extensions](https://halfrost.com/https-extensions/)
 
+[HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)](https://halfrost.com/https_tls1-2_handshake/#2sessionticket)
+
 [TLS扩展的那些事](https://www.zybuluo.com/ensis/note/233759)
 
 [SSL协议安全系列：PKI体系中的证书吊销](https://wooyun.js.org/drops/SSL%E5%8D%8F%E8%AE%AE%E5%AE%89%E5%85%A8%E7%B3%BB%E5%88%97%EF%BC%9APKI%E4%BD%93%E7%B3%BB%E4%B8%AD%E7%9A%84%E8%AF%81%E4%B9%A6%E5%90%8A%E9%94%80.html)
+
