@@ -50,6 +50,40 @@ center{
 
 不如先从解析每一个包的内容说起。
 
+
+## 密钥交换协议
+
+我们知道TLS握手的目的之一是协商一个对称密钥。基于非对称加密以及证书机制，我们可以很容易想到如下流程：
+
+1. 客户端发起请求
+2. 服务端回复自己的证书，
+3. 客户端使用证书链机制验证有效性，生成对称密钥S，使用证书中包含有公钥的加密，发送给服务端
+4. 服务端收到密文后使用私钥解密，得到密钥S，至此两端就可以使用S进行对称加密传输了
+
+这种方式可以保证密钥S只有通信双方知道，在私钥不泄漏的情况下，第三方无法解密内容。但如果私钥泄漏了呢？
+
+一旦私钥泄漏，之前的转输内容将全部被解密，这是由于私钥参与了密钥交换，不满足前向安全性（Forward Secrecy）。
+
+
+为了解决这个问题，就出现了DH密钥交换协议（Diffie–Hellman key exchange），其流程如下：
+
+1. 客户端发起请求
+2. 服务端生成一个私钥a，并选定p,g，计算A = g^a mod p，发送p,g,A
+3. 客户端生成一个私钥b, 计算B = g^b mod p，主密钥K = A^b mod p，发送B;
+4. 服务端生成主密钥K = B^a mod p
+
+这样双方即协商生成了主密钥K，这是基于这样一个等式的 (g^a)^b mod p = (g^b)^a mod p，证明从略
+
+DH协商中服务端私钥a可以使用证书中的私钥，也可以使用临时生成一个私钥，第一种由于证书私钥参与了密钥的生成，所以一旦证书的私钥泄漏，之前的传输就有可能被破解，所以是非前向安全性。而使用临时生成的私钥可以解决这个问题，这种方式称之为DHE(Diffie–Hellman ephemeral)
+
+与此类似的，如果将计算过程替换成椭圆曲线的方式，就产生了ECDH和ECDHE(Elliptic-curve Diffie–Hellman ephemeral)，由于ECDH的非前向安全性，目前已经废弃。
+
+在DHE/ECDHE算法中，证书的公私钥不再参与密钥的计算，只是做为服务端的身份认证。
+
+
+承载协商消息的包包括Server Key Exchange、Client Key Exchange。
+
+
 ## 分析
 <br/>
 
@@ -96,7 +130,6 @@ center{
 3 Alert Protocol：用于表示警告或者错误的发生，包含有两个字段，AlertLevel(1)和AlertDescription(1)。需要注意的是，在TLS结束时，双方都需要发送close_notify类型的Alert来告诉对方已经传输完成。
 
 4 Application Data Protocol：携带需要传输的应用层数据
-
 
 
 ### Handshake Protocal
@@ -232,7 +265,7 @@ client_version： 与之前提到的版本一号格式一致，这一个值表�
 
 random：这个结构包括一个32位的时间戳和一个28字节的随机数
 
-session_id：是一个不定长的id标识，在实现中有一个字节的长度和后面的具体内容组成。session id一般情况下为空，只有在客户端希望复用session id（可以从之前连接的，也可以从当前连接的，也可以从当前其它连接的拿到session id）时，才会传这个session id，传session id可以减少协商的交互次数
+session_id：是一个不定长的id标识，在实现中有一个字节的长度和后面的具体内容组成。session id一般情况下为空，只有在客户端希望复用session id（可以从之前连接的，也可以从当前连接的，也可以从当前其它连接的拿到session id）时，才会传这个session id，传session id可以减少协商的交互次数，详见后面的session复用章节
 
 cipher_suites：包括两个字节的长度信息，和支持的套件列表（按客户端喜好优先排列），每一个套件占用两字节，定义了以下四个方面：密钥交换算法（a key   exchange algorithm）, 批量加密算法（a bulk encryption algorithm (including secret keylength)）, 消息认证码算法（a MAC algorithm）, 伪随机算法函数(pseudo-random function /PRF）
 
@@ -700,17 +733,253 @@ server端随时可以发送，用于告知client端需要重新协商。此类�
 
 
 
+### 证书链与证书的校验
 
+Chrome打开任意一个https的网站，在地址栏的最左边可以查看网站的对应证书链
+
+![](assets/images/cer-chain.png)
+
+证书链中最顶端的为根证书(Root Certificates)，一般随操作系统分发，自签名，属于Root CA；最底端的为终端用户证书(End-user Certificates)，即网站所属者的证书；位于中间的证书可能有多级，都称之为中间证书(Intermediates Certificates)。
+
+
+可以点击证书图片的位置拖出到文件夹，即可得到cer文件，使用如下命令可以查看证书的内容：
+
+```bash
+$ openssl x509 -text -inform DER -in baidu.com.cer
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            72:58:78:36:6e:9f:56:e8:1d:41:88:48
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=BE, O=GlobalSign nv-sa, CN=GlobalSign Organization Validation CA - SHA256 - G2
+        Validity
+            Not Before: Apr  2 07:04:58 2020 GMT
+            Not After : Jul 26 05:31:02 2021 GMT
+        Subject: C=CN, ST=beijing, L=beijing, OU=service operation department, O=Beijing Baidu Netcom Science Technology Co., Ltd, CN=baidu.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:c1:a9:b0:ae:47:1a:d2:57:eb:1d:15:1f:6e:5c:
+                    ...
+                    cf:26:a6:08:8e:a5:49:17:92:53:b3:91:a5:cf:53:
+                    b0:31
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            Authority Information Access:
+                CA Issuers - URI:http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt
+                OCSP - URI:http://ocsp2.globalsign.com/gsorganizationvalsha2g2
+
+            X509v3 Certificate Policies:
+                Policy: 1.3.6.1.4.1.4146.1.20
+                  CPS: https://www.globalsign.com/repository/
+                Policy: 2.23.140.1.2.2
+
+            X509v3 Basic Constraints:
+                CA:FALSE
+            X509v3 CRL Distribution Points:
+
+                Full Name:
+                  URI:http://crl.globalsign.com/gs/gsorganizationvalsha2g2.crl
+
+            X509v3 Subject Alternative Name:
+                DNS:baidu.com, DNS:baifubao.com, DNS:www.baidu.cn, DNS:www.baidu.com.cn, DNS:mct.y.nuomi.com, DNS:apollo.auto, DNS:dwz.cn, DNS:*.baidu.com, DNS:*.baifubao.com, DNS:*.baidustatic.com, DNS:*.bdstatic.com, DNS:*.bdimg.com, DNS:*.hao123.com, DNS:*.nuomi.com, DNS:*.chuanke.com, DNS:*.trustgo.com, DNS:*.bce.baidu.com, DNS:*.eyun.baidu.com, DNS:*.map.baidu.com, DNS:*.mbd.baidu.com, DNS:*.fanyi.baidu.com, DNS:*.baidubce.com, DNS:*.mipcdn.com, DNS:*.news.baidu.com, DNS:*.baidupcs.com, DNS:*.aipage.com, DNS:*.aipage.cn, DNS:*.bcehost.com, DNS:*.safe.baidu.com, DNS:*.im.baidu.com, DNS:*.baiducontent.com, DNS:*.dlnel.com, DNS:*.dlnel.org, DNS:*.dueros.baidu.com, DNS:*.su.baidu.com, DNS:*.91.com, DNS:*.hao123.baidu.com, DNS:*.apollo.auto, DNS:*.xueshu.baidu.com, DNS:*.bj.baidubce.com, DNS:*.gz.baidubce.com, DNS:*.smartapps.cn, DNS:*.bdtjrcv.com, DNS:*.hao222.com, DNS:*.haokan.com, DNS:*.pae.baidu.com, DNS:*.vd.bdstatic.com, DNS:click.hm.baidu.com, DNS:log.hm.baidu.com, DNS:cm.pos.baidu.com, DNS:wn.pos.baidu.com, DNS:update.pan.baidu.com
+            X509v3 Extended Key Usage:
+                TLS Web Server Authentication, TLS Web Client Authentication
+            X509v3 Authority Key Identifier:
+                keyid:96:DE:61:F1:BD:1C:16:29:53:1C:C0:CC:7D:3B:83:00:40:E6:1A:7C
+
+            X509v3 Subject Key Identifier:
+                9E:C9:79:D7:E9:5B:AB:8A:16:CC:32:8E:C6:99:E6:9F:20:42:35:87
+            1.3.6.1.4.1.11129.2.4.2:
+                ...j.h.v.\.C....ED.^..V..7...G..s..^........q9.<......G0E. i.h1!.Y]...J.Ef.i.....r..(.......!...._.....ve.W...Jmo..J.....'.E...v.oSv.1.1.....Q..w.......).....7.....q9.<......G0E. TEl0N......hf.A...=.P.F..,.Z|6?^.!../.j..Z...J.5e...Z..J..xw'..C..F.v..\./.w0".T..0.V..M..3.../ ..N.d....q9.<......G0E. E...(Ga.....1A...H..[.?..v....i?.!........% ......o..e.=qY5._..-C.[
+    Signature Algorithm: sha256WithRSAEncryption
+         bc:dc:02:d0:d9:de:8c:c5:e2:d9:fe:4d:ef:ba:d1:22:8b:34:
+         ...
+         ee:69:4b:df:e4:ec:cf:f8:f2:ae:a5:5f:55:2b:0f:31:f2:64:
+         0a:53:ab:eb
+````
+
+证书的标准为[X.509](https://zh.wikipedia.org/wiki/X.509)，主要定义了需要包含哪些字段；
+
+有几个比较重要的字段：
+
+> 颁发者(Issuer)：指向证书链的上一级证书，包含国家或地区(C)、组织(O)、名称(CN)；根证书的Issuer是自己，所以他的签名也是使用自己的密钥签名的，称之为自签名证书(Self-signed certificate)
+
+> 有效期(Validity)：证书有效期限
+
+> 被颁发的对象(Subject)：一般是网站所有者，包含国家或地区(C)，州或省(ST)，地点(L/Locality), 组织单位(OU)，组织名(O)，名称(CN)
+
+> 公钥信息(Public Key Info)：包括公钥算法、模数(Modulus，2048bit，在输入中有[前导0x00](https://stackoverflow.com/questions/15953631/rsa-modulus-prefaced-by-0x00)，所以看起来像257字节)和指数(Exponent，一般是65537)，[参考此](https://wujingchao.github.io/2016/04/03/java-rsa-encryption/)
+
+> 签名(Signature)：包括签名算法(如sha256WithRSAEncryption)和签名的值，签名的计算公式为RSA(sha256(Data), IssuerPrivateKey)
+
+> CRL Distribution Points：CRL列表的访问地址，用于吊销证书使用，参见证书吊销章节
+
+> Authority Information Access：这个信息中OCSP是比较重要的信息，用于查看证书是否被吊销，参见证书吊销章节
+
+
+证书对应又有两种编码格式PEM和DER，PEM格式是使用base64编码，可以用文本程序打开，以```-----BEGIN CERTIFICATE-----```开头，而DER是二进制编码；可以通过以下命令将DER转成PEM：
+
+```
+openssl x509 -text -inform DER -in baidu.com.cer -out baidu.com.pem
+```
+
+对于证书文件的后缀名有很多，.crt，.cer,.pem,.der等，后缀名与编码格式并没有很大的关系。
+
+### 证书链的校验
+
+![](assets/images/Chain_of_trust.svg)
+
+如图中所示，从终端用户证书开始，取出证书的签名，使用上一级证书中的公钥解密得到摘要，将终端用户证书的内容按摘要算法(sha256等)获得的摘要与签名解密的摘要对比，如果一致，即说明内容没有被篡改；
+依次再取出第二级的证书使用再上一级的公钥解密，并验证摘要；
+以此类推，直到受信任的根证书或者信任锚点(trusted anchor)；
+如果在此过程中摘要对不上或者找不到受信的根证书，那么这个网站就会标记为不安全，如原来的12306，只有通过安装根证书才能使浏览器不报警。
+
+以上就是证书链的校验过程。这一套机制通过增加中间证书的方式，使得在某一个证书提供商有问题时，直接吊销中间证书即可，而可以保证根证书的安全性。
+
+
+### CA机构与证书
+
+CA(Certificate Authority)，即证书认证机构，通过WebTrust国际安全审计认证，就可以将自己颁发的证书预装主流浏览器中，成为受信和根证书。
+
+全球的主流的CA机构有Comodo、Symantec、GeoTrust、DigiCert、Thawte、GlobalSign、RapidSSL等；其中几个公司又属于DigiCert公司，如Symantec，GeoTrust，Thawte，RapidSSL。
+
+不得不提一下[Let's Encrypt](https://zh.wikipedia.org/wiki/Let%27s_Encrypt)，它提供免费的自动化的证书管理和颁发，降低了证书申请的门槛，推进了全网HTTPS化的进程。
+
+CA的私钥如此重要，关于他的保护措施可以查看此文章：[CA 机构是如何保护自己私钥的](https://www.zhihu.com/question/22260090)。
 
 
 ### TLS重协商的中间人攻击
 
+重协商是在已经协商好的tls连接上发起重新协商的机制，用于更换算法、证书、更新密钥等场景。
+
+有两种方式可以发起重协商：1. 客户端发起clientHello要求重协商 ，2. 服务端发送helloRequest来发起重协商。当然对方都可以通过Alert来拒绝重协商。
+
+最开始的重协商机制存在安全漏洞，我们来看下图展示出来的中间人攻击：
+
+![](assets/images/renegotiation.jpg)
+
+攻击流程：
+1. Client发起clientHello握手请求，被中间人暂时存下来
+2. 中间人发起握手请求，并发送精心设计的HTTP的请求头:
+```
+GET /attacked.jsp HTTP/1.0
+Dummy: 
+```
+3. 中间人将暂存的clientHello发送到服务端，服务端会认为是一个重协商，所以走重协商流程
+4. Client发送真正的HTTP请求
+```
+GET /index.jsp HTTP/1.0
+Cookie: Token=xxx
+```
+5. 在服务端看来，会把两段请求合并(如图)，变成带着用户的cookie请求attacked.jsp路径，中间人攻击达到目的。
+
+
+使用这个思路还可以实现用户重定向到恶意网站，POST劫持等[各种攻击](https://www.anquanke.com/post/id/82989)。
+
+
+#### 解决方式
+
+以上SSL3.0上的重协商协议之所以是不安全的，主要原因在于服务端无法区分首次的ClientHello包还是重协商的ClientHello包，以及前后的两次协商之间缺少关联性。
+
+为此，[RFC5746](https://tools.ietf.org/html/rfc5746)提出了安全重协商renegotitation_info扩展。
+
+client hello中发送此扩展来与服务端协商开启安全的重协商策略，其它发送的数据如下：
+
+```
+Extension: renegotiation_info (len=1)
+    Type: renegotiation_info (65281)
+    Length: 1
+    Renegotiation Info extension
+        Renegotiation info extension length: 0
+
+```
+
+如果服务端同意开启安全重协商策略，则在server hello也会返回些扩展，数据也是为空；在协商完成发送的Finish包时会各自都带上verify_data，称之为client_verify_data和server_verify_data，两端都将这两个verify_data存储下来。
+
+在重协商时，发送的client hello会在Renegotiation Info extension里带有上一次协商时的client_verify_data；server hello则会将client_verify_data和server_verify_data都带上。两端对此数据校验通过了再会继续重协商。
+
+Finish包是使用协商完成的密钥加密传输的，所以不用担心verify_data被篡改的问题，这种方式就将两次协商关联在一起了，防止中间人攻击。
+
+
+有时候client hello中也存在不发送这个扩展，但服务端返回这个扩展的情况，这是为了监容旧版本服务端不正确 的实现，使用了TLS_EMPTY_RENEGOTIATION_INFO_SCSV这一伪密码套件来表示这一扩展，即在client hello中的cipher_suites中添加TLS_EMPTY_RENEGOTIATION_INFO_SCSV来表示支持重协商，这块的理解参见[此](https://blog.csdn.net/u010129119/article/details/77675644)
+
+```
+Cipher Suites (46 suites)
+    Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
+    ...
+    Cipher Suite: TLS_EMPTY_RENEGOTIATION_INFO_SCSV (0x00ff)
+```
 
 ### 使用session id 和session ticket 减少TTL次数
 
 
 ### 证书的吊销
 
+证书吊销的原因有很多，例如私钥泄漏，私钥被破解等。
+
+目前有两种方式可以吊销证书：CRLs证书吊销列表(Certificate Revocation Lists)和OCSP在线证书状态协议(Online Certificate Status Protocol)。
+
+
+#### CRLs
+
+CRLs方式，其实是CA机构会维护一个或者多个CRL列表，包含有被吊销的证书的信息。如之前我们看到的证书信息中就有CRL Distribution Points字段，表示CRL列表的下载地址。但一些证书（大多数是自签名证书）不包含有此信息。
+
+CRLs方式存在性能问题，随着被吊销的证书越来越多，CRL文件越来越大，达到上百兆之多。部分CA通过拆分CRL的方式来缓解这个问题，但拆分之后的大小依然可达到1M。
+
+另外一种方式是通过增量的方式来更新CRL列表，但这需要客户端实现上的支持，目前这种方式并没有广泛地应用。
+
+#### OCSP
+
+使用OCSP方式的CA会提供一个实时查询证书有效性的HTTP接口，这个接口的地址一般保存在证书当中。
+
+这种方式会在请求服务端接口前请求一次OCSP接口，一定程度上会将用户的行为隐私暴露给CA。并且OCSP的响应时间也影响客户端页面的加载速度，带来一些性能上的问题。
+
+为了解决这些问题，OCSP Stapling技术出现了。TLS的status_request扩展用来表明客户端支持OCSP stapling的方式来校验证书的有效性。服务端接收到此扩展后，会请求OCSP服务器来确认证书的状态，并在发送服务器状态的同时将证书的状态也下发下去，服务商会缓存叶子证书的OCSP的响应结果，但不允许缓存中间证书的响应结果。不过nginx的ocsp_stapling的选项默认是关闭的，有需要时可以在[配置中打开](http://nginx.org/en/docs/http/ngx_http_ssl_module).html#ssl_stapling_file)。
 
 
 ### TLS v1.3相关的改动
+
+
+
+
+## 参考
+
+[TLS/SSL 协议详解 (30) SSL中的RSA、DHE、ECDHE、ECDH流程与区别](https://blog.csdn.net/mrpre/article/details/78025940)
+
+[Diffie–Hellman key exchange DH密钥协商](https://blog.csdn.net/youngbug/article/details/78740805)
+
+[TLS 中的密钥交换](https://claviering.github.io/2019/02/17/key-exchange/)
+
+[HTTPS 精读之 TLS 证书校验](https://zhuanlan.zhihu.com/p/30655259)
+
+[HTTPS系列1——HTTPS三次握手](https://www.zybuluo.com/blueGhost/note/805491)
+
+[RSA Modulus prefaced by 0x00](https://stackoverflow.com/questions/15953631/rsa-modulus-prefaced-by-0x00)
+
+[Java使用模数、公钥指数、私钥指数进行RSA加解密](https://wujingchao.github.io/2016/04/03/java-rsa-encryption/)
+
+[CA证书相关的一些基础知识](https://blog.csdn.net/u012894479/article/details/53691691)
+
+[科普一下关于SSL证书颁发机构的相关知识](https://www.pianyissl.com/ssl/page/69)
+
+[CA机构介绍(Certificate Authority 域名SSL证书颁发机构)](https://www.cnblogs.com/osfipin/p/11780916.html)
+
+[Let's Encrypt，免费好用的 HTTPS 证书](https://imququ.com/post/letsencrypt-certificate.html)
+
+[SSL/TLS协议安全之:不安全的重协商](https://www.anquanke.com/post/id/82989)
+
+[白话SSL/TLS默认重协商漏洞原理与安全重协商对抗机制](https://blog.csdn.net/O4dC8OjO7ZL6/article/details/78537550)
+
+[RFC 5746:Transport Layer Security (TLS) Renegotiation Indication Extension](https://tools.ietf.org/html/rfc5746)
+
+[HTTPS 温故知新（六） —— TLS 中的 Extensions](https://halfrost.com/https-extensions/)
+
+[TLS扩展的那些事](https://www.zybuluo.com/ensis/note/233759)
+
+[SSL协议安全系列：PKI体系中的证书吊销](https://wooyun.js.org/drops/SSL%E5%8D%8F%E8%AE%AE%E5%AE%89%E5%85%A8%E7%B3%BB%E5%88%97%EF%BC%9APKI%E4%BD%93%E7%B3%BB%E4%B8%AD%E7%9A%84%E8%AF%81%E4%B9%A6%E5%90%8A%E9%94%80.html)
