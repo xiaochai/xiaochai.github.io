@@ -91,7 +91,7 @@ Any sample code included in the Specification, unless otherwise specified, is li
 
 ### 例子: Hello World
 
-状态机的操作是通过由JSON对象表示的状态集合(states)指定的，也就是一级字段"States"的值。在这个例子中展示了一个名为"Hello World"状态。
+状态机的操作是通过由JSON对象表示的状态集合(states)指定的，也就是一级字段"States"的值。在以下例子中展示了一个名为"Hello World"状态。
 
 ```json
 {
@@ -107,34 +107,33 @@ Any sample code included in the Specification, unless otherwise specified, is li
 }
 ```
 
-When this state machine is launched, the interpreter begins execution by identifying the Start State. It executes that state, and then checks to see if the state is marked as an End State. If it is, the machine terminates and returns a result. If the state is not an End State, the interpreter looks for a “Next” field to determine what state to run next; it repeats this process until it reaches a [Terminal State](#terminal-state) \(Succeed, Fail, or an End State\) or a runtime error occurs.
-
-当状态机启动时，解释器就开始执行"开始状态"(Start State)指定的任务。执行完这个状态的任务之后，判断此状态是否被标记为"结束状态"(End State)。如果是，那么状态机就会停止执行，并返回结果。如果不是，解释器将查找Next字段所指向的状态并执行，重复以上动作直到某个状态是["结束状态"(Terminal State，包括Succeed, Fail, 'End State)或者是出现运行时错误。
+当状态机启动时，解释器就开始执行被识别为开始状态(Start State)的节点。执行完这个状态的任务之后，判断此状态是否被标记为结束状态(End State)。如果是，那么状态机将会停止执行并返回结果。如果不是，解释器将查找Next字段所指向的状态并接着执行，重复以上动作直到某个状态是[结束状态(Terminal State)](#terminal-state)：包括成功(Succeed)，失败(Fail)，结束(End)这些状态或者是出现运行时错误。
 
 
-In this example, the machine contains a single state named “Hello World”. Because “Hello World” is a Task State, the interpreter tries to execute it. Examining the value of the “Resource” field shows that it points to a Lambda function, so the interpreter attempts to invoke that function. Assuming the Lambda function executes successfully, the machine will terminate successfully.
+ 在此示例中，状态机含名为"Hello World"的单个状态。因为"Hello World"是一个任务状态(Task State)，所以解释器会尝试执行。通过检查Resource字段可以知道其指向Lambda函数，此时解释器会尝试调用该函数。假设Lambda函数成功执行，状态机将成功结束。
 
-A State Machine is represented by a JSON object.
+状态机是通过JSON对象表示的。
 
-### Top-level fields
+### 一级字段
 
-A State Machine MUST have an object field named “States”, whose fields represent the states.
+状态机对象必须有States字段，表示状态集合。
 
-A State Machine MUST have a string field named “StartAt”, whose value MUST exactly match one of names of the “States” fields. The interpreter starts running the the machine at the named state.
+状态机对象必须有StartAt字段，并且这个字段的值必须是States状态集合里的某个状态名。解释器会从这个状态开始执行。
 
-A State Machine MAY have a string field named “Comment”, provided for human-readable description of the machine.
+状态机对象可包含Comment字段，用来描述状态机。
 
-A State Machine MAY have a string field named “Version”, which gives the version of the States language used in the machine. This document describes version 1.0, and if omitted, the default value of “Version” is the string “1.0”.
+状态机对象可包含Version字段，表示所用的状态机描述语言的版本号。此文档的版本是1.0，所以此字段的默认值为1.0。
 
-A State Machine MAY have an integer field named “TimeoutSeconds”. If provided, it provides the maximum number of seconds the machine is allowed to run. If the machine runs longer than the specified time, then the interpreter fails the machine with a `States.Timeout` [Error Name](#error-names).
+状态机对象可包含有TimeoutSeconds字段，表示此状态机的最长允许执行时间。如果执行时间超过了指定时间，解释器将执行失败，[错误名](#error-names)为States.Timeout。
 
-## Concepts
 
-### States
+## 概念
 
-States are represented as fields of the top-level “States” object. The state name, whose length MUST BE less than or equal to 128 Unicode characters, is the field name; state names MUST be unique within the scope of the whole state machine. States describe tasks \(units of work\), or specify flow control \(e.g. Choice\).
+### 状态集合(States)
 
-Here is an example state that executes a Lambda function:
+状态集合由顶层的States字段表示。状态的名称就是key名，必须小于128个Unicode字符，并且所有的状态名称必须唯一。状态可以描述任务(工作单元)，或者是特定流程控制(例如Choice)。
+
+这是一个执行Lambda函数的状态例子：
 
 ```
 "HelloWorld": {
@@ -145,37 +144,43 @@ Here is an example state that executes a Lambda function:
 }
 ```
 
-Note that:
+请注意：
 
-1.  All states MUST have a “Type” field. This document refers to the values of this field as a state’s _type_, and to a state such as the one in the example above as a Task State.
+1. 所有状态必须有Type字段。此文档将此字段定义为状态的类型，像之前例子中的状态是一个任务类型状态(Task State)。
 
-2.  Any state MAY have a “Comment” field, to hold a human-readable comment or description.
 
-3.  Most state types require additional fields as specified in this document.
+2.  状态可包含有Comment字段，表示对状态的描述。
 
-4.  Any state except for Choice, Succeed, and Fail MAY have a field named "End" whose value MUST be a boolean. The term “Terminal State” means a state with with `{ "End": true }`, or a state with `{ "Type": "Succeed" }`, or a state with `{ "Type": "Fail" }`.
+3.  本文档中的大部分状态类型都有一些额外的字段，来表示特定类型状态的额外信息。
 
-### Transitions
+4. 除了Choice、Succeed、Fail状态外其它状态都可包含有类型为boolean的End字段。结束状态(Terminal State)指是的含有以下字段的状态：{"End": true }或{ "Type": "Succeed" }或{ "Type": "Fail" }。
 
-Transitions link states together, defining the control flow for the state machine. After executing a non-terminal state, the interpreter follows a transition to the next state. For most state types, transitions are unconditional and specified through the state's “Next” field.
+### 状态流转(Transitions)
 
-All non-terminal states MUST have a “Next” field, except for the Choice state. The value of the “Next” field MUST exactly and case-sensitively match the name of the another state.
+状态流转定义了状态机的控制流，将所有状态连接在一起。在执行完一个非终止状态时，解释器将继续执行下一个状态。大多数状态类型是通过状态的Next字段无条件流转的。
 
-States can have multiple incoming transitions from other states.
 
-### Timestamps
+除了类型为Choice的状态外，其它非终止状态都必须有Next字段，而且此字段必须是状态集合里的某一个状态名，匹配时大小写敏感。
 
-The Choice and Wait states deal with JSON field values which represent timestamps. These are strings which MUST conform to the [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) profile of ISO 8601, with the further restrictions that an uppercase “T” character MUST be used to separate date and time, and an uppercase “Z” character MUST be present in the absence of a numeric time zone offset, for example “2016-03-14T01:59:00Z”.
+一个状态的流转来源可以是多个状态，例如多个状态的Next字段是同一个状态名。
 
-### Data
 
-The interpreter passes data between states to perform calculations or to dynamically control the state machine’s flow. All such data MUST be expressed in JSON.
 
-When a state machine is started, the caller can provide an initial [JSON text](https://tools.ietf.org/html/rfc7159#section-2) as input, which is passed to the machine's start state as input. If no input is provided, the default is an empty JSON object, `{}`. As each state is executed, it receives a JSON text as input and can produce arbitrary output, which MUST be a JSON text. When two states are linked by a transition, the output from the first state is passed as input to the second state. The output from the machine's terminal state is treated as its output.
+### 时间戳(Timestamps)
 
-For example, consider a simple state machine that adds two numbers together:
+Choice和Wait类型的状态需要处理包含有时间戳的字段。时间戳字段必须是满足[RFC3339](https://www.ietf.org/rfc/rfc3339.txt)), ISO 8601的一个字符串, 并加强了如下限制：大写字母T必须用来分开日期和时间，在没有时区时必须使用大写字母Z，例如”2016-03-14T01:59:00Z”。
 
-```
+
+### 数据(Data)
+
+解释器通过在状态间传递数据来执行计算任务或者控制流程。所有这些数据必须以JSON表示。
+
+
+当状态机开始时，调用者可以提供一个初始的JSON字符串做为输入，这也将传给Start State做为输入，默认为`{}`。每一个状态在执行完成后也会产生JSON格式的输出。当两个状态被流转在一起时，第一个状态的输出将成为第二个状态的输入。状态机终止状态的输出，将被视为这个状态机的输出。
+
+举个例子，如下将两个数相加的状态机：
+
+```json
 {
   "StartAt": "Add",
   "States": {   
@@ -188,31 +193,35 @@ For example, consider a simple state machine that adds two numbers together:
 }
 ```
 
-Suppose the “Add” Lambda function is defined as:
+假设Add这个函数定义如下：
 
-```
+```js
 exports.handler = function(event, context) {
   context.succeed(event.val1 + event.val2);
 };
 ```
 
-Then if this state machine was started with the input `{ "val1": 3, "val2": 4 }`, then the output would be the JSON text consisting of the number `7`.
+如果之前的状态机以`{ "val1": 3, "val2": 4 }`做为输入，那么输出的JSON值就是数字`7`。
 
-The usual constraints applying to JSON-encoded data apply. In particular, note that:
+适用于JSON编码的约束也同样适用，特别需要注意：
 
-1.  Numbers in JSON generally conform to JavaScript semantics, typically corresponding to double-precision IEEE-854 values. For this and other interoperability concerns, see [RFC 7159](https://tools.ietf.org/html/rfc7159).
+1. JSON中的数字通常符合JavaScript语义，通常对应于双精度IEEE-854值。有关此问题和其他互操作性问题，请参阅[RFC 7159](https://tools.ietf.org/html/rfc7159)。
 
-2.  Standalone "-delimited strings, booleans, and numbers are valid JSON texts.
 
-### Paths
+2. 独立的分隔字符串“-”、布尔值和数字都是有效的JSON文本。
 
-A Path is a string, beginning with “\$”, used to identify components with a JSON text. The syntax is that of [JsonPath](https://github.com/jayway/JsonPath).
 
-### Reference Paths
+### 路径(Paths)
 
-A Reference Path is a Path with syntax limited in such a way that it can only identify a single node in a JSON structure: The operators “\@”, “,”, “:”, and “\?” are not supported \- all Reference Paths MUST be unambiguous references to a single value, array, or object \(subtree\).
+路径是以"$"开头的字符串，使用[JsonPath](https://github.com/jayway/JsonPath)语法来标识JSON对象的某个字段。
 
-For example, if state input data contained the values:
+
+### 引用路径(Reference Paths)
+
+
+引用路径是受限制的路径访问(PATH)，只能访问JSON结构中单个节点：不支持“@”， “,”，“:” 和 “?” 。所有的引用路径必须是对单个值，数组，对象(子树)的明确引用。
+
+例如，如果状态的输入如下：
 
 ```
 {
@@ -224,7 +233,7 @@ For example, if state input data contained the values:
 }
 ```
 
-Then the following Reference Paths would return:
+则如下显示了引用路径以及结果示例：
 
 ```
 $.foo => 123
@@ -232,9 +241,11 @@ $.bar => ["a", "b", "c"]
 $.car.cdr => true
 ```
 
-Paths and Reference Paths are used by certain states, as specified later in this document, to control the flow of a state machine or to configure a state's settings or options.
 
-Here are some examples of acceptable Reference Path syntax:
+路径和引用路径会在特定的状态中使用，包括文档后面介绍的控制状态机的流程以及配置状态机的选项。
+
+
+以下是一些合法的引用路径的语法参考：
 
 ```
 $.store.book
@@ -251,18 +262,22 @@ $['store']['book']
 $['store'][0]['book']
 ```
 
-### Input and Output Processing
+### 输入和输出处理
 
-As described above, data is passed between states as JSON texts. However, a state may want to process only a subset of its input data, and may want that data structured differently from the way it appears in the input. Similarly, it may want to control the format and content of the data that it passes on as output.
 
-Fields named “InputPath”, “Parameters”, “OutputPath”, and “ResultPath” exist to support this. Any state except for the Fail and Succeed states MAY have “InputPath” and “OutputPath”. States which potentially generate results MAY have “ResultPath” and “Parameters”: Pass State, Task State, Parallel State, and Map State.
+如上文说述，数据是以JSON字符串的形式在状态间传递。然而，一个状态可能只会处理输入数据的子集，变换其结构。同样，也需要控制输出数据的格式和内容。
 
-In this discussion, “raw input” means the JSON text that is the input to a state. “Result” means the JSON text that a state generates, for example from external code invoked by a Task State, the combined result of the branches in a Parallel State, or the value of the “Result” field in a Pass state. “Effective input” means the input after the application of InputPath and Parameters, and “effective output” means the final state output after processing the Result with ResultPath and OutputPath.
+存在名为“ InputPath”，“ Parameters”，“ OutputPath”和“ ResultPath”的字段来支持此功能。除Success和Fail状态外的任何状态都可拥有“ InputPath”和“ OutputPath”字段。可能产生结果的状态可以具有“ ResultPath”和“ Parameters”字段：Pass State, Task State, Parallel State, and Map State。
+
+
+在本文中，原始输入(raw input)表示作为状态输入的JSON文本。结果(Result)表示状态产生的JSON文本，它可以来自于Task State执行外部代码的结果、Parallel State各个分支结果的合并、Pass State的Result字段。 有效输入(Effective input)是指应用InputPath和Parameters后的输入，有效输出(effective output)是指使用ResultPath和OutputPath处理Result后的最终状态输出。
+
 
 #### InputPath, Parameters, OutputPath, DefaultPath
 
-1.  The value of “InputPath” MUST be a Path, which is applied to a State’s raw input to select some or all of it; that selection is used by the state, for example in passing to Resources in Task States and Choices selectors in Choice States.
+1. InputPath的值必须是一个Path，应用于状态的raw input来筛选出某些或者全部的值；筛选的结果将被状态所使用，例如在Task State中将传递给Resources指定的任务，在Choice State中将传递给选择器(Choices selectors)。
 
+2. Parameters可以包含任意值。
 2.  “Parameters” may have any value. Certain conventions described below allow values to be extracted from the effective input and embedded in the Parameters structure. If the “Parameters” field is provided, its value, after the extraction and embedding, becomes the effective input.
 
 3.  The value of “ResultPath” MUST be a Reference Path, which specifies the raw input’s combination with or replacement by the state’s Result.
@@ -1144,130 +1159,3 @@ A Choice state failed to find a match for the condition field extracted from its
 
 
 
-
-
-
-
-
- =====================
-
-
- 在此示例中，状态机含名为"Hello World"的单个状态。因为"Hello World"是一个"任务状态"(Task State)，所以解释器会尝试执行。通过检查Resource字段所指向Lambda函数，解释器尝试调用该函数。假设 Lambda 函数成功执行，状态机将成功结束。
-
-状态机是由JSON对象表示。
-
-顶层字段
-状态机对象必须有States字段，表示状态集合。
-
-状态机对象必须有StartAt字段，并且这个字段的值必须是States状态集合里的某个状态名。解释器会从这个状态开始执行。
-
-状态机对象可能包含(MAY)Comment字段，表示状态机的描述。
-
-状态机对象可能包含Version字段，表示此对应所用的状态机描述语言的版本号。此文档的版本是1.0，所以此字段的默认值为1.0。
-
-状态机对象可能包含有TimeoutSeconds字段，表示此状态机的最长允许执行时间。如果执行时间超过了指定时间，解释器将执行失败。
-
-概念
-状态集合(States)
-状态集合由顶层的States字段表示。状态的名称就是字段的key名，必须小于128个Unicode字符，并且在所有的状态名称必须唯一。状态可以描述任务(Task，工作单元)，或者是指定流程控制(例如Choice类型状态)。
-
-这是一个执行Lambda函数的状态例子。
-
-"HelloWorld": {
-  "Type": "Task",
-  "Resource": "arn:aws:lambda:us-east-1:123456789012:function:HelloWorld",
-  "Next": "NextState",
-  "Comment": "Executes the HelloWorld Lambda function"
-}
-请注意：
-
-状态必须有Type字段。此文档将此字段定义为状态的类型，像之前例子中的状态是一个任务状态(Task State)。
-
-状态可能包含有Comment字段，表示状态的描述。
-
-本文档中的大部分状态类型都有一些额外的字段。
-
-除了Choice、Succeed、Fail状态外其它状态都可能包含有类型为bollean的End字段。结束状态(Terminal State)指是的含有以下字段的状态"End": true },  { "Type": "Succeed" },  { "Type": "Fail" }。
-
-状态转换(Transitions)
-状态转换定义了状态机的控制流，将所有状态连接在一起。在执行完一个非终止状态时，解释器将继续执行下一个状态。大多数状态类型是通过状态的Next字段无条件转换的
-
-除了类型为Choice的状态外，其它非终止状态都必须有Next字段，而且此字段必须是状态集合里的某一个状态名，匹配时大小写敏感。
-
-一个状态的转换来源可以是多个状态，例如多个状态的Next字段可以是同一个状态名。
-
-时间戳(Timestamps)
-Choice和Wait类型的状态需要处理包含有时间戳的字段。时间戳字段是一个字符串满足RFC3339, ISO 8601, 加强了如下限制：大字字母T必须用来分开日期和时间，在没有时区时必须使用大写字母Z，例如“2016-03-14T01:59:00Z”.
-
-数据(Data)
-解释器通过在状态间传递数据来计算任务或者控制流程。所有这些数据必须以JSON表示。
-
-当状态机开始时，调用者可以提供一个初始的JSON对象做为输入，这也将传给开始状态做为输入，默认为{}。每一个状态在执行完成后也会产生JSON格式的输出。当两个状态被流转在一起时，第一个状态的输入将成为第二个状态的输入。状态机的终止状态的输出，将是这个状态机的输出。
-
-举个例子，如下将两个数相加的状态机：
-
-{
-  "StartAt": "Add",
-  "States": {   
-    "Add": {
-      "Type": "Task",
-      "Resource": "arn:aws:lambda:us-east-1:123456789012:function:Add",
-      "End": true
-    }
-  }
-}
-假设Add这个函数定义如下：
-
-exports.handler = function(event, context) {
-  context.succeed(event.val1 + event.val2);
-};
-如果之前的状态机以 { "val1": 3, "val2": 4 }做为输入，那么输出的JSON值就是数字7。
-
-适用于JSON编码的约束也同样适用，特别需要注意：
-
-JSON中的数字通常符合JavaScript语义，通常对应于双精度IEEE-854值。有关此问题和其他互操作性问题，请参阅RFC 7159。
-
-独立的“-”分隔的字符串，布尔值和数字是有效的JSON文本。
-
-路径(Paths)
-路径是以"$"开头的字符串，使用JsonPath的语法来标识JSON对象的某个字段。
-
-引用路径(Reference Paths)
-引用路径是受限制的路径访问(PATH)，只能访问JSON结构中单个节点：不支持“@”， “,”，“:” 和 “?” - 所有的引用路径必须是对单个值，数组，对象(子树)的明确引用
-
-例如，如果状态的输入如下：
-
-{
-    "foo": 123,
-    "bar": ["a", "b", "c"],
-    "car": {
-        "cdr": true
-    }
-}
-则以下的引用路径的结果为：
-
-$.foo => 123
-$.bar => ["a", "b", "c"]
-$.car.cdr => true
-路径和引用路径会在某些状态中使用，例如文档后面介绍的控制状态机的流程或者配置状态机的选项。
-
-以下是一些正确的引用路径的语法参考：
-
-$.store.book
-$.store\.book
-$.\stor\e.boo\k
-$.store.book.title
-$.foo.\.bar
-$.foo\@bar.baz\[\[.\?pretty
-$.&Ж中.\uD800\uDF46
-$.ledgers.branch[0].pending.count
-$.ledgers.branch[0]
-$.ledgers[0][22][315].foo
-$['store']['book']
-$['store'][0]['book']
-输入和输出处理
-如上文说述，数据是以JSON字符串的形式在状态间传递。然而，一个状态可能只会处理输入数据的子集，并且想让数据与输入时的不一样。同样也有可能需要控制输出数据的格式和内容。
-
-存在名为“ InputPath”，“ Parameters”，“ OutputPath”和“ ResultPath”的字段来支持此功能。除失败和成功状态外的任何状态都可以具有“ InputPath”和“ OutputPath”。可能产生结果的状态可以具有“ ResultPath”和“ Parameters”：通过状态，任务状态，并行状态和映射状态。
-
-在本文中，原始输入(raw input) 表示作为状态输入的JSON文本。结果(Result)表示状态产生的JSON文本，例如任务状态调用外部代码产品的结果，并行状态每个分支结果的合并，通过状态(Pass State)下的Result字段。 “有效输入”是指应用InputPath和参数后的输入，“有效输出”是指使用ResultPath和OutputPath处理Result后的最终状态输出。
