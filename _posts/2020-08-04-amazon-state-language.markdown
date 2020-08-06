@@ -340,17 +340,19 @@ ResultPath字段是Refrence Path，表示状态的结果相对于raw input将保
 
 #### Defaults
 
-Each of InputPath, Parameters, ResultPath, and OutputPath are optional. The default value of InputPath is “\$”, so by default the effective input is just the raw input. The default value of ResultPath is “\$”, so by default a state’s Result overwrites and replaces the input. The default value of OutputPath is “\$”, so by default a state’s effective output is the result of processing ResultPath.
 
-Parameters has no default value. If it is absent, it has no effect on the effective input.
+InputPath、Parameters、ResultPath、OutputPath这些字段都是可选的。InputPath的默认值为`$`，所以effective input默认情况下就是raw input。ResultPath的默认值为`$`，所以状态的Result默认情况下会覆盖掉输入。OutputPath的默认值为`$`，所以状态的有效输出默认就是ResultPath。
 
-Therefore, if none of InputPath, Parameters, ResultPath, or OutputPath are supplied, a state consumes the raw input as provided and passes its Result to the next state.
 
-#### Input/Output Processing Examples
+Parameters没有默认值。在不给此字段的情况下，对effective input不产生作用。
 
-Consider the example given above, of a Lambda task that sums a pair of numbers. As presented, its input is: `{ "val1": 3, "val2": 4 }` and its output is: `7`.
+因此，在这些字段都没有的情况下，一个状态消费raw input并将它产生的Result传给下一个状态。
 
-Suppose the input is little more complex:
+#### 输入输出处理示例
+
+回顾之前给出的两数相加的状态机例子。原来的输入是`{ "val1": 3, "val2": 4 }`，输出 为数字 `7`。
+
+考虑以下更复杂点的输入：
 
 ```
 {
@@ -359,16 +361,16 @@ Suppose the input is little more complex:
 }
 ```
 
-Then suppose we modify the state definition by adding:
+另外我们将状态添加如下两个字段：
 
 ```
 "InputPath": "$.numbers",
 "ResultPath": "$.sum"
 ```
 
-And finally,suppose we simplify Line 4 of the Lambda function to read as follows: `return JSON.stringify(total)`. This is probably a better form of the function, which should really only care about doing math and not care how its result is labeled.
+并将Lambda函数改成`return JSON.stringify(total)`；这可能是更好的一种形式，因为函数只关心数学运算，而不用关心最终结果如何标注。
 
-In this case, the output would be:
+在这个例子中，输出可能如下：
 
 ```
 {
@@ -378,13 +380,15 @@ In this case, the output would be:
 }
 ```
 
-The interpreter might need to construct multiple levels of JSON object to achieve the desired effect. Suppose the input to some Task state is:
+解释器也可能需要构建多级的JSON对象来达到想要的结果。假设某个Task状态的输入为：
+
 
 ```
 { "a": 1 }
 ```
 
-Suppose the output from the Task is “Hi\!”, and the value of the “ResultPath” field is “\$.b.greeting”. Then the output from the state would be:
+假设Task状态的输出为"Hi!"，并且ResultPath字段为`$.b.greeting`。则这个状态的输出将是：
+
 
 ```
 {
@@ -395,9 +399,9 @@ Suppose the output from the Task is “Hi\!”, and the value of the “ResultPa
 }
 ```
 
-#### The Context Object
+#### Context对象
 
-The Interpreter can provide information to an executing state machine about the execution and other implementation details. This is delivered in the form of a JSON object called the “Context Object”. This version of the States Language specification does not specify any contents of the Context Object.
+解释器可以为运行中的状态机提供关于本次执行与其它实现细节的信息。这是以称之为Context Object的JSON对象来传递的。这一版本的状态机语言没有指定任何Context Object应该包含的内容。
 
 #### Parameters
 
