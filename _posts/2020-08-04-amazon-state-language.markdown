@@ -277,28 +277,30 @@ $['store'][0]['book']
 
 1. InputPath的值必须是一个Path，应用于状态的raw input来筛选出某些或者全部的值；筛选的结果将被状态所使用，例如在Task State中将传递给Resources指定的任务，在Choice State中将传递给选择器(Choices selectors)。
 
-2. Parameters可以包含任意值。
+2. Parameters可以包含任意值。以下讨论的场景允许从effec
+
 2.  “Parameters” may have any value. Certain conventions described below allow values to be extracted from the effective input and embedded in the Parameters structure. If the “Parameters” field is provided, its value, after the extraction and embedding, becomes the effective input.
 
+3. ResultPath的值必须是一个Reference Path，指定了raw input的组合或者替换状态的结果。
 3.  The value of “ResultPath” MUST be a Reference Path, which specifies the raw input’s combination with or replacement by the state’s Result.
 
-4.  The value of “OutputPath” MUST be a Path, which is applied to the state’s output after the application of ResultPath, producing the effective output which serves as the raw input for the next state.
+4. OutputPath的值必须是Path，应用于由ResultPath处理后的状态的结果，由此产生了effective out，并作为下一个状态的raw input。
 
-Note that JsonPath can yield multiple values when applied to an input JSON text. For example, given the text:
+请注意，将JsonPath应用于输入JSON文本时，可以产生多个值。 例如，给定以下文本：
 
 ```
 { "a": [1, 2, 3, 4] }
 ```
 
-Then if the JsonPath `$.a[0,1]` is appplied, the result will be two JSON texts, `1` and `2`. When this happens, to produce the effective input, the interpreter gathers the texts into an array, so in this example the state would see the input:
+JsonPath`$.a[0,1]`的结果将是`1`和`2`两个值。这种情况下，解释器会将这些值合并成数组，所以以上例子在状态中将看到如下输入：
 
 ```
 [ 1, 2 ]
 ```
 
-The same rule applies to OutputPath processing; if the OutputPath result contains multiple values, the effective output is a JSON array containing all of them.
+同样的规则也将应用于OutPath；如果OutputPath的结果包含多个合二为一，则effective output将是这些值组成的数组。
 
-The “ResultPath” field’s value is a Reference Path that specifies where to place the Result, relative to the raw input. If the raw input has a field at the location addressed by the ResultPath value then in the output that field is discarded and overwritten by the state's result. Otherwise, a new field is created in the state output, with intervening fields constructed as necessary. For example, given the raw input:
+ResultPath字段是Refrence Path，表示状态的结果相对于raw input将保存在哪个字段中。如果raw input在ResultPath指示的字段中有值，则在输出时此字段将被状态的结果替换掉。否则将在输出时创建新字段，并根据需要构造中间字段。如下例子中，给定raw input：
 
 ```
 {
@@ -308,7 +310,7 @@ The “ResultPath” field’s value is a Reference Path that specifies where to
 }
 ```
 
-If the state's result is the number `6`, and the “ResultPath” is `$.master.detail`, then in the output the `detail` field would be overwritten:
+如果状态的结果是数字`6`，并且ResultPath是`$.master.detail`，则在输出结果时`detail`字段将被覆盖：
 
 ```
 {
@@ -318,7 +320,7 @@ If the state's result is the number `6`, and the “ResultPath” is `$.master.d
 }
 ```
 
-If instead a “ResultPath” of `$.master.result.sum` was used then the result would be combined with the raw input, producing a chain of new fields containing `result` and `sum`:
+如果ResultPath为`$.master.result.sum`，则结果将是在raw input的基础上链式增加两个新字段，`result`和`sum`：
 
 ```
 {
@@ -330,12 +332,11 @@ If instead a “ResultPath” of `$.master.result.sum` was used then the result 
   }
 }
 ```
+如果InputPath的值为`null`，这表示raw input将被忽略，此状态的effective input将是一个空的JSON对象`{}`。注意InputPath的值为`null`与缺少此字段所表示的意思不同。
 
-If the value of InputPath is `null`, that means that the raw input is discarded, and the effective input for the state is an empty JSON object, `{}`. Note that having a value of `null` is different from the “InputPath” field being absent.
+如果ResultPath的值为`null`，这表示状态的Result将被忽略，raw input将成为Result。
 
-If the value of ResultPath is `null`, that means that the state’s Result is discarded and its raw input becomes its Result.
-
-If the value of OutputPath is `null`, that means the input and Result are discarded, and the effective output from the state is an empty JSON object, `{}`.
+如果OutputPath的值为`null`，这表示输入和Result将被忽略，effective output 将是一个空的JSON对象`{}`。
 
 #### Defaults
 
