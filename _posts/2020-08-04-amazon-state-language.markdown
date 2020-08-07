@@ -405,7 +405,7 @@ Parameters没有默认值。在不给此字段的情况下，对effective input�
 
 #### Parameters
 
-The value of the “Parameters” field \(after processing described below\) becomes the effective input. Consider the following Task state:
+Parameters字段的值经过下面的处理成为有效输入。考虑如下的Task状态：
 
 ```
 "X": {
@@ -419,21 +419,21 @@ The value of the “Parameters” field \(after processing described below\) bec
 }
 ```
 
-In this case, the effective input to the code identified in the Resource field would be the object with “first” and “second” fields which is the value of the “Parameters” field.
+在这个例子中，Resource字段函数的有效输入是一个包含有first和second字段的对象，这两个字段的值为Parameters里指定的值。
 
-Values from the effective input and the Context Object can be inserted into the “Parameters” field with a combination of a field-naming convention and JsonPath.
+有效输入和Context Object的值可以使用一种字段约定和JsonPath相结合的语法来插入到Parameters的字段中。
 
-If any JSON object within the value of Parameters \(however deeply nested\) has a field whose name ends with the characters “.\$”, its value MUST begin with a "\$".
+如果Parameters中JSON对象的字段名以`.$`结尾(不管是第几层的字段)，那么这个字段的值必须以`$`开头。
 
-If the value begins with “\$\$”, the first dollar sign is stripped and the remainder MUST be a PATH. In this case, the Path is applied to the Context Object and the result is called the Extracted Value.
+如果某个值以`$$`开头，除掉第一个`$`符外，剩下的字符串必须是一个PATH。这种情况下，这个Path所标识的是Context Object和Extracted Value的结果值。
 
-If the value begins with only one “\$”, the value MUST be a path. In this case, the Path is applied to the effective input and the result is called the Extracted Value.
+如果某个值单个`$`开头，则必须是一个Path。这种情况下，这个Path所标识的是有效输入和Extracted Value的结果值。
 
-If the path is legal but cannot be applied successfully the Interpreter fails the machine execution with an Error Name of “States.ParameterPathFailure”.
+如果Path是有效的，但无法找到对应的引用值，则解释器将执行失败，并抛出名为States.ParameterPathFailure的错误。
 
-When a field name ends with “.\$” and its value can be used to generate an Extracted Value as described above, the field is replaced within the Parameters value by another field whose name is the original name minus the “.\$” suffix, and whose value is the Extracted Value.
+如果一个字段名以`.$`结果，他的值可以被用作生成之前提到的Extracted Value，这个字段名将是去掉`.$`之后的字符串，值为Extracted Value。
 
-Consider this example:
+比如下面的例子：
 
 ```
 "X": {
@@ -451,7 +451,7 @@ Consider this example:
 }
 ```
 
-Suppose that the input to the state is as follows:
+假设状态的输入为：
 
 ```
 {
@@ -460,7 +460,7 @@ Suppose that the input to the state is as follows:
 }
 ```
 
-Further, suppose that the Context Object is as follows:
+另外，假设Context Object如下：
 
 ```
 {
@@ -468,7 +468,7 @@ Further, suppose that the Context Object is as follows:
 }
 ```
 
-In this case, the effective input to the code identified in the “Resource” field would be as follows:
+这种情况下，对于Resource字段所表示的函数的有效输入为：
 
 ```
 {
@@ -481,11 +481,11 @@ In this case, the effective input to the code identified in the “Resource” f
 }
 ```
 
-#### Runtime Errors
+#### 运行时错误(Runtime Errors)
 
-Suppose a state’s input is the string `"foo"`, and its “ResultPath” field has the value “\$.x”. Then ResultPath cannot apply and the Interpreter fails the machine with an Error Name of “States.ResultPathMatchFailure”.
+假设状态的输入值为`"foo"`，ResultPath的字段值为`$.x`，这个ResultPath无法被于输入的值(输入的值是字符串，无法再追加x字段)，所以解释器将执行失败，并抛出错“States.ResultPathMatchFailure”。
 
-### Errors
+### 错误(Errors)
 
 Any state can encounter runtime errors. Errors can arise because of state machine definition issues \(e.g. the “ResultPath” problem discussed immediately above\), task failures \(e.g. an exception thrown by a Lambda function\) or because of transient issues, such as network partition events.
 
