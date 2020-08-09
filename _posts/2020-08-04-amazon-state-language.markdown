@@ -595,12 +595,11 @@ Task States、Parallel States和Map States可包含有Catch字段，其值必须
 当某个状态出现错误，并且匹配到一个Catcher将转到下一个状态执行时，这一状态的结果(JSON对象)称之为错误输出(Error Output)，这将成为Catcher的Next指向状态的输入。错误输出必须含有值为字符串的Error字段，表示错误名。也必须含有字符串类型的Cause字段，包含可阅读的错误描述。
 
 
-Catcher可包含ResultPath字段，这与
-A Catcher MAY have an “ResultPath” field, which works exactly like [a state’s top-level “ResultPath”](#filters), and may be used to inject the Error Output into the state’s original input to create the input for the Catcher’s “Next” state. The default value, if the “ResultPath” field is not provided, is “\$”, meaning that the output consists entirely of the Error Output.
+Catcher可包含ResultPath字段，这与状态一级字段的ResultPath工作方式一样，可以将错误输出注入到原始的输入中，并将此结果做为Next字段所指向的状态的输入。ResultPath的默认值为`$`，表示错误输出将做为整个状态的输出。
 
-Here is an example of a Catcher that will transition to the state named “RecoveryState” when a Lambda function throws an unhandled Java Exception, and otherwise to the “EndMachine” state, which is presumably Terminal.
+下面这个例子中，当Lambda函数抛出未来捕获的Java Exception时，会将流转到RecoveryState状态，如果是其它错误时，流转到EndMachine状态。
 
-Also in this example, if the first Catcher matches the Error Name, the input to “RecoveryState” will be the original state input, with the Error Output as the value of the top-level “error-info” field. For any other error, the input to “EndMachine” will just be the Error Output.
+另外，在这个例子中，如果第一个Catcher匹配成功，RecoveryState的输入将是原来状态的输入外包含有错误输出的error-info字段。如果是第二个Catcher匹配成功，则EndMachine的输入仅仅是错误输出。
 
 ```
 "Catch": [
@@ -616,17 +615,19 @@ Also in this example, if the first Catcher matches the Error Name, the input to 
 ]
 ```
 
-Each Catcher can specifiy multiple errors to handle.
+Catcher可以匹配多个错误。
 
-When a state has both “Retry” and “Catch” fields, the interpreter uses any appropriate Retriers first and only applies the a matching Catcher transition if the retry policy fails to resolve the error.
+一个状态既有Retry字段又有Catch字段时，解释器会优先匹配Retriers，只有当重试策略无法解决问题时(如超过允许重试次数)，才会匹配Catcher进行状态流转。
 
-## State Types
 
-As a reminder, the state type is given by the value of the “Type” field, which MUST appear in every State object.
+## 状态类型(State Types)
 
-### Table of State Types and Fields
 
-Many fields can appear in more than one state type. The table below summarizes which fields can appear in which states. It excludes fields that are specific to one state type.
+提醒一下，状态类型由Type字段的值给出，该值必须出现在每个状态对象中。
+
+### 状态类型和字段表(Table of State Types and Fields)
+
+许多字段不仅仅出现在一个状态类型中。下表汇总了哪些字段可以出现在哪些类型的状态中。表中不包含某一类型特定的字段。
 
 <table cellpadding="5"><tbody><tr><td class="blank"></td><th align="center" colspan="8">States</th></tr><tr align="center"><td class="blank"></td><th>Pass</th><th>Task</th><th>Choice</th><th>Wait</th><th>Succeed</th><th>Fail</th><th>Parallel</th><th>Map</th></tr><tr align="center"><td align="right" class="field">Type</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td></tr><tr align="center"><td align="right" class="field">Comment</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field">InputPath, OutputPath</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field">Parameters</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field">ResultPath</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field"><i>One of:</i> Next <i>or</i> "End":true</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="empty"></td><td align="center" class="required">Required</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="required">Required</td><td align="center" class="required">Required</td></tr><tr align="center"><td align="right" class="field">Retry, Catch</td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr></tbody></table>
 
