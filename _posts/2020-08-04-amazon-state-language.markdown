@@ -487,31 +487,33 @@ Parameters字段的值经过下面的处理成为有效输入。考虑如下的T
 
 ### 错误(Errors)
 
-Any state can encounter runtime errors. Errors can arise because of state machine definition issues \(e.g. the “ResultPath” problem discussed immediately above\), task failures \(e.g. an exception thrown by a Lambda function\) or because of transient issues, such as network partition events.
+任何状态都可能产生运行时错误。错误的产生原因可能是状态机的定义问题(例如之前ResultPath的问题)、任务失败(例如Lambda函数执行异常)以及一些诸如网络异常等临时问题。
 
-When a state reports an error, the default course of action for the interpreter is to fail the whole state machine.
+当某个状态报告错误时，解释器的默认操作是使得整个状态机失败。
 
-#### Error representation
 
-Errors are identified by case-sensitive strings, called Error Names. The States language defines a set of built-in strings naming well-known errors, all of which begin with the prefix “States.”; see [Appendix A](#appendix-a).
+#### 错误表示(Error representation)
 
-States MAY report errors with other names, which MUST NOT begin with the prefix “States.”.
+错误是由大小写敏感的字符串标识，称之为错误名(Error Names)。此文档中定义了些常见错误名，这些错误名都是以States开头的字符串，参见[Appendix A](#appendix-a)。
 
-#### Retrying after error
+状态也可以报告其它的错误，但这些错误名不能以States开头。
 
-Task States, Parallel States, and Map States MAY have a field named “Retry”, whose value MUST be an array of objects, called Retriers.
+#### 出错重试(Retrying after error)
 
-Each Retrier MUST contain a field named “ErrorEquals” whose value MUST be a non-empty array of Strings, which match [Error Names](#error-names).
 
-When a state reports an error, the interpreter scans through the Retriers and, when the Error Name appears in the value of a Retrier’s “ErrorEquals” field, implements the retry policy described in that Retrier.
+Task States、Parallel States和Map States可包含有Retry字段，此字段的值是由称之为Retriers的对象组成的数组。
 
-An individual Retrier represents a certain number of retries, usually at increasing time intervals.
+任一Retrier必须饮食有ErrorEquals字段，字段的值必须是匹配[Error Names](#error-names)的非空字符串。
 
-A Retrier MAY contain a field named “IntervalSeconds”, whose value MUST be a positive integer, representing the number of seconds before the first retry attempt \(default value: 1\); a field named “MaxAttempts” whose value MUST be a non-negative integer, representing the maximum number of retry attempts \(default: 3\); and a field named “BackoffRate”, a number which is the multiplier that increases the retry interval on each attempt \(default: 2.0\). The value of BackoffRate MUST be greater than or equal to 1.0.
+当错误发生时，解释器遍历Retriers寻找ErrorEquals字段值为此错误名的Retrier，并按其所描述的重试策略来实施。
 
-Note that a “MaxAttempts” field whose value is 0 is legal, specifying that some error or errors should never be retried.
+每一个Retrier代表特定次数的尝试，通常时间间隔随次数增加。
 
-Here is an example of a Retrier which will make 2 retry attempts after waits of 3 and 4.5 seconds:
+Retrier可包含有IntervalSeconds字段，它的值必须是正整数，表示第一次重试之前需要等待的时间(默认为1)；也可包含MaxAttempts字段，也必须是一个正整数，表示最大重试次数；也可包含BackoffRate字段，表示重试间隔的增长率(默认为2.0)，字段值必须大于1.0。
+
+注意MaxAttempts字段值为0时，表示指定错误出现时不需要重试。
+
+以下是一个Retrier的例子，将在States.Timeout错误发生之后3秒之后重试，如果再失败，将在4.5秒后再重试：
 
 ```
 "Retry" : [
@@ -524,9 +526,9 @@ Here is an example of a Retrier which will make 2 retry attempts after waits of 
 ]
 ```
 
-The reserved name “States.ALL” in a Retrier’s “ErrorEquals” field is a wild-card and matches any Error Name. Such a value MUST appear alone in the “ErrorEquals” array and MUST appear in the last Retrier in the “Retry” array.
+Retrier的ErrorEquals字段中可以包含保留名States.ALL，表示匹配任意错误。含有States.ALL的ErrorEquals数组必须只有这一个值，并且这个Retrier必须是所有Retry数组中的最后一个。
 
-Here is an example of a Retrier which will retry any error except for “States.Timeout”, using the default retry parameters.
+以下Retry的配置例子，将会使用Retrier的默认参数重试除了States.Timeout之外的所有错误。
 
 ```
 "Retry" : [
@@ -540,11 +542,12 @@ Here is an example of a Retrier which will retry any error except for “States.
 ]
 ```
 
-If the error recurs more times than allowed for by the “MaxAttempts” field, retries cease and normal error handling resumes.
+如果错误出现的次数超过了MaxAttempts字段所允许的次数，则将停止重试，并进入正常的错误处理。
 
-#### Complex retry scenarios
+#### 复杂的重试场景(Complex retry scenarios)
 
-A Retrier’s parameters apply across all visits to that Retrier in the context of a single state execution. This is best illustrated by example; consider the following Task State:
+
+在单次状态执行的上下文中，Retrier的参数会应用于对该Retrier的所有访问。通过以下的例子更容易理解：
 
 ```
 "X": {
@@ -572,24 +575,27 @@ A Retrier’s parameters apply across all visits to that Retrier in the context 
 }
 ```
 
-Suppose that this task fails four successive times, throwing Error Names “ErrorA”, “ErrorB”, “ErrorC”, and “ErrorB”. The first two errors match the first retrier and cause waits of one and two seconds. The third error matches the second retrier and causes a wait of five seconds. The fourth error would match the first retrier but its “MaxAttempts” ceiling of two retries has already been reached, so that Retrier fails, and execution is redirected to the “Z” state via the “Catch” field.
+假设这个任务连续失败了4次，错误分别是ErrorA，ErrorB，ErrorC和ErrorB。前两次错误匹配到第一个Retrier，所以分别在1秒和2秒后进行重试。第三个错误匹配到第二个Retrier，并等待5秒后重试。第四个错误匹配到第一个Retrier，但是第一个Retrier已经超过了MaxAttemp的次数限制，所以Retrier失败了，将通过Catch字段的Next跳转到Z状态继续执行。
 
-Note that once the interpreter transitions to another state in any way, all the Retrier parameters reset.
 
-#### Fallback states
+注意一旦解释器流转到其它状态执行，所有的Retrier参数将重置。
 
-Task States, Parallel States, and Map States MAY have a field named “Catch”, whose value MUST be an array of objects, called Catchers.
+#### 回退状态(Fallback states)
 
-Each Catcher MUST contain a field named “ErrorEquals”, specified exactly as with the Retrier “ErrorEquals” field, and a field named “Next” whose value MUST be a string exactly matching a State Name.
+Task States、Parallel States和Map States可包含有Catch字段，其值必须为对象的数组，称之为Catchers。
 
-When a state reports an error and either there is no Retrier, or retries have failed to resolve the error, the interpreter scans through the Catchers in array order, and when the [Error Name](#error-names) appears in the value of a Catcher’s “ErrorEquals” field, transitions the machine to the state named in the value of the “Next” field.
+每个Catchr必须饱含有ErrorEquals字段，与Retrier的ErrorEquals字段含义一致，也必须包含Next字段，值必须匹配某个状态名。
 
-The reserved name “States.ALL” appearing in a Retrier’s “ErrorEquals” field is a wild-card and matches any Error Name. Such a value MUST appear alone in the “ErrorEquals” array and MUST appear in the last Catcher in the “Catch” array.
+当某个状态执行报错，并且此状态没有对应的Retrier或者所有的Retrier都已经不再满足条件时，解释器将按数组顺序扫描Catch字段，当按错误名搜索到与匹配的Catcher时，将状态流转到此Catcher的Next字段所指向的状态。
 
-#### Error output
+保留名States.ALL出现在Catcher的ErrorEquals字段时，此Catcher将与任意错误相匹配。所以States.ALL只能做为ErrorEquals的唯一元素出现，并且此Catcher必须是Catch数组的最后一个元素。
 
-When a state reports an error and it matches a Catcher, causing a transfer to another state, the state’s Result \(and thus the input to the state identified in the Catcher’s “Next” field\) is a JSON object, called the Error Output. The Error Output MUST have a string-valued field named “Error”, containing the Error Name. It SHOULD have a string-valued field named “Cause”, containing human-readable text about the error.
+#### 错误输出(Error output)
 
+当某个状态出现错误，并且匹配到一个Catcher将转到下一个状态执行时，这一状态的结果(JSON对象)称之为错误输出(Error Output)，这将成为Catcher的Next指向状态的输入。错误输出必须含有值为字符串的Error字段，表示错误名。也必须含有字符串类型的Cause字段，包含可阅读的错误描述。
+
+
+Catcher可包含ResultPath字段，这与
 A Catcher MAY have an “ResultPath” field, which works exactly like [a state’s top-level “ResultPath”](#filters), and may be used to inject the Error Output into the state’s original input to create the input for the Catcher’s “Next” state. The default value, if the “ResultPath” field is not provided, is “\$”, meaning that the output consists entirely of the Error Output.
 
 Here is an example of a Catcher that will transition to the state named “RecoveryState” when a Lambda function throws an unhandled Java Exception, and otherwise to the “EndMachine” state, which is presumably Terminal.
