@@ -10,6 +10,7 @@ image-sm: /assets/images/traffic_light.jpg
 
 ---
 
+
 [Amazon States Language](https://states-language.net/)
 
 本文描述了一种基于[JSON](https://tools.ietf.org/html/rfc7159)格式的状态机描述语言。满足此描述的状态机可以被称之为解释器(the interpreter)的软件执行。
@@ -629,15 +630,91 @@ Catcher可以匹配多个错误。
 
 许多字段不仅仅出现在一个状态类型中。下表汇总了哪些字段可以出现在哪些类型的状态中。表中不包含某一类型特定的字段。
 
-<table cellpadding="5"><tbody><tr><td class="blank"></td><th align="center" colspan="8">States</th></tr><tr align="center"><td class="blank"></td><th>Pass</th><th>Task</th><th>Choice</th><th>Wait</th><th>Succeed</th><th>Fail</th><th>Parallel</th><th>Map</th></tr><tr align="center"><td align="right" class="field">Type</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td></tr><tr align="center"><td align="right" class="field">Comment</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field">InputPath, OutputPath</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field">Parameters</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field">ResultPath</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr><tr align="center"><td align="right" class="field"><i>One of:</i> Next <i>or</i> "End":true</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="empty"></td><td align="center" class="required">Required</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="required">Required</td><td align="center" class="required">Required</td></tr><tr align="center"><td align="right" class="field">Retry, Catch</td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td></tr></tbody></table>
+
+<style>
+center{
+	font-size: 0.7em;
+    margin-top: -20px;
+    margin-bottom: 15px;
+}
+table{
+	font-size:0.7em;
+	margin-bottom: 29px;
+	border: 2px solid #2b5fa8;
+}
+
+table th {
+	background: #cef;
+    padding: 5px;
+}
+.post ul {
+    font-size: 0.75em;
+    list-style-type: disc;
+    padding-left: 16px;
+}
+
+td{
+padding: 8px;
+}
+td.special-title{
+color: #a30623;
+}
+table .field{
+  background-color:#cef
+}
+table .allowed{
+  background-color:#cfe
+}
+table .required{
+    background-color:#cfa
+
+}
+table .empty{
+  background-color:#fbb
+}
+</style>
+
+
+<table>
+  <tbody>
+    <tr>
+      <td></td><th align="center" colspan="8">States</th>
+    </tr>
+    <tr align="center">
+      <td></td><th>Pass</th><th>Task</th><th>Choice</th><th>Wait</th><th>Succeed</th><th>Fail</th><th>Parallel</th><th>Map</th>
+    </tr>
+    <tr align="center">
+      <td align="right" class="field">Type</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td>
+    </tr>
+    <tr align="center">
+      <td align="right" class="field">Comment</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td>
+    </tr>
+    <tr align="center">
+      <td align="right" class="field">InputPath, OutputPath</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td>
+    </tr>
+    <tr align="center">
+      <td align="right" class="field">Parameters</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td>
+    </tr>
+    <tr align="center">
+      <td align="right" class="field">ResultPath</td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td>
+    </tr>
+    <tr align="center">
+      <td align="right" class="field"><i>One of:</i> Next <i>or</i> "End":true</td><td align="center" class="required">Required</td><td align="center" class="required">Required</td><td align="center" class="empty"></td><td align="center" class="required">Required</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="required">Required</td><td align="center" class="required">Required</td>
+    </tr>
+    <tr align="center">
+      <td align="right" class="field">Retry, Catch</td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="empty"></td><td align="center" class="allowed">Allowed</td><td align="center" class="allowed">Allowed</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Pass State
 
-The Pass State \(identified by `"Type":"Pass"`\) simply passes its input to its output, performing no work. Pass States are useful when constructing and debugging state machines.
+Pass State(`"Type":"Pass"`)简单地将状态的输入转化为输出，没有额外的功能。Pass State在
+构造和调试状态机时很有用。
 
-A Pass State MAY have a field named “Result”. If present, its value is treated as the output of a virtual task, and placed as prescribed by the “ResultPath” field, if any, to be passed on to the next state. If “Result” is not provided, the output is the input. Thus if neither “Result” nor “ResultPath” are provided, the Pass state copies its input through to its output.
+Pass State可包含字段Result。它的值被视为虚拟任务的输出，并由ResultPath字段来处理后将其传递给下一个状态。如果Result字段未提供，输出即为输入。因此如果Result和ResultPath都没有提供，Pass State只是拷贝输入并做为输出。
 
-Here is an example of a Pass State that injects some fixed data into the state machine, probably for testing purposes.
+以下例子中Pass State在状态机中注入了一些固定值，可以用于调试：
 
 ```
 "No-op": {
@@ -651,7 +728,7 @@ Here is an example of a Pass State that injects some fixed data into the state m
 }
 ```
 
-Suppose the input to this state were as follows:
+假设给这个状态的输入如下：
 
 ```
 {
@@ -659,7 +736,7 @@ Suppose the input to this state were as follows:
 }
 ```
 
-Then the output would be:
+那么输出为：
 
 ```
 {
@@ -673,9 +750,9 @@ Then the output would be:
 
 ### Task State
 
-The Task State \(identified by `"Type":"Task"`\) causes the interpreter to execute the work identified by the state’s “Resource” field.
+Task State(`"Type":"Task"`)将使得状态机执行Resource字段定义的任务。
 
-Here is an example:
+示例如下：
 
 ```
 "TaskState": {
@@ -688,23 +765,23 @@ Here is an example:
 }
 ```
 
-A Task State MUST include a “Resource” field, whose value MUST be a URI that uniquely identifies the specific task to execute. The States language does not constrain the URI scheme nor any other part of the URI.
+Task State必须包含Resource字段，表示指向特定执行任务的唯一标识URI。本规范不规定URI scheme，也不规定URI的其它部分。
 
-Tasks can optionally specify timeouts. Timeouts \(the “TimeoutSeconds” and “HeartbeatSeconds” fields\) are specified in seconds and MUST be positive integers. If provided, the “HeartbeatSeconds” interval MUST be smaller than the “TimeoutSeconds” value.
+此类型状态可以指定某超时时间。TimeoutSeconds和HeartbeatSconds字段表示秒数，必须是正整数。如果如果指定了HeartbeatSeconds，则它的值必须小于TimeoutSeconds。
 
-If not provided, the default value of “TimeoutSeconds” is 60.
+TimeoutSeconds的去缺省值为60。
 
-If the state runs longer than the specified timeout, or if more time than the specified heartbeat elapses between heartbeats from the task, then the interpreter fails the state with a `States.Timeout` Error Name.
+如果状态运行时间比指定的超时时间长，或者任务的心跳间隔超过了指定的心跳超时，解释器将失败，并抛出State.Timeout错误。
 
 ### Choice State
 
-A Choice state \(identified by `"Type":"Choice"`\) adds branching logic to a state machine.
+Choice State(`"Type":"Choice"`)为状态机添加了分支逻辑。
 
-A Choice state MUST have a “Choices” field whose value is a non-empty array. Each element of the array is called a Choice Rule \- an object containing a comparison operation and a “Next” field, whose value MUST match a state name.
+Choice State必须包含Choices字段，值为非空数组。每一个数组元素被称之为Choice Rule，一个包含有比较操作和指向某个状态名的Next字段的对象。
 
-The interpreter attempts pattern-matches against the Choice Rules in array order and transitions to the state specified in the “Next” field on the first Choice Rule where there is an exact match between the input value and a member of the comparison-operator array.
+解释器按数组的顺序尝试匹配Choice Rules，当输入与数组元素中的比较操作相匹配时，将流转到此Choice Rule的Next字段指定的状态中继续执行。
 
-Here is an example of a Choice state, with some other states that it transitions to.
+以下是Choice state的例子，包括会流转到的状态：
 
 ```
 "ChoiceStateX": {
@@ -752,7 +829,7 @@ Here is an example of a Choice state, with some other states that it transitions
 }
 ```
 
-In this example, suppose the machine is started with an input value of:
+在这个状态中，假设输入为：
 
 ```
 {
@@ -761,9 +838,9 @@ In this example, suppose the machine is started with an input value of:
 }
 ```
 
-Then the interpreter will transition to the “ValueInTwenties” state, based on the “value” field.
+解释器根据value字段在Choices中进行匹配后，将流转到ValueInTwenties状态。
 
-Each choice rule MUST contain exactly one field containing a comparison operator. The following comparison operators are supported:
+任一Choice Rule必须包含以下比较操作中的某一个，而且有且仅有一个。支持的比较操作有：
 
 1.  StringEquals
 
@@ -802,6 +879,8 @@ Each choice rule MUST contain exactly one field containing a comparison operator
 18.  Or
 
 19.  Not
+
+
 
 For each of these operators, the field’s value MUST be a value of the appropriate type: String, number, boolean, or [Timestamp](#timestamps).
 
