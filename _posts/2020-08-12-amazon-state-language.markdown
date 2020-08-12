@@ -1,7 +1,7 @@
 ---
 layout: post_n
 title: Amazon State Language
-date: 2020-08-04
+date: 2020-08-12
 categories:
   - Translation
 description: 
