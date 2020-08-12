@@ -880,29 +880,27 @@ Choice State必须包含Choices字段，值为非空数组。每一个数组元�
 
 19.  Not
 
+对于以上这些操作类型中字段的值，必须是一合适的类型：String，数字，布尔或者[Timestamp](#timestamps)。
 
+解释器在扫描Choice Rules时是对类型敏感，即无法对于字符串类型的值，无法匹配上数字类型的值。但是，由于Timestamp字段在逻辑上是字符串，因此有可能某个被认为是timestamp的字段使用StringEquals匹配成功。
 
-For each of these operators, the field’s value MUST be a value of the appropriate type: String, number, boolean, or [Timestamp](#timestamps).
+各种字符串比较方式都是一个字符一个字符比较，对于大小写、空白字符和[规范化形式的Unicode](https://unicode.org/reports/tr15/)并没有特殊对待。简单来说，就是大小写敏感。
 
-The interpreter scans through the Choice Rules in a type-sensitive way, and will not attempt to match a numeric field to a string value. However, since Timestamp fields are logically strings, it is possible that a field which is thought of as a time-stamp could be matched by a “StringEquals” comparator.
+为了通用性，不应该假设数值比较能在IEEE754-2008 64字节数据类型外正常工作。特别是在 [-2^(253)+1, 2^(253)-1] 范围之外的整数比较将可能与预期不匹配。
 
-The various String comparators compare strings character-by-character with no special treatments such as case-folding, white-space collapsing, or [Unicode form normalization](https://unicode.org/reports/tr15/). Put simply, they are case-sensitive.
+And和Or操作类型的值必须是Choice Rules类型的非空数组，但不包含有Next字段，Next字段只能出现在顶层的Choice Rule中。
 
-Note that for interoperability, numeric comparisons should not be assumed to work with values outside the magnitude or precision representable using the IEEE 754-2008 “binary64” data type. In particular, integers outside of the range \[-\(253\)+1, \(253\)-1\] might fail to compare in the expected way.
+Not操作类型的值是单个Choice Rule，必须包含有Next字段；Next字段只能出现在顶层的Choice Rule中。
 
-The values of the “And” and “Or” operators MUST be non-empty arrays of Choice Rules that MUST NOT contain “Next” fields; the “Next” field can only appear in a top-level Choice Rule.
+Choice State可包含有Default字段，表示如果没有任何Choice Rule匹配的情况下将执行Default字段所指向的状态。如果Default字段不指定，并且没有匹配任何的Choice Rule，则将产生运行时错误States.NoChoiceMatched。
 
-The value of a “Not” operator MUST be a single Choice Rule, that MUST NOT contain “Next” fields; the “Next” field can only appear in a top-level Choice Rule.
-
-Choice states MAY have a “Default” field, which will execute if none of the Choice Rules match. The interpreter will raise a run-time States.NoChoiceMatched error if a “Choice” state fails to match a Choice Rule and no “Default” transition was specified.
-
-Choice states MUST NOT be End states.
+Choice State不能是结束状态(End state)。
 
 ### Wait State
 
-A Wait state \(identified by `"Type":"Wait"`\) causes the interpreter to delay the machine from continuing for a specified time. The time can be specified as a wait duration, specified in seconds, or an absolute expiry time, specified as an ISO-8601 extended offset date-time format string.
+Wait State(`"Type":"Wait"`)使得解释器延迟指定的时间再继续执行。时间值可以是以秒为单位的等待间隔，也可以是ISO-8601扩展偏移日期格式所允许的绝对到期时间。
 
-For example, the following Wait state introduces a ten-second delay into a state machine:
+在如下例子中Wait State将在状态机中引入10秒的延迟：
 
 ```
 "wait_ten_seconds" : {
@@ -912,7 +910,7 @@ For example, the following Wait state introduces a ten-second delay into a state
 }
 ```
 
-This waits until an absolute time:
+以下例子中状态机会等到指定的时间才继续运行：
 
 ```
 "wait_until" : {
@@ -921,8 +919,7 @@ This waits until an absolute time:
   "Next": "NextState"
 }
 ```
-
-The wait duration does not need to be hardcoded. Here is the same example, reworked to look up the timestamp time using a Reference Path to the data, which might look like `{ "expirydate": "2016-03-14T01:59:00Z" }`:
+等待时间不一定是写死的。以下的例子功能与上一个一致，只是绝对时间字段使用了引用路径来表示，状态的输入可能是这样子的：`{ "expirydate": "2016-03-14T01:59:00Z" }`。
 
 ```
 "wait_until" : {
@@ -932,15 +929,15 @@ The wait duration does not need to be hardcoded. Here is the same example, rewor
 }
 ```
 
-A Wait state MUST contain exactly one of ”Seconds”, “SecondsPath”, “Timestamp”, or “TimestampPath”.
+Wait State必须包含有Seconds、SecondsPath、Timestamp、TimestampPath中的一个，并且只能包含一个。
 
 ### Succeed State
 
-The Succeed State \(identified by `"Type":"Succeed"`\) either terminates a state machine successfully, ends a branch of a Parallel state, or ends an iteration of a Map state. The output of a Succeed state is the same as its input, possibly modified by “InputPath” and/or “OutputPath”.
+Succeed State(`"Type":"Succeed"`)可以用于表示成功地结束状态机、结束Parallel State的一个分支或者结束Map State的一将迭代。它的输出即是它的输入，当然也会被InputPath、OutputPath影响。
 
-The Succeed State is a useful target for Choice-state branches that don't do anything except terminate the machine.
+Succeed State在Choice State的某个想直接结束整个状态机的分支时很有用。
 
-Here is an example:
+以下是一个例子：
 
 ```
 "SuccessState": {
@@ -948,13 +945,13 @@ Here is an example:
 }
 ```
 
-Because Succeed States are terminal states, they have no “Next” field.
+因为Succeed State是终止状态(terminal states)，所以没有Next字段。
 
 ### Fail State
 
-The Fail State \(identified by `"Type":"Fail"`\) terminates the machine and marks it as a failure.
+Fail State(`"Type":"Fail"`)结束整个状态机，并将结果标记为失败。
 
-Here is an example:
+例如：
 
 ```
 "FailState": {
@@ -963,16 +960,16 @@ Here is an example:
           "Cause": "Kaiju attack"
 }
 ```
+Fail State必须包含有字符串类型的Error字段，提供一个能够被Retry和Catch处理的错误名称，同时也用于某些操作和诊断。Fail State也必须包含字符串类型的Cause字段，用于提供可阅读的错误信息。
 
-A Fail State MUST have a string field named “Error”, used to provide an error name that can be used for error handling \(Retry/Catch\), operational, or diagnostic purposes. A Fail State MUST have a string field named “Cause”, used to provide a human-readable message.
-
-Because Fail States are terminal states, they have no “Next” field.
+因为Fail State是终止状态，所以没有Next字段。
 
 ### Parallel State
 
-The Parallel State \(identified by `"Type":"Parallel"`\) causes parallel execution of "branches".
+Parallel State(`"Type":"Parallel"`)将并行地执行各个分支。
 
-Here is an example:
+来看如下例子：
+
 
 ```
 "LookupCustomerInfo": {
@@ -1005,25 +1002,23 @@ Here is an example:
 }
 ```
 
-A Parallel state causes the interpreter to execute each branch starting with the state named in its “StartAt” field, as concurrently as possible, and wait until each branch terminates \(reaches a terminal state\) before processing the Parallel state's “Next” field. In the above example, this means the interpreter waits for “LookupAddress” and “LookupPhoneNumber” to both finish before transitioning to “NextState”.
+解释器并行地从Parallel State每一个分支的StartAt字段所指定的状态开始执行，等待每一个分支都执行结束(到达terminal state)才会转到Next指向的下一个状态。在上面的例子中，解释器将等待LookupAddress和LookupPhoneNumber都执行结束时，再转到NextState。
 
-In the example above, the LookupAddress and LookupPhoneNumber branches are executed in parallel.
+以上例子中，LookupAddress和LookupPhoneNumber是并行执行的。
 
-A Parallel State MUST contain a field named “Branches” which is an array whose elements MUST be objects. Each object MUST contain fields named “States” and “StartAt” whose meanings are exactly like those in the top level of a State Machine.
+Parallel State必须包含有Branches字段，是由对象组成的数组。每一个对象必须包含有States和StartAt字段，与状态机顶层同名字段表示的含义相同。
 
-A state in a Parallel state branch “States” field MUST NOT have a “Next” field that targets a field outside of that “States” field. A state MUST NOT have a “Next” field which matches a state name inside a Parallel state branch’s “States” field unless it is also inside the same “States” field.
+分支中的States里的每一个状态的Next字段不能指向外部的状态名。也就是本分支的状态的Next指向的只能是本分支中的状态。
 
-Put another way, states in a branch’s “States” field can transition only to each other, and no state outside of that “States” field can transition into it.
+如果某一分支由于没有处理的错误或者是流转到Fail State而失败了，则整个Parallel State将失败并且其它所有的分支将终止执行。如果Parallel State无法处理这一错误，则整个状态机将失败，并产生一个错误。
 
-If any branch fails, due to an unhandled error or by transitioning to a Fail state, the entire Parallel state is considered to have failed and all the branches are terminated. If the error is not handled by the Parallel State, the interpreter should terminate the machine execution with an error.
+不像Fail State，分支中的Succeed State仅仅只是结束本分支。Succeed State的输出即是它的输入，当然也会被InputPath、OutputPath影响。
 
-Unlike a Fail state, a Succeed state within a Parallel merely terminates its own branch. A Succeed state passes its input through as its output, possibly modified by “InputPath” and “OutputPath”.
+Parallel State将其输入(可能被InputPath字段过滤)做为每一个分支的StartAt状态的输入。结果则为由每一个分支的结果组成的数组，数组中的元素的顺序，与分支在Branches中的顺序一致。结果数组中的每个元素的结构不一定类型相同。
 
-The Parallel state passes its input \(potentially as filtered by the “InputPath” field\) as the input to each branch’s “StartAt” state. It generates a result which is an array with one element for each branch containing the output from that branch. The elements of the output array correspond to the branches in the same order that they appear in the “Branches” array. There is no requirement that all elements be of the same type.
+结果数组也可以使用ResultPath插入到输入数据中，与其它的状态处理方式一致。
 
-The output array can be inserted into the input data using the state’s “ResultPath” field in the usual way.
-
-For example, consider the following Parallel State:
+考虑以下Parallel State：
 
 ```
 "FunWithMath": {
@@ -1054,7 +1049,8 @@ For example, consider the following Parallel State:
 }
 ```
 
-If the “FunWithMath” state was given the JSON array `[3, 2]` as input, then both the “Add” and “Subtract” states would receive that array as input. The output of “Add” would be `5`, that of “Subtract” would be `1`, and the output of the Parallel State would be a JSON array:
+
+如果FunWithMath的输入是`[3, 2]`，则此数据也将是Add和Subtract状态的输入。Add的输出是`5`，Substract的结果为`1`，所以Parallel State状态的输出将是JSON数组：
 
 ```
 [ 5, 1 ]
@@ -1062,7 +1058,8 @@ If the “FunWithMath” state was given the JSON array `[3, 2]` as input, then 
 
 ### Map State
 
-The Map State \(identified by `"Type": "Map"`\) causes the interpreter to process all the elements of an array, potentially in parallel, with the processing of each element independent of the others. This document uses the term “iteration” to describe each such nested execution.
+Map State(`"Type": "Map"`)将使得解释器将独立地处理输入数组中的每一个元素，这种处理默认是并行的。本文档中称这种嵌入的处理为迭代(iteration)。
+
 
 The Parallel state applies multiple different state-machine branches to the same input, while the Map state applies a single state machine to multiple input elements.
 
@@ -1201,51 +1198,20 @@ If any iteration fails, due to an unhandled error or by transitioning to a Fail 
 
 Unlike a Fail state, a Succeed state within a Map merely terminates its own iteration. A Succeed state passes its input through as its output, possibly modified by “InputPath” and “OutputPath”.
 
-## Appendices
+## 附录
 
-### Appendix A: Predefined Error Codes
+### 附录 A: 预定义错误码(Predefined Error Codes)
 
 | Code | Description |
 | --- | --- |
-| States.ALL | 
-A wild-card which matches any Error Name.
-
- |
-| States.Timeout | 
-
-A Task State either ran longer than the “TimeoutSeconds” value, or failed to heartbeat for a time longer than the “HeartbeatSeconds” value.
-
- |
-| States.TaskFailed | 
-
-A Task State failed during the execution.
-
- |
-| States.Permissions | 
-
-A Task State failed because it had insufficient privileges to execute the specified code.
-
- |
-| States.ResultPathMatchFailure | 
-
-A state’s “ResultPath” field cannot be applied to the input the state received.
-
- |
-| States.ParameterPathFailure | 
-
-Within a state’s “Parameters” field, the attempt to replace a field whose name ends in “.\$” using a Path failed.
-
- |
-| States.BranchFailed | 
-
-A branch of a Parallel state failed.
-
- |
-| States.NoChoiceMatched | 
-
-A Choice state failed to find a match for the condition field extracted from its input.
-
- |
+| States.ALL | 可以匹配所有错误名的通配符。A wild-card which matches any Error Name. |
+| States.Timeout | A Task State either ran longer than the “TimeoutSeconds” value, or failed to heartbeat for a time longer than the “HeartbeatSeconds” value. |
+| States.TaskFailed | A Task State failed during the execution.|
+| States.Permissions | A Task State failed because it had insufficient privileges to execute the specified code.|
+| States.ResultPathMatchFailure | A state’s “ResultPath” field cannot be applied to the input the state received.|
+| States.ParameterPathFailure | Within a state’s “Parameters” field, the attempt to replace a field whose name ends in “.\$” using a Path failed.|
+| States.BranchFailed | A branch of a Parallel state failed. |
+| States.NoChoiceMatched | A Choice state failed to find a match for the condition field extracted from its input. |
 
 
 
