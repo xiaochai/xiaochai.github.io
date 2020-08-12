@@ -601,10 +601,18 @@
         /* padding-left: 39px;
         padding-top: 30px; */
         padding:30px;
-        bottom: 30px;
+        bottom: 2px;
         max-height: 90%;
         border: 1px solid #aaa;
         display:none;
+        &  a {
+          color: #66bb6a;
+          cursor: pointer;
+          border:none;
+          &:hover{
+            color:#419345;
+          }
+        }
     }
     .toc-button{
     position: fixed;
@@ -612,9 +620,9 @@
         width: 30px;
         bottom: 3px;
         z-index: 10;
-        margin-left: -29px;
+        margin-left: -1px;
         cursor: pointer;
-        opacity: 0.4;
+        opacity: 0.2;
     }
     .toc-button:hover{
           opacity: 1;
