@@ -103,4 +103,17 @@ document.addEventListener('DOMContentLoaded', function() {
   Tabs.init();
   Preview.init();
   wow.init();
+  var toc = document.getElementById('markdown-toc')
+  var btn = document.getElementsByClassName('toc-button')[0]
+  if(toc == undefined){
+    btn.style.display = "none"
+  }else{
+    btn.addEventListener('click', function(){
+      if(toc.style.display == "block"){
+        toc.style.display = "none"
+      }else{
+        toc.style.display = "block"
+      }
+    })
+  }
 });
