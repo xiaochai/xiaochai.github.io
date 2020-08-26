@@ -237,7 +237,7 @@ openssl x509 -text -inform DER -in baidu.com.cer -out baidu.com.pem
 
 #### CRLs
 
-CRLs方式，其实是CA机构会维护一个或者多个CRL列表，包含有被吊销的证书的信息。如之前我们看到的证书信息中就有CRL Distribution Points字段，表示CRL列表的下载地址。但一些证书（大多数是自签名证书）不包含有此信息。
+CRLs方式，其实是CA机构会维护一个或者多个CRL列表，包含有被吊销的证书的信息。如之前我们看到的证书信息中就有CRL Distribution Points字段，表示CRL列表的下载地址。但一些证书(大多数是自签名证书)不包含有此信息。
 
 CRLs方式存在性能问题，随着被吊销的证书越来越多，CRL文件越来越大，达到上百兆之多。部分CA通过拆分CRL的方式来缓解这个问题，但拆分之后的大小依然可达到1M。
 
@@ -249,7 +249,7 @@ CRLs方式存在性能问题，随着被吊销的证书越来越多，CRL文件�
 
 这种方式会在请求服务端接口前请求一次OCSP接口，一定程度上会将用户的行为隐私暴露给CA。并且OCSP的响应时间也影响客户端页面的加载速度，带来一些性能上的问题。
 
-为了解决这些问题，OCSP Stapling技术出现了。TLS的status_request扩展用来表明客户端支持OCSP stapling的方式来校验证书的有效性。服务端接收到此扩展后，会请求OCSP服务器来确认证书的状态，并在发送服务器状态的同时将证书的状态也下发下去，服务商会缓存叶子证书的OCSP的响应结果，但不允许缓存中间证书的响应结果。不过nginx的ocsp_stapling的选项默认是关闭的，有需要时可以在[配置中打开](http://nginx.org/en/docs/http/ngx_http_ssl_module).html#ssl_stapling_file)。
+为了解决这些问题，OCSP Stapling技术出现了。TLS的status_request扩展用来表明客户端支持OCSP stapling的方式来校验证书的有效性。服务端接收到此扩展后，会请求OCSP服务器来确认证书的状态，并在发送服务器状态的同时将证书的状态也下发下去，服务商会缓存叶子证书的OCSP的响应结果，但不允许缓存中间证书的响应结果。不过nginx的ocsp_stapling的选项默认是关闭的，有需要时可以在[配置中打开](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_stapling_file)。
 
 
 ## 分析
