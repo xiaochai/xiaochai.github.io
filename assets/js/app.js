@@ -114,6 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
       }else{
         toc.style.display = "block"
       }
+    }); 
+    [].forEach.call(toc.getElementsByTagName("a"), function(tab, idx) {
+      tab.addEventListener('click', function() { 
+        toc.style.display = "none"
+      })
     })
   }
 });
