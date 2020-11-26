@@ -9,7 +9,8 @@ image: /assets/images/tls-flow.png
 image-sm: /assets/images/tls-flow.png
 
 ---
-
+* ignore but need
+{:toc}
 
 <style>
 center{
@@ -73,7 +74,7 @@ TLS的交互流程发生于[TCP的三次握手](/2017/11/14/tcp-ip/)之后，典
 
 2. 服务端回复自己的证书；
 
-3. 客户端使用证书链机制验证有效性，生成对称密钥S，使用证书中包含有公钥的加密，发送给服务端；
+3. 客户端使用证书链机制验证有效性，生成对称密钥S，使用证书中包含的公钥进行加密，发送给服务端；
 
 4. 服务端收到密文后使用私钥解密，得到密钥S，至此两端就可以使用S进行对称加密传输了。
 
@@ -93,7 +94,7 @@ TLS的交互流程发生于[TCP的三次握手](/2017/11/14/tcp-ip/)之后，典
 
 4. 服务端生成主密钥$$K = B^a\ mod\ p$$；
 
-这样双方即协商生成了主密钥$$K$$，这是基于这样一个等式的 $$(g^a)^b\ mod\ p = (g^b)^a\ mod\ p$$，证明从略。
+这样双方即协商生成了主密钥$$K$$，这是基于这样一个等式： $$(g^a)^b\ mod\ p = (g^b)^a\ mod\ p$$，证明从略。
 
 DH协商中服务端私钥$$a$$可以使用证书中的私钥，也可以使用临时生成一个私钥。第一种由于证书私钥参与了密钥的生成，所以一旦证书的私钥泄漏，之前的传输就有可能被破解，所以是非前向安全性。而使用临时生成的私钥可以解决这个问题，这种方式称之为DHE(Diffie–Hellman ephemeral)。
 
@@ -121,14 +122,12 @@ Chrome打开任意一个https的网站，在地址栏的最左边可以查看网
 
 ![](/assets/images/cer-chain.png)
 
-证书链中最顶端的为根证书(Root Certificates)，一般随操作系统分发，自签名，属于Root CA；最底端的为终端用户证书(End-user Certificates)，即网站所属者的证书；位于中间的证书可能有多级，都称之为中间证书(Intermediates Certificates)。
-
+证书链中最顶端的为根证书(Root Certificates)，一般随操作系统分发，自签名，属于Root CA；最底端的为终端用户证书(End-User Certificates)，即网站所属者的证书；位于中间的证书可能有多级，都称之为中间证书(Intermediates Certificates)。
 
 可以点击证书图片的位置拖出到文件夹，即可得到cer文件，使用如下命令可以查看证书的内容：
 
 ```bash
 $ openssl x509 -text -inform DER -in baidu.com.cer
-
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -217,15 +216,15 @@ openssl x509 -text -inform DER -in baidu.com.cer -out baidu.com.pem
 
 ![](/assets/images/Chain_of_trust.svg)
 
-如图中所示，从终端用户证书开始，取出证书的签名，使用上一级证书(Issuer指定的)中的公钥(Public Key Info)解密得到摘要，将终端用户证书的内容按摘要算法(sha256等)获得的摘要与签名解密的摘要对比，如果一致，即说明内容没有被篡改；
+如图中所示
 
-这里的解密和摘要生成使用了证书中指定的Signature Algorithm信息，例如sha256WithRSAEncryption，则使用sha256生成摘要，使用RSA和上一级证书公钥解密证书签名。
+1. 从终端用户证书开始，取出证书的签名，使用上一级证书(Issuer指定的)中的公钥(Public Key Info)解密得到摘要，将终端用户证书的内容按摘要算法(sha256等)获得的摘要与签名解密的摘要对比，如果一致，即说明内容没有被篡改；这里的解密和摘要生成使用了证书中指定的Signature Algorithm信息，例如sha256WithRSAEncryption，则使用sha256生成摘要，使用RSA和上一级证书公钥解密证书签名；
 
-依次再取出第二级的证书使用再上一级的公钥解密，并验证摘要；
+2. 依次再取出第二级的证书使用再上一级的公钥解密，并验证摘要；
 
-以此类推，直到受信任的根证书或者信任锚点(trusted anchor)。
+3. 以此类推，直到受信任的根证书或者信任锚点(trusted anchor)。
 
-如果在此过程中摘要对不上或者找不到受信的根证书，那么这个网站就会标记为不安全，如原来的12306，只有通过安装根证书才能使浏览器不报警。
+如果在此过程中摘要对不上或者找不到受信的根证书，那么这个网站就会标记为不安全。如原来的12306，只有通过安装根证书才能使浏览器不报警。
 
 以上就是证书链的校验过程。这一套机制通过增加中间证书的方式，使得在某一个证书提供商有问题时，直接吊销中间证书即可，保证了根证书的安全性。
 
@@ -253,7 +252,6 @@ CRLs方式存在性能问题，随着被吊销的证书越来越多，CRL文件�
 
 
 ## 分析
-<br/>
 
 使用Wireshark可以很方便地识别TLS相关的包，并按其对应的含义识别成易读的结构。再配合[RFC5246](https://tools.ietf.org/html/rfc5246)文档说明，可以很容易地了解交互中的每一个包的作用。
 
@@ -271,105 +269,124 @@ CRLs方式存在性能问题，随着被吊销的证书越来越多，CRL文件�
 其定义如下：
 
 ```c
-      struct {
-          uint8 major;
-          uint8 minor;
-      } ProtocolVersion;
+struct {
+    uint8 major;
+    uint8 minor;
+} ProtocolVersion;
 
-      enum {
-          change_cipher_spec(20), alert(21), handshake(22),
-          application_data(23), (255)
-      } ContentType;
+enum {
+    change_cipher_spec(20), alert(21), handshake(22),
+    application_data(23), (255)
+} ContentType;
 
-      struct {
-          ContentType type;
-          ProtocolVersion version;
-          uint16 length;
-          opaque fragment[TLSPlaintext.length];
-      } TLSPlaintext;
+struct {
+    ContentType type;
+    ProtocolVersion version;
+    uint16 length;
+    opaque fragment[TLSPlaintext.length];
+} TLSPlaintext;
 ```
 
 这里的ContentType的定义主要有以下四种，每一种都是子协议，所以会在名称后面添加Protocol字样：
 
-1 Handshake Protocal： 用于协商各种内容，例如加密套件等，常见的像ClientHello、ServerHello都属于这一类型
+1. Handshake Protocal(22)： 用于协商各种内容，例如加密套件等，常见的像ClientHello、ServerHello都属于这一类型；
 
-2 Change Cipher Spec Protocol：这个类型的消息只有一种子类型change_cipher_spec(1)，用于宣告接下来的数据传输都使用协商后的加密方式进行，所以一般在加密信息协商完成之后发送，这包括重新协商的情况。
+2. Change Cipher Spec Protocol(20)：这个类型的消息只有一种子类型change_cipher_spec(1)，用于宣告接下来的数据传输都使用协商后的加密方式进行，所以一般在加密信息协商完成之后发送，这包括重新协商的情况；
 
-3 Alert Protocol：用于表示警告或者错误的发生，包含有两个字段，AlertLevel(1)和AlertDescription(1)。需要注意的是，在TLS结束时，双方都需要发送close_notify类型的Alert来告诉对方已经传输完成。
+3. Alert Protocol(21)：用于表示警告或者错误的发生，包含有两个字段，AlertLevel(1)和AlertDescription(1)。需要注意的是，在TLS结束时，双方都需要发送close_notify类型的Alert来告诉对方已经传输完成；
 
-4 Application Data Protocol：携带需要传输的应用层数据
+4. Application Data Protocol(23)：携带需要传输的应用层数据。
 
 
 ### Handshake Protocal
 
-由于Handshake Protocal中包的类型众多，而且在交互过程中起到关键的作用，所以先来详细介绍一下它的包格式（Record Protocol中Fragment的数据格式）：
+由于Handshake Protocal中包的类型众多，而且在交互过程中起到关键的作用，所以先来详细介绍一下它的包格式(TLS Record Protocol中Fragment的数据格式)：
 
 ```c
-      enum {
-          hello_request(0), client_hello(1), server_hello(2),
-          certificate(11), server_key_exchange (12),
-          certificate_request(13), server_hello_done(14),
-          certificate_verify(15), client_key_exchange(16),
-          finished(20), (255)
-      } HandshakeType;
+enum {
+    hello_request(0), client_hello(1), server_hello(2),
+    certificate(11), server_key_exchange (12),
+    certificate_request(13), server_hello_done(14),
+    certificate_verify(15), client_key_exchange(16),
+    finished(20), (255)
+} HandshakeType;
 
-      struct {
-          HandshakeType msg_type;    /* handshake type */
-          uint24 length;             /* bytes in message */
-          select (HandshakeType) {
-              case hello_request:       HelloRequest;
-              case client_hello:        ClientHello;
-              case server_hello:        ServerHello;
-              case certificate:         Certificate;
-              case server_key_exchange: ServerKeyExchange;
-              case certificate_request: CertificateRequest;
-              case server_hello_done:   ServerHelloDone;
-              case certificate_verify:  CertificateVerify;
-              case client_key_exchange: ClientKeyExchange;
-              case finished:            Finished;
-          } body;
-      } Handshake;
+struct {
+    HandshakeType msg_type;    /* handshake type */
+    uint24 length;             /* bytes in message */
+    select (HandshakeType) {
+        case hello_request:       HelloRequest;
+        case client_hello:        ClientHello;
+        case server_hello:        ServerHello;
+        case certificate:         Certificate;
+        case server_key_exchange: ServerKeyExchange;
+        case certificate_request: CertificateRequest;
+        case server_hello_done:   ServerHelloDone;
+        case certificate_verify:  CertificateVerify;
+        case client_key_exchange: ClientKeyExchange;
+        case finished:            Finished;
+    } body;
+} Handshake;
 ```
 
 即会以一个字节的类型字段开头，后跟3字节的长度字段标识后续各个类型附属信息的长度，后面介绍每一种类型的时候，还会加深对此的认识。
 
-
 至此，我们终于要开始分析每一个包了。
 
-### ClientHello
+#### ClientHello
 
 在client连接上server时，需要发送ClientHello消息。其结构体如下：
 
 ```c
-      struct {
-          ProtocolVersion client_version;
-          Random random;
-          SessionID session_id;
-          CipherSuite cipher_suites<2..2^16-2>;
-          CompressionMethod compression_methods<1..2^8-1>;
-          select (extensions_present) {
-              case false:
-                  struct {};
-              case true:
-                  Extension extensions<0..2^16-1>;
-          };
-      } ClientHello;
+struct {
+    ProtocolVersion client_version;
+    Random random;
+    SessionID session_id;
+    CipherSuite cipher_suites<2..2^16-2>;
+    CompressionMethod compression_methods<1..2^8-1>;
+    select (extensions_present) {
+        case false:
+            struct {};
+        case true:
+            Extension extensions<0..2^16-1>;
+    };
+} ClientHello;
 
-      struct {
-          uint32 gmt_unix_time;
-          opaque random_bytes[28];
-      } Random;
+struct {
+    uint32 gmt_unix_time;
+    opaque random_bytes[28];
+} Random;
 
-      uint8 CipherSuite[2];
+opaque SessionID<0..32>;
 
-      enum { null(0), (255) } CompressionMethod;
+uint8 CipherSuite[2];
 
-      struct {
-          ExtensionType extension_type;
-          opaque extension_data<0..2^16-1>;
-      } Extension;
+enum { null(0), (255) } CompressionMethod;
+
+struct {
+    ExtensionType extension_type;
+    opaque extension_data<0..2^16-1>;
+} Extension;
 
 ```
+
+**client_version**： 与之前提到的版本号格式一致，表示客户端期望交互的TLS的版本号，如TLS v1.2时，值为0x0303。但其实在TLS v1.3中，这个值也是使用1.2的值(字段名变更为legacy_version)，而是使用了supported_versions这个扩展来标识对于TLS v1.3的支持。这块的原因可以参考[RFC8446](https://tools.ietf.org/html/rfc8446)中的以下这段话，主要是为了兼容客户端：
+> legacy_version:  <br/>
+>   &nbsp;&nbsp; In previous versions of TLS, this field was used for version negotiation and represented the highest version number supported by the client.  
+>   &nbsp;&nbsp; Experience has shown that many servers do not properly implement version negotiation, leading to "version intolerance" in which the server rejects an otherwise acceptable ClientHello with a version number higher than it supports.  
+>   &nbsp;&nbsp; In TLS 1.3, the client indicates its version preferences in the "supported_versions" extension (Section 4.2.1) and the legacy_version field MUST be set to 0x0303, which is the version number for TLS 1.2.  
+>   &nbsp;&nbsp; TLS 1.3 ClientHellos are identified as having a legacy_version of 0x0303 and a supported_versions extension present with 0x0304 as the highest version indicated therein. 
+
+**random**：这个结构包括一个32位的时间戳和一个28字节的随机数；
+
+**session_id**：是一个不定长的id标识，在实现中有一个字节的长度和后面的具体内容组成。session_id一般情况下为空，只有在客户端希望复用session_id(session_id的来源可以是之前连接的，也可以是当前连接的，也可以是当前其它连接)时，才会传这个session_id，传session_id可以减少协商的交互次数，详见后面的[session复用章节](#使用session_id-和session_ticket-减少ttl次数)；
+
+**cipher_suites**：包括两个字节的长度信息，和支持的套件列表（按客户端喜好优先排列），每一个套件占用两字节，定义了以下四个方面：密钥交换算法(key exchange algorithm)，批量加密算法(bulk encryption algorithm (including secret key length))，消息认证码算法(MAC algorithm)，伪随机算法函数(pseudo-random function/PRF);
+
+**compression_methods**: 包括一个字节的长度信息和支持的压缩方法列表，列表中必须包含有null(0)，表示支持不使用压缩；
+
+**extensions**： 剩下的都为扩展相关的内容，包括两字节的长度信息和扩展列表；扩展的结构如下，包括两个字节的ExtensionType、两个字节的扩展长度，以及剩下的扩展的具体数据信息，详情参见[ClientHello与ServerHello所使用的扩展](#clienthello与serverhello所使用的扩展)。
+
 
 Wireshark抓包如下：
 
@@ -429,37 +446,32 @@ TLSv1.2 Record Layer: Handshake Protocol: Client Hello
 
 ```
 
-client_version： 与之前提到的版本一号格式一致，这一个值表示客户端期望交互的TLS的版本号，如TLS v1.2时，值为0x0303。但其实在TLS v1.3中，这个值也是使用1.2的值，而是使用了supported_versions这个扩展来标识对于TLS v1.3的支持。
 
-random：这个结构包括一个32位的时间戳和一个28字节的随机数
+#### ServerHello
 
-session_id：是一个不定长的id标识，在实现中有一个字节的长度和后面的具体内容组成。session id一般情况下为空，只有在客户端希望复用session id（可以从之前连接的，也可以从当前连接的，也可以从当前其它连接的拿到session id）时，才会传这个session id，传session id可以减少协商的交互次数，详见后面的session复用章节
-
-cipher_suites：包括两个字节的长度信息，和支持的套件列表（按客户端喜好优先排列），每一个套件占用两字节，定义了以下四个方面：密钥交换算法（a key   exchange algorithm）, 批量加密算法（a bulk encryption algorithm (including secret keylength)）, 消息认证码算法（a MAC algorithm）, 伪随机算法函数(pseudo-random function /PRF）
-
-compression_methods: 包括一个字节的长度信息和支持的压缩方法列表，列表中必须包含有null(0)，表示支持不使用压缩
-
-extensions： 后续为扩展相关的内容，包括两字节的长度信息和扩展列表，扩展的结构如下，包括两个字节的ExtensionType、两个字节的扩展长度，以及剩下的扩展的具体数据信息。
-
-
-### ServerHello
-
+用于回复ClinetHello。如果客户端的所有算法套件服务端不支持，则不会回复ServerHello，而会使用FailureAlert消息。
 
 ```c
 struct {
-          ProtocolVersion server_version;
-          Random random;
-          SessionID session_id;
-          CipherSuite cipher_suite;
-          CompressionMethod compression_method;
-          select (extensions_present) {
-              case false:
-                  struct {};
-              case true:
-                  Extension extensions<0..2^16-1>;
-          };
-      } ServerHello;
+    ProtocolVersion server_version;
+    Random random;
+    SessionID session_id;
+    CipherSuite cipher_suite;
+    CompressionMethod compression_method;
+    select (extensions_present) {
+        case false:
+            struct {};
+        case true:
+            Extension extensions<0..2^16-1>;
+    };
+} ServerHello;
 ```
+
+字段上与ClientHello基本一样，只是CipherSuite和CompressionMethod不再是变长的字段，而是服务端选定的结果。
+
+**session_id字段说明**：如果ClientHello传了session_id，并且server端在自己的缓存中找到了这个session_id对应的信息，则可以直接返回client的session_id，表示复用此session。如果没有找到，或者服务端不想使用，则生成一个新的session_id，服务端也可以返回空的session_id表示服务端不希望复用此session_id。
+
+**extensions_present**: 用于回应ClientHello中的扩展信息，注意ServerHello中的扩展只能出现那些在ClientHello里出现的扩展。
 
 ```
 TLSv1.2 Record Layer: Handshake Protocol: Server Hello
@@ -482,25 +494,15 @@ TLSv1.2 Record Layer: Handshake Protocol: Server Hello
         Extension: application_layer_protocol_negotiation (len=5)
 ```
 
+#### ClientHello与ServerHello所使用的扩展
 
-用于回复ClinetHello。如果客户端的所有算法套件服务端不支持，则不会回复ServerHello，而会使用FailureAlert消息。
+扩展的使用延展了TLS协议的大量能力，所以这里穿插介绍TLS中使用的扩展，以下这些扩展是在chrome里抓包查看到的，也忽略了一些不常用。
 
-字段上与ClientHello基本一样，只是CipherSuite和CompressionMethod不再是变长的字段，而是服务端选定的结果。
+##### [Reserved(GREASE)](https://tools.ietf.org/id/draft-ietf-tls-grease-01.html)
 
-session_id字段说明：如果ClientHello传了session id，并且server端在自己的缓存中找到了这个session id对应的信息，则可以直接返回client的sessionid，表示 复用此session。如果没有找到，或者服务端不想使用，则生成 一个新的session id，服务端也可以返回空的session id表示服务端不希望复用此session id。
-
-extensions_present: 用于回应ClientHello中的扩展信息，注意ServerHello中的扩展只能出现那些在ClientHello里出现的扩展。
-
-
-
-### ClientHello与ServerHello所使用的扩展
-
-扩展的使用扩展了TLS协议的方方面面，所以这里穿插介绍TLS中使用的扩展，以下这些扩展是在chrome里抓包查看到的，也忽略了一些不常用。
-
-
-#### [Reserved(GREASE)](https://tools.ietf.org/id/draft-ietf-tls-grease-01.html)
-
-这个扩展并不是只有指定的一个类型编号，而是有一系列类型编号。它是google提出，用于消除那些服务端在碰到不认识扩展时就中止的不正确服务端实现，这里是对应的[介绍](https://www.thesslstore.com/blog/google-wants-grease-chrome/)。此类型只包含两字节的类型和两字节的内容长度，并且长度为0。
+这个扩展并不是只有指定的一个类型编号，而是有一系列类型编号。它是google提出，用于消除那些服务端在碰到不认识扩展时就中止的不正确服务端实现，这里是对应的[介绍](https://www.thesslstore.com/blog/google-wants-grease-chrome/)。此类型只包含两字节的类型和两字节的内容长度，并且长度为0。其意义如下，定义的这些插件会被随机发送给服务端，使得有问题的服务端实现可以在广泛传播前发现问题：
+> However, bugs may cause an implementation to reject unknown values. It will interoperate with existing peers, so the mistake may spread through the ecosystem unnoticed. Later, when new values are defined, updated peers will discover that the metaphorical joint in the protocol has rusted shut and that the new values cannot be deployed without interoperability failures.
+> To avoid this problem, this document reserves some currently unused values for TLS implementations to advertise at random. Correctly implemented peers will ignore these values and interoperate. Peers that do not tolerate unknown values will fail to interoperate, revealing the mistake before it is widespread.
 
 ```
 Extension: Reserved (GREASE) (len=0)
@@ -508,12 +510,10 @@ Extension: Reserved (GREASE) (len=0)
     Length: 0
     Data: <MISSING>
 ```
-    
 
+##### [sever_name(RFC6066)](https://tools.ietf.org/html/rfc6066)
 
-#### [sever_name(RFC6066)](https://tools.ietf.org/html/rfc6066)
-
-对于使用vhost的服务器来说，同一个ip可能对应服务多个域名，并且对应多个证书，所以在http的host头信息没有上传时，server端根据这个server_name扩展字段来识别域名，即大家所说的sni扩展(server name indication)。[RFC6066]
+对于使用vhost的服务器来说，同一个IP可能对应服务多个域名，并且对应多个证书，所以在http的host头信息没有上传时，server端根据这个server_name扩展字段来识别域名，即大家所说的SNI扩展(server name indication)。
 
 ```
 Extension: server_name (len=30)
@@ -527,9 +527,21 @@ Extension: server_name (len=30)
 ```
 
 
-#### [extended_master_secret(RFC7627)](https://tools.ietf.org/html/rfc7627)
+##### [extended_master_secret(RFC7627)](https://tools.ietf.org/html/rfc7627)
 
-使用增强型主密钥计算方式，可参考[此](https://github.com/halfrost/Halfrost-Field/blob/master/contents/Protocol/HTTPS-key-cipher.md)，client发送的内容为空，而server hello如果返回了这个扩展，表示使用增强型主密钥计算方式。
+使用增强型主密钥计算方式，client发送的内容为空，而server hello如果返回了这个扩展，表示使用增强型主密钥计算方式。
+
+增强型主密钥是将原来的主密钥算法
+
+```master_secret = PRF(pre_master_secret, "master secret", ClientHello.random + ServerHello.random)[0..47]```
+
+替换为
+
+```master_secret = PRF(pre_master_secret, "extended master secret", session_hash)[0..47]```
+
+其中server_hash是整个交互过程中提取的信息，包括ClientHello.random和ServerHello.random：
+
+> 此设计反映了密钥应该绑定到计算它们的安全上下文的建议[SP800-108](https://tools.ietf.org/html/rfc7627#ref-SP800-108)。将密钥交换消息的散列混合到主密钥导出中的技术已经用于其他众所周知的协议，例如Secure Shell（SSH）RFC4251。Client和Server不应接受不使用扩展主密钥的握手，特别是如果它们依赖于复合认证等功能。
 
 ```
 Extension: extended_master_secret (len=0)
@@ -537,9 +549,11 @@ Extension: extended_master_secret (len=0)
     Length: 0
 ```
 
-#### [renegotiation_info(RFC5746)](https://tools.ietf.org/html/rfc5746)
+##### [renegotiation_info(RFC5746)](https://tools.ietf.org/html/rfc5746)
 
-重协商扩展，用于解决旧版本中重协商存在中间人攻击的情况，具体这块扩展的内容，见后面的重协商中间人攻击相关的内容。有时候client hello中也存在不发送这个扩展，但服务端返回这个扩展的情况，这是为了监容旧版本服务端不正确 的实现，使用了TLS_EMPTY_RENEGOTIATION_INFO_SCSV这一伪密码套件来表示这一扩展，即在client hello中的cipher_suites中添加TLS_EMPTY_RENEGOTIATION_INFO_SCSV来表示支持重协商，这块的理解参见[此](https://blog.csdn.net/u010129119/article/details/77675644)
+重协商扩展，用于解决旧版本中重协商存在中间人攻击的情况，具体这块扩展的内容，见后面的[重协商中间人攻击](#tls重协商的中间人攻击)相关的内容。
+
+有时候ClientHello中也存在不发送这个扩展，但服务端返回这个扩展的情况，这是为了监容旧版本服务端不正确的实现，使用了TLS_EMPTY_RENEGOTIATION_INFO_SCSV这一伪密码套件来表示这一扩展，即在ClientHello中的cipher_suites中添加TLS_EMPTY_RENEGOTIATION_INFO_SCSV来表示支持重协商。
 
 ```
 Extension: renegotiation_info (len=1)
@@ -549,7 +563,7 @@ Extension: renegotiation_info (len=1)
         Renegotiation info extension length: 0
 ```
 
-#### [supported_groups(RFC7919)](https://tools.ietf.org/html/rfc7919)、[ec_point_formats(RFC8422)](https://tools.ietf.org/html/rfc8422) 
+##### [supported_groups(RFC7919)](https://tools.ietf.org/html/rfc7919)、[ec_point_formats(RFC8422)](https://tools.ietf.org/html/rfc8422) 
 
  这两个都是关于椭圆曲线相关的: 支持的椭圆曲线的种类以及是否能对椭圆曲线参数进行压缩。
 
@@ -571,9 +585,9 @@ Extension: ec_point_formats (len=2)
         EC point format: uncompressed (0)
 ```
 
-#### [session_ticket(RFC5077)](https://tools.ietf.org/html/rfc5077) 
+##### [session_ticket(RFC5077)](https://tools.ietf.org/html/rfc5077) 
 
-附带之前服务端下发的ticket来加速协商的过程，如果服务端支持ticket需要在回包中带上此扩展，并且在Change Chiper Spec之前发送New Session Ticket类型的Handshake包。
+附带之前服务端下发的ticket来加速协商的过程，如果服务端支持ticket需要在回包中带上此扩展，并且在Change Chiper Spec之前发送New Session Ticket类型的Handshake包，详情见[此](#使用session_id-和session_ticket-减少ttl次数)。
 
 ```
 Extension: session_ticket (len=160)
@@ -594,7 +608,7 @@ TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
             Session Ticket: d008e85ec8445a77337455e2cf7bfd761fbd4dcfc1294b10…
 ```
             
-#### [application_layer_protocol_negotiation(RFC7301)](https://tools.ietf.org/html/rfc7301) 
+##### [application_layer_protocol_negotiation(RFC7301)](https://tools.ietf.org/html/rfc7301) 
 
 用于协调应用层的协议，例如使用http1.1还是使用http2，一般称之为ALPN扩展。
 
@@ -619,9 +633,9 @@ Extension: application_layer_protocol_negotiation (len=5)
 ```
 
 
-####  [status_request](https://tools.ietf.org/html/rfc6066#page-14) 
+#####  [status_request(RFC6066)](https://tools.ietf.org/html/rfc6066#page-14) 
 
-期望服务端请求OCSP来校验证书是否被吊销，这在证书吊销章节中会详细介绍。
+期望服务端请求OCSP来校验证书是否被吊销，详见[证书吊销](#证书吊销)章节。
 
 ```
     Extension: status_request (len=5)
@@ -633,64 +647,63 @@ Extension: application_layer_protocol_negotiation (len=5)
 
 ```
 
-
-
-
-#### [signature_algorithms](): 
-    Extension: signature_algorithms (len=18)
-        Type: signature_algorithms (13)
-        Length: 18
-        Signature Hash Algorithms Length: 16
-        Signature Hash Algorithms (8 algorithms)
-            Signature Algorithm: ecdsa_secp256r1_sha256 (0x0403)
-            Signature Algorithm: rsa_pss_rsae_sha256 (0x0804)
-            Signature Algorithm: rsa_pkcs1_sha256 (0x0401)
-            Signature Algorithm: ecdsa_secp384r1_sha384 (0x0503)
-            Signature Algorithm: rsa_pss_rsae_sha384 (0x0805)
-            Signature Algorithm: rsa_pkcs1_sha384 (0x0501)
-            Signature Algorithm: rsa_pss_rsae_sha512 (0x0806)
-            Signature Algorithm: rsa_pkcs1_sha512 (0x0601)
-
-
-    Extension: signed_certificate_timestamp (len=0)
-        Type: signed_certificate_timestamp (18)
-        Length: 0
-
-
-#### [supported_versions](https://tools.ietf.org/html/rfc8446)
-
- 在 TLS 1.3 中，ClientHello 中的 supported_versions 扩展非常重要。因为 TLS 1.3 是根据这个字段的值来协商是否支持 TLS 1.3 。在 TLS 1.3 规范中规定，ClientHello 中的 legacy_version 必须设置为 0x0303，这个值代表的是 TLS 1.2 。这样规定是为了对网络中间件做的一些兼容。如果此时 ClientHello 中不携带 supported_versions 这个扩展，那么注定只能协商 TLS 1.2 了。
+##### [signature_algorithms(RFC5246)](https://tools.ietf.org/html/rfc5246): 
 
 ```
-    Extension: supported_versions (len=11)
-        Type: supported_versions (43)
-        Length: 11
-        Supported Versions length: 10
-        Supported Version: Unknown (0xeaea)
-        Supported Version: TLS 1.3 (0x0304)
-        Supported Version: TLS 1.2 (0x0303)
-        Supported Version: TLS 1.1 (0x0302)
-        Supported Version: TLS 1.0 (0x0301)
+Extension: signature_algorithms (len=18)
+    Type: signature_algorithms (13)
+    Length: 18
+    Signature Hash Algorithms Length: 16
+    Signature Hash Algorithms (8 algorithms)
+        Signature Algorithm: ecdsa_secp256r1_sha256 (0x0403)
+        Signature Algorithm: rsa_pss_rsae_sha256 (0x0804)
+        Signature Algorithm: rsa_pkcs1_sha256 (0x0401)
+        Signature Algorithm: ecdsa_secp384r1_sha384 (0x0503)
+        Signature Algorithm: rsa_pss_rsae_sha384 (0x0805)
+        Signature Algorithm: rsa_pkcs1_sha384 (0x0501)
+        Signature Algorithm: rsa_pss_rsae_sha512 (0x0806)
+        Signature Algorithm: rsa_pkcs1_sha512 (0x0601)
+Extension: signed_certificate_timestamp (len=0)
+    Type: signed_certificate_timestamp (18)
+    Length: 0
 ```
 
+##### [supported_versions(RFC8446)](https://tools.ietf.org/html/rfc8446)
 
+ 在 TLS 1.3中，ClientHello 中的supported_versions 扩展非常重要。因为 TLS 1.3 是根据这个字段的值来协商是否支持TLS 1.3。
+ 
+ 在 TLS 1.3规范中规定，ClientHello中的legacy_version必须设置为0x0303，这个值代表的是TLS 1.2。这样规定是为了对网络中间件做的一些兼容。
+ 
+ 如果ClientHello中不携带supported_versions这个扩展，那么注定只能协商TLS 1.2了。
 
-#### [padding](https://tools.ietf.org/html/rfc7685) 
+```
+Extension: supported_versions (len=11)
+    Type: supported_versions (43)
+    Length: 11
+    Supported Versions length: 10
+    Supported Version: Unknown (0xeaea)
+    Supported Version: TLS 1.3 (0x0304)
+    Supported Version: TLS 1.2 (0x0303)
+    Supported Version: TLS 1.1 (0x0302)
+    Supported Version: TLS 1.0 (0x0301)
+```
+
+##### [padding(RFC7685)](https://tools.ietf.org/html/rfc7685) 
 
 为了解决某些TLS实现在收到特定大小的client hello包时会出现问题的情况。
+
 ```
-    Extension: padding (len=207)
-        Type: padding (21)
-        Length: 207
-        Padding Data: 000000000000000000000000000000000000000000000000…
+Extension: padding (len=207)
+    Type: padding (21)
+    Length: 207
+    Padding Data: 000000000000000000000000000000000000000000000000…
 ```
 
+#### Server Certificate
 
-### Server Certificate
+这个消息跟在ServerHello之后，用于发送服务端的证书链：
 
-这个消息跟在server hello之后，用于发送服务端的证书链
-
-
+```
 Handshake Protocol: Certificate
     Handshake Type: Certificate (11)
     Length: 3419
@@ -778,12 +791,13 @@ Handshake Protocol: Certificate
         Certificate: 3082048b30820373a00302010202100546fe1823f7e1941d… (id-at-commonName=GeoTrust RSA CA 2018,id-at-organizationalUnitName=www.digicert.com,id-at-organizationName=DigiCert Inc,id-at-countryName=US)
         Certificate Length: 947
         Certificate: 308203af30820297a0030201020210083be056904246b1a1… (id-at-commonName=DigiCert Global Root CA,id-at-organizationalUnitName=www.digicert.com,id-at-organizationName=DigiCert Inc,id-at-countryName=US)
+```
 
-
-### Server Key Exchange Message
+#### Server Key Exchange Message
 
 用于密钥交换时所需要的额外信息，例如在密钥交换使用DHE算法时，就需要发送服务端算出来的值。
 
+```
 TLSv1.2 Record Layer: Handshake Protocol: Server Key Exchange
     Content Type: Handshake (22)
     Version: TLS 1.2 (0x0303)
@@ -801,12 +815,13 @@ TLSv1.2 Record Layer: Handshake Protocol: Server Key Exchange
                 Signature Hash Algorithm Signature: RSA (1)
             Signature Length: 256
             Signature: 231e98d4d7327615c0623390b5a70c75af452d4f3138516f…
+```
 
-
-### Server Hello Done 
+#### Server Hello Done 
 
 用于表明服务端已经在密钥交换环节发送完成信息了，现在需要等待客户端发送信息了。
 
+```
 TLSv1.2 Record Layer: Handshake Protocol: Server Hello Done
     Content Type: Handshake (22)
     Version: TLS 1.2 (0x0303)
@@ -814,12 +829,13 @@ TLSv1.2 Record Layer: Handshake Protocol: Server Hello Done
     Handshake Protocol: Server Hello Done
         Handshake Type: Server Hello Done (14)
         Length: 0
+```
 
-
-### Client Key Exchange
+#### Client Key Exchange
 
 客户端用于密钥协商所需要提供的信息
 
+```
 TLSv1.2 Record Layer: Handshake Protocol: Client Key Exchange
     Content Type: Handshake (22)
     Version: TLS 1.2 (0x0303)
@@ -830,12 +846,13 @@ TLSv1.2 Record Layer: Handshake Protocol: Client Key Exchange
         EC Diffie-Hellman Client Params
             Pubkey Length: 65
             Pubkey: 0417926519bea2958936e4350faa1a3f4271228a97668627…
-
+```
 
 ### New Session Ticket
 
 新生成的session ticket，参见session ticket章节
 
+```
 TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
     Content Type: Handshake (22)
     Version: TLS 1.2 (0x0303)
@@ -847,20 +864,22 @@ TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
             Session Ticket Lifetime Hint: 6000 seconds (1 hour, 40 minutes)
             Session Ticket Length: 192
             Session Ticket: d008e85ec8445a77337455e2cf7bfd761fbd4dcfc1294b10…
+```
 
 ### Finished
 
 用于表示协商结束，后续开始传输应用数据，Finished本身使用协商的对称密钥加密，并且包含了整个协商交互过程中内容的Hash校验值，所以Finish信息也是对于交互中是否篡改进行的校验。
 
-   struct {
-          opaque verify_data[verify_data_length];
-      } Finished;
+```c
+struct {
+       opaque verify_data[verify_data_length];
+   } Finished;
 
-      verify_data
-         PRF(master_secret, finished_label, Hash(handshake_messages))
-            [0..verify_data_length-1];
+   verify_data
+      PRF(master_secret, finished_label, Hash(handshake_messages))
+         [0..verify_data_length-1];
+```
 注意这里的verify_data将在重协商的renegotiation_info扩展消息中使用
-
 
 ## 深入了解交互流程
 
@@ -910,7 +929,7 @@ server端随时可以发送，用于告知client端需要重新协商。此类�
 
 最开始的重协商机制存在安全漏洞，我们来看下图展示出来的中间人攻击：
 
-![](assets/images/renegotiation.jpg)
+![](/assets/images/renegotiation.jpg)
 
 攻击流程：
 1. Client发起clientHello握手请求，被中间人暂时存下来
@@ -964,7 +983,7 @@ Cipher Suites (46 suites)
     Cipher Suite: TLS_EMPTY_RENEGOTIATION_INFO_SCSV (0x00ff)
 ```
 
-### 使用session id 和session ticket 减少TTL次数
+### 使用session_id 和session_ticket 减少TTL次数
 
 
 session id用于复用连接信息来减少tls握手的次数，其机制是在server hello时返回sessionid，客户端在下次建立连接时发送的client hello包里可以包含此sessionid来恢复之前的会话。
