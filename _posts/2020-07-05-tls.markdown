@@ -379,7 +379,7 @@ struct {
 
 **random**：这个结构包括一个32位的时间戳和一个28字节的随机数；
 
-**session_id**：是一个不定长的id标识，在实现中有一个字节的长度和后面的具体内容组成。session_id一般情况下为空，只有在客户端希望复用session_id(session_id的来源可以是之前连接的，也可以是当前连接的，也可以是当前其它连接)时，才会传这个session_id，传session_id可以减少协商的交互次数，详见后面的[session复用章节](#使用session_id-和session_ticket-减少ttl次数)；
+**session_id**：是一个不定长的id标识，在实现中有一个字节的长度和后面的具体内容组成。session_id一般情况下为空，只有在客户端希望复用session_id(session_id的来源可以是之前连接的，也可以是当前连接的，也可以是当前其它连接)时，才会传这个session_id，传session_id可以减少协商的交互次数，详见后面的[session复用章节](#使用session_id-和session_ticket-减少握手次数)；
 
 **cipher_suites**：包括两个字节的长度信息，和支持的套件列表（按客户端喜好优先排列），每一个套件占用两字节，定义了以下四个方面：密钥交换算法(key exchange algorithm)，批量加密算法(bulk encryption algorithm (including secret key length))，消息认证码算法(MAC algorithm)，伪随机算法函数(pseudo-random function/PRF);
 
@@ -587,7 +587,7 @@ Extension: ec_point_formats (len=2)
 
 ##### [session_ticket(RFC5077)](https://tools.ietf.org/html/rfc5077) 
 
-附带之前服务端下发的ticket来加速协商的过程，如果服务端支持ticket需要在回包中带上此扩展，并且在Change Chiper Spec之前发送New Session Ticket类型的Handshake包，详情见[此](#使用session_id-和session_ticket-减少ttl次数)。
+附带之前服务端下发的ticket来加速协商的过程，如果服务端支持ticket需要在回包中带上此扩展，并且在Change Chiper Spec之前发送New Session Ticket类型的Handshake包，详情见[此](#使用session_id-和session_ticket-减少握手次数)。
 
 ```
 Extension: session_ticket (len=160)
@@ -670,11 +670,11 @@ Extension: signed_certificate_timestamp (len=0)
 
 ##### [supported_versions(RFC8446)](https://tools.ietf.org/html/rfc8446)
 
- 在 TLS 1.3中，ClientHello 中的supported_versions 扩展非常重要。因为 TLS 1.3 是根据这个字段的值来协商是否支持TLS 1.3。
+ 在TLS1.3中，ClientHello中的supported_versions扩展非常重要。因为TLS1.3 是根据这个字段的值来协商是否支持TLS1.3。
  
- 在 TLS 1.3规范中规定，ClientHello中的legacy_version必须设置为0x0303，这个值代表的是TLS 1.2。这样规定是为了对网络中间件做的一些兼容。
+ 在TLS1.3规范中规定，ClientHello中的legacy_version必须设置为0x0303，这个值代表的是TLS1.2。这样规定是为了对网络中间件做的一些兼容。
  
- 如果ClientHello中不携带supported_versions这个扩展，那么注定只能协商TLS 1.2了。
+ 如果ClientHello中不携带supported_versions这个扩展，那么注定只能协商TLS1.2了。
 
 ```
 Extension: supported_versions (len=11)
@@ -690,7 +690,7 @@ Extension: supported_versions (len=11)
 
 ##### [padding(RFC7685)](https://tools.ietf.org/html/rfc7685) 
 
-为了解决某些TLS实现在收到特定大小的client hello包时会出现问题的情况。
+为了解决某些TLS实现在收到特定大小的ClientHello包时会出现问题的情况。
 
 ```
 Extension: padding (len=207)
@@ -819,7 +819,7 @@ TLSv1.2 Record Layer: Handshake Protocol: Server Key Exchange
 
 #### Server Hello Done 
 
-用于表明服务端已经在密钥交换环节发送完成信息了，现在需要等待客户端发送信息了。
+用于表明服务端已经在密钥交换环节发送完信息了，现在需要等待客户端发送信息了。
 
 ```
 TLSv1.2 Record Layer: Handshake Protocol: Server Hello Done
@@ -848,9 +848,9 @@ TLSv1.2 Record Layer: Handshake Protocol: Client Key Exchange
             Pubkey: 0417926519bea2958936e4350faa1a3f4271228a97668627…
 ```
 
-### New Session Ticket
+#### New Session Ticket
 
-新生成的session ticket，参见session ticket章节
+新生成的session ticket，参见[session ticket章节](#使用session_id-和session_ticket-减少握手次数)。
 
 ```
 TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
@@ -872,62 +872,28 @@ TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
 
 ```c
 struct {
-       opaque verify_data[verify_data_length];
-   } Finished;
+    opaque verify_data[verify_data_length];
+} Finished;
 
-   verify_data
-      PRF(master_secret, finished_label, Hash(handshake_messages))
-         [0..verify_data_length-1];
+verify_data
+   PRF(master_secret, finished_label, Hash(handshake_messages))
+      [0..verify_data_length-1];
 ```
-注意这里的verify_data将在重协商的renegotiation_info扩展消息中使用
-
-## 深入了解交互流程
-
-<br/>
-
-我们似乎深入分析了每一个包的作用，但对于整体的流程，我们可能还是不清楚。
-
-我们从一些概念出发，来真正深入了解整体的交互流程吧。
+注意这里的verify_data将在重协商的renegotiation_info扩展消息中使用。
 
 
+###  Hello Request
 
-
-
-
-### TLS协议的历史
-
-### TLS的交互流程概览
-
-### 协议细节
-
-基于TLS传输的数据，会在TCP与真正数据之间通过TLS Record Protocol封装成特定的TLS数据包。
-
-这一协议不仅定义了数据的传输方式，还定义了许多在协商过程中使用的包类型，以下是基本的数据结构图：
-
-ContentType表示此包的类型，可选为      
-enum {
-          change_cipher_spec(20), alert(21), handshake(22),
-          application_data(23), (255)
-      } ContentType;
-
-
-length表示fragment数据的长度，占用两字节，根据ContentType的不同，fragment数据表示的含义也有所不同。
-
-#####  hello_request
-
-server端随时可以发送，用于告知client端需要重新协商。此类型没有消息体，所以length为0
-
-
-
+Server端随时可以发送，用于告知Client端需要重新协商。此类型没有消息体，所以length为0。
 
 
 ### TLS重协商的中间人攻击
 
-重协商是在已经协商好的tls连接上发起重新协商的机制，用于更换算法、证书、更新密钥等场景。
+重协商是在已经协商好的TLS连接上发起重新协商的机制，用于更换算法、证书、更新密钥等场景。
 
-有两种方式可以发起重协商：1. 客户端发起clientHello要求重协商 ，2. 服务端发送helloRequest来发起重协商。当然对方都可以通过Alert来拒绝重协商。
+有两种方式可以发起重协商：1. 客户端发起ClientHello要求重协商 ，2. 服务端发送HelloRequest来发起重协商。当然对方都可以通过Alert来拒绝重协商。
 
-最开始的重协商机制存在安全漏洞，我们来看下图展示出来的中间人攻击：
+最开始的重协商机制存在安全漏洞，可以通过以下的方式进行中间人攻击：
 
 ![](/assets/images/renegotiation.jpg)
 
@@ -954,9 +920,7 @@ Cookie: Token=xxx
 
 以上SSL3.0上的重协商协议之所以是不安全的，主要原因在于服务端无法区分首次的ClientHello包还是重协商的ClientHello包，以及前后的两次协商之间缺少关联性。
 
-为此，[RFC5746](https://tools.ietf.org/html/rfc5746)提出了安全重协商renegotitation_info扩展。
-
-client hello中发送此扩展来与服务端协商开启安全的重协商策略，其它发送的数据如下：
+为此，[RFC5746](https://tools.ietf.org/html/rfc5746)提出了安全重协商renegotitation_info扩展，ClientHello中发送此扩展来与服务端协商开启安全的重协商策略，其发送的数据如下：
 
 ```
 Extension: renegotiation_info (len=1)
@@ -969,12 +933,11 @@ Extension: renegotiation_info (len=1)
 
 如果服务端同意开启安全重协商策略，则在server hello也会返回些扩展，数据也是为空；在协商完成发送的Finish包时会各自都带上verify_data，称之为client_verify_data和server_verify_data，两端都将这两个verify_data存储下来。
 
-在重协商时，发送的client hello会在Renegotiation Info extension里带有上一次协商时的client_verify_data；server hello则会将client_verify_data和server_verify_data都带上。两端对此数据校验通过了再会继续重协商。
+在重协商时，发送的ClientHello会在Renegotiation Info extension里带有上一次协商时的client_verify_data；ServerHello则会将client_verify_data和server_verify_data都带上。两端对此数据校验通过了才会继续重协商。
 
 Finish包是使用协商完成的密钥加密传输的，所以不用担心verify_data被篡改的问题，这种方式就将两次协商关联在一起了，防止中间人攻击。
 
-
-有时候client hello中也存在不发送这个扩展，但服务端返回这个扩展的情况，这是为了监容旧版本服务端不正确 的实现，使用了TLS_EMPTY_RENEGOTIATION_INFO_SCSV这一伪密码套件来表示这一扩展，即在client hello中的cipher_suites中添加TLS_EMPTY_RENEGOTIATION_INFO_SCSV来表示支持重协商，这块的理解参见[此](https://blog.csdn.net/u010129119/article/details/77675644)
+有时候ClientHello中也存在不发送这个扩展但服务端返回这个扩展的情况，这是为了兼容旧版本服务端不正确的实现，使用了TLS_EMPTY_RENEGOTIATION_INFO_SCSV这一伪密码套件来表示这一扩展，即在ClientHello中的cipher_suites中添加TLS_EMPTY_RENEGOTIATION_INFO_SCSV来表示支持重协商，这块的理解参见[此](https://blog.csdn.net/u010129119/article/details/77675644)：
 
 ```
 Cipher Suites (46 suites)
@@ -983,10 +946,11 @@ Cipher Suites (46 suites)
     Cipher Suite: TLS_EMPTY_RENEGOTIATION_INFO_SCSV (0x00ff)
 ```
 
-### 使用session_id 和session_ticket 减少TTL次数
+### 使用session_id 和session_ticket 减少握手次数
 
+#### SessionID机制
 
-session id用于复用连接信息来减少tls握手的次数，其机制是在server hello时返回sessionid，客户端在下次建立连接时发送的client hello包里可以包含此sessionid来恢复之前的会话。
+session_id用于复用连接信息来减少TLS握手的次数，其机制是在ServerHello时返回session_id，客户端在下次建立连接时发送的ClientHello包里可以包含此session_id来恢复之前的会话。
 
 
       Client                                                Server
@@ -999,16 +963,18 @@ session id用于复用连接信息来减少tls握手的次数，其机制是在s
       Finished                      -------->
       Application Data              <------->     Application Data
 
-服务端存储session id并存储与之对应的状态，如加密套件，master key等信息。如果服务端拿客户端传过来的sessionid能拿到对应的信息，就表示此session id有效，并尝试恢复会话。
+服务端存储session_id并存储与之对应的状态，如加密套件，master key等信息。如果服务端拿客户端传过来的session_id能拿到对应的信息，就表示此session_id有效，并尝试恢复会话。
 
-由于session id 是存储在服务端，所以需要解决多台机器共享session id的问题，一般来说在分布式系统中增加sessionid的共享 会带来一些麻烦。
-
-
+由于session_id是存储在服务端，所以需要解决多台机器共享session_id的问题，一般来说在分布式系统中增加session_id的共享会带来一些麻烦。
 
 
-session ticket用来减少客户端和服务端协商密钥等信息的交互次数（由原来的两次交互减少为一次交互）。与此相关的插件sessionTicket以及NewSessionTicket消息来共同完成此工作。
+#### SessionTicket机制
 
-首先client hello会发送空的session ticket插件来表示支持session ticket。服务端如果希望使用此机制，会在server hello中返回空的session ticket扩展。接着在协商完成之后在Change Cipher Spec包之前发送New Session Ticket包
+session_ticket用来减少客户端和服务端协商密钥等信息的交互次数(由原来的两次交互减少为一次交互)。与此相关的插件SessionTicket以及NewSessionTicket消息来共同完成此工作。
+
+首先ClientHello会发送空的session_ticket插件来表示支持session_ticket。服务端如果希望使用此机制，会在ServerHello中返回空的session_ticket扩展。
+
+接着在协商完成之后在Change Cipher Spec包之前发送New Session Ticket包：
 
 ```
 TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
@@ -1025,7 +991,11 @@ TLSv1.2 Record Layer: Handshake Protocol: New Session Ticket
 
 ```
 
-其中包含的session ticket是将本次协商的结果状态（如加密套件，master secret等），使用只有服务端知道的密钥加密(nginx中的ssl_session_ticket_key配置)。对于这个session ticket，客户端会与主密钥、加密套件等状态信息保存在一起。
+其中包含的session_ticket是将本次协商的结果状态(如加密套件，master secret等)，使用只有服务端知道的密钥加密(nginx中的ssl_session_ticket_key配置)。
+
+对于这个session_ticket，客户端会与主密钥、加密套件等状态信息保存在一起。
+
+以下是第一次握手以及服务端发送SessionTicket的过程：
 
 Client                                               Server
 
@@ -1047,7 +1017,7 @@ Client                                               Server
                                       <--------             Finished
          Application Data             <------->     Application Data
 
-下次发起请求时，会在client hello的session ticket 插件上带上此ticket，服务端尝试从中解析出对应主密钥，如果此ticket验证通过，则服务端就重用session状态，直接握手完成，开始发送Change cipher spec，当然服务端也可以再发一个新的NewSessionTicket。
+下次发起请求时，会在ClientHello的session_ticket插件上带上此ticket，服务端尝试从中解析出对应主密钥，如果此ticket验证通过，则服务端就重用session状态，直接握手完成，开始发送Change cipher spec，当然服务端也可以再发一个新的NewSessionTicket。
 
          Client                                                Server
          ClientHello
@@ -1061,10 +1031,10 @@ Client                                               Server
          Finished                      -------->
          Application Data              <------->     Application Data
 
-Ticket是明文传输的，其安全性是通过服务端的加密密钥来保证。如果这个ticket被第三方截获，由于其它无法解密，就无法得知主密钥，所以也就恢复会话了。
+Ticket是明文传输的，其安全性是通过服务端的加密密钥来保证。如果这个ticket被第三方截获，由于其它无法解密，就无法得知主密钥，所以也就无法恢复会话了。
 
+## TLS1.3
 
-### TLS v1.3相关的改动
 
 
 
