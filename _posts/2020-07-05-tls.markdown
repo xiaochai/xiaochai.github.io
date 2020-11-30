@@ -879,8 +879,8 @@ verify_data
    PRF(master_secret, finished_label, Hash(handshake_messages))
       [0..verify_data_length-1];
 ```
-注意这里的verify_data将在重协商的renegotiation_info扩展消息中使用。
 
+注意这里的verify_data将在重协商的renegotiation_info扩展消息中使用。
 
 ###  Hello Request
 
@@ -1032,6 +1032,20 @@ Client                                               Server
          Application Data              <------->     Application Data
 
 Ticket是明文传输的，其安全性是通过服务端的加密密钥来保证。如果这个ticket被第三方截获，由于其它无法解密，就无法得知主密钥，所以也就无法恢复会话了。
+
+
+### 密钥的生成
+
+在TLS1.2中，密钥分成预备主密钥(premaster secret)和主密钥。
+
+在协商过程中通过两个Key Exchange信息以及DH密钥交换机制协商出预备主密钥，然后根据Client.Random和Server.Random，通过PRF函数，计算出主密钥(会话密钥)。
+
+在使用了增强型主密钥扩展后，需要将Client.Random和Server.Random换成握手过程中内容的值。
+
+在session_id和session_ticket中，各方保存的都是预备主密钥，而每一次会话中所使用的Random是不同的，所以可以保证每一次所使用的主密钥是不同的。
+
+另外由于Finish数据校验的存在，客户端也不能实现重放攻击，因为在不知道主密钥的情况下，无法伪造出Finish的校验数据。
+
 
 ## TLS1.3
 
