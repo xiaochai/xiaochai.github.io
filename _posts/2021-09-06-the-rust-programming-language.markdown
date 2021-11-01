@@ -51,11 +51,14 @@ Cargo是Rust工具链中内置的构建系统及包管理器。
 | cargo new \<path\>    | 创建一个新的cargo项目，会生成Cargo.toml和src/main.rs| 
 | cargo new \-\-lib  \<path\>   | 创建一个新的库项目，会生成Cargo.toml和src/lib.rs| 
 | cargo build      |编译本项目，生成的可执行文件位于./target/debug/下，如果添加\-\-release，则会生成到./target/release/下；<br/>\-\-release参数将花费更多的时间来编译以优化代码，一般用于发布生产环境时使用   |  
-| cargo run | 编译并运行本项目，也支持\-\-release参数，常用于运行压测    |  
+| cargo run | 编译并运行本项目，也支持\-\-release参数，常用于运行压测； -p 用于工作空间下有多个二进制包时指定运行哪个包   |  
 | cargo run \-\-bin \<target\>  | 编译并运行指定的bin文件，一般位于src/bin目录下，target不带.rs后缀   |  
 | cargo check | 仅检查是否通过编译，由于不生成二进制文件，速度快于cargo build  |
 | cargo doc | 在当前项目的target/doc目录生成使用到的库的文档，可以使用\-\-open选项直接打开浏览器  |
 | cargo update | 忽略Cargo.lock文件中的版本信息，并更新为语义化版本所表示的最新版本，用于升级依赖包  |
+| cargo test | 运行测试用例，默认情况下是多个测试case并行运行；\n cargo test接收两种参数，第一种传递给cargo test使用，第二种是传递给编译出来的测试二进制使用的，这两种参数中间使用\-\-分开\n例如 cargo test -q  tests::it_works -- --test-threads=1；这一命令，会以安静模式(-q)运行tests::it_works下的测试，并且只使用一个线程串行运行(--test-threads=1) |
+|cargo publish | 发布项目到crate.io上，添加\-\-allow-dirty可以跳过本地git未提交的错误|
+|cargo yank \-\-vers 0.0.1| 撤回某个版本，添加\-\-undo取消撤回操作|
 
 
 Cargo.toml说明：
@@ -1591,12 +1594,352 @@ Rust中不允许空值的存在
     }
 ```
 
+## 编写自动化测试
+
+rust中的单元测试一般与要测试的代码放在同一个文件中，使用的模块名称为tests，通过```#[cfg(test)]```来标记，让编译器只在cargo test时才编译和运行这一部分代码，在cargo build等场景会剔除这些代码
+
+在函数上使用```#[test]``` 称为属性(attribute)，与c#的attribute以及java的annotation一样，用于给编译器提供更多的信息。
+
+cargo test参数说明：
+
+\-\-之后的参数：
+\-\-test-threads=1:运行的并发数，默认是多个case并行执行，可以设置成1为串行执行
+\-\-nocapture: 将测试用例中打印出来内容输出显示出来。默认情况下这些内容会被捕获并丢弃
+\-\-ignored: 专门运行被```#[ignore]```标记的case
+
+\-\-之前的参数：
+\-q：静默情况下运行测试用例，输出的信息比较有限
+\-\-test file_name：用于指定运行集成测试的文件，注意不用跟.rs后缀名
+
+cargo test允许我们指定需要运行的用例名，例如cargo test adder，则所有case名中包含有adder的case都会被运行(例如：tests::adder_test)，这种方法只能指定一个匹配字符串，无法指定多个。
+
+在```#[test]```标记之后，跟上```#[ignore]```的测试函数，默认情况下不会运行，只有使用\-\-ignored时，才会专门运行这些case，例如```cargo test -- --ignored```
+
+集成测试
+在src同级别建立tests目录，在这个目录下可以创建任意的集成测试用例；tests目录只在cargo test时进行编译和执行，其它情况会忽略
+tests目录下每一个文件都是独立包名，所以不用担心测试函数会重名。
+可以在tests目录下建立子目录，做为公共使用的部分，或者隐藏测试中的细节等等，子目录中的函数也可以标记为```#[test]```，只他只在tests目录下的文件引用到时执行
+如果将子目录做为公共部分使用，一般不在里面设置测试用例，因为如果多个测试模块引用的话，这个case将被运行多次
+
+无法在集成测试中引用main.rs，所以一般我们将复杂的操作移到lib.rs中，而main.rs中只保留简单的胶水代码逻辑。
+
+
+## minigrep
+std::env::args() 获取命令行参数，与其它程序一样
+std::process::exit(1) 退出进程，这个函数签名为:pub fn exit(code: i32) -> !，!表示从来不会返回
+std::fs::read_to_string() 读取文件内容
+std::env::var("CASE_INSENSITIVE") 获取环境变量值
+eprintln! 将错误信息打印到标准错误输出
+
+
+## 函数式语言特性：迭代器与闭包
+
+闭包：可以在定义他的作用域中捕获值，在函数中使用
+
+std::thread::sleep()
+
+迭代器：
+比起使用for循环的原始实现，rust更倾向于使用迭代器风格；迭代器可以让开发者专注于高层的业务逻辑，而不必陷入编写循环、维护中间变量这些具体的细节中。通过高层抽象去消除一些惯例化的模板代码，也可以让代码的重点逻辑（例如filter方法的过滤条件）更加突出。
+
+迭代器是Rust语言中的一种零开销抽象（zero-cost abstraction），这个词意味着我们在使用这些抽象时不会引入额外的运行时开销
+## 进一步认识Cargo及crates.io
+
+rust中的发布配置是一系列定义好的配置方案，例如cargo build时使用dev配置方案，添加`--release`后，使用release配置方案。
+在Cargo.toml中添加`[profile.dev]`和`[profile.release]`配置段可以对这两个方案进行配置。
+
+在没有配置时，有一套默认的配置，当自定义了配置时，会使用自定义配置的子集覆盖默认的配置。
+
+提到的配置
+
+opt-level=1 : 编译优化程序，0~3优化递增，release默认是3，dev为0
+
+## 文档注释
+
+rust中使用三斜线做为文档注释，支持markdown语法；被包在markdown里的代码片段会被当成测试case，在运行cargo test的时候运行。
+
+```rust
+/// 定义一个泛型加法
+///
+/// # Example
+///
+/// 例子，一般是测试用例
+/// ```
+/// assert_eq!(5, adder::adder(3,2));
+/// assert_eq!(9.8, adder::adder(3.3, 6.5));
+/// ```
+/// # Panics
+///
+/// 可能Panic的场景
+///
+/// # Errors
+/// 如果返回Result时，这里写明Error返回的场景，以及返回的Error值
+///
+/// # Safety
+///
+/// 当使用了unsafe关键字时，这里可以说明使用unsafe的原因，以及调用者的注意事项
+///
+pub fn adder<T: Add + Add<Output=T>>(a: T, b: T) -> T {
+    return a + b;
+}
+```
+
+使用```cargo doc --open```来打开文档查看
+
+使用```//!```开头的注释，不像```///```为紧跟的代码提供注释，而是为整个包，或者整个模块提供注释； 这种类型的注释，只能放在文件最开头
+
+
+使用pub use 重新组织结构：
+```rust
+//! # Art
+//!
+//! 测试用于艺术建模的库
+
+// 使用pub use 重新组织API结构
+pub use crate::kinds::PrimaryColor;
+pub use crate::kinds::SecondaryColor;
+pub use crate::utils::mixed;
+
+pub mod kinds {
+    pub enum PrimaryColor {
+        Red,
+        Yellow,
+        Blue,
+    }
+
+    pub enum SecondaryColor {
+        Orange,
+        Green,
+        Purple,
+    }
+}
+
+pub mod utils{
+    use crate::kinds::*;
+
+    pub fn mixed(c1:PrimaryColor, c2:PrimaryColor) -> SecondaryColor{
+        SecondaryColor::Orange
+    }
+}
+```
+
+
+main.rs
+```rust
+// use example::kinds::PrimaryColor;
+// use example::utils::mixed;
+
+// 使用pub use重新导出包结构后，就可以使用直接使用一级目录的结构，不用关心原包中的结构了
+use example::PrimaryColor;
+use example::mixed;
+
+fn main(){
+    let red = PrimaryColor::Red;
+    let yellow = PrimaryColor::Yellow;
+    mixed(red, yellow);
+
+}
+```
+
+### 使用crates.io分享代码
+
+1. 使用github账号登录
+2. 在账号设置中绑定邮箱，并验证
+2. 在账号设置中生成New Token
+3. 在本地使用cargo login xxxx(your token)来保存token到本地(~/.cargo/credentials)
+4. 在项目中填写足够的信息(Cargo.toml)
+```ini
+[package]
+name = "guessing_game_xiaochai"
+version = "0.1.0"
+authors = "[xiaochai<soso2501@gmail.com>]"
+edition = "2018"
+description = "a game demo"
+license = "MIT"
+```
+5. 在命令行中运行cargo publish，此时，会将代码提交到远程：https://crates.io/crates/guessing_game_xiaochai
+如果本地是git，并且有未提交的文件，将会生成错误，可以使用``` cargo publish --allow-dirty```忽略git信息。
+
+
+更新版本：
+1. 修改Cargo.toml，增加版本号
+2. 运行```cargo publish```即可提交新版本
+
+撤回某个版本
+
+```cargo yank --vers 0.1.0```可以撤回某个版本，虽然还能在crate.io上看到对应版本，但新的项目无法引用这个版本了
+使用```cargo yank --vers 0.1.0 --undo```可以取消撤回操作
+
+如果你分享的是一个二进制包，可以使用 cargo install guessing_game_xiaochai  来下载安装，会安装到~/.cargo/bin目录下
+
+### 工作空间
+
+同一个工作空间下的项目使用同一个Cargo.lock文件
+
+1. 新起目录，例如workspace_example，cd workspace_example
+2. 创建Cargo.toml文件，内容为
+```ini
+[workspace]
+members = [
+    "adder"
+]
+```
+3. 在目录下使用cargo new来创建adder二进制包
+4. 此时不管在workspace_example目录下运行cargo run 还是在workspace_example/adder下，最终的target都会在workspace_example/target目录下
+    换种说法，adder项目目前已经不是一个独立的项目了，要么1. 在workspace_example/Cargo.toml添加
+```
+    [workspace]
+members = [
+]
+exclude = [
+    "adder",
+]
+```
+    或者是在workspace_example/adder/Cargo.toml中添加空的[workspace]段
+    这样才可以将adder单独编译
+5. 添加add-one这个代码包```cargo new add-one --lib```
+6. adder的二进制文件需要依赖adder-one包，需要在adder/Cargo.toml的dependencies段添加```add-one = { path = "../add-one" }```
+7. 在main函数中使用
+```rust
+fn main() {
+    println!("Hello, world!");
+    println!("{}", add_one::add_one(10));
+}
+```
+8. 在workspace_example下运行```cargo run```，则运行了adder包中的二进制文件；如果一个工作空间下有多个二进制项目的话，可以使用\-p参数来指定项目
+```cargo run -p adder```
+
+### 扩展cargo
+如果在$PATH中包含有cargo-something的可执行文件，那么可以使用cargo something来运行此文件
+例如刚安装的guessing_game_xiaochai程序
+```
+➜  workspace_example git:(master) ✗ echo $PATH
+/usr/local/bin:/usr/bin:/bin:/usr/sbin:/Users/bytedance/.cargo/bin
+➜  workspace_example git:(master) ✗ mv ~/.cargo/bin/guessing_game_xiaochai ~/.cargo/bin/cargo-guessing_game_xiaochai
+➜  workspace_example git:(master) ✗ cargo guessing_game_xiaochai
+secret number is 86
+Guess the number!
+Please input your guess:
+...
+```
+
+## 智能指针
+
+指针是指包含内存地址的变量
+引用是最常用的指针，没有额外的开销
+智能指针是一些数据结构，他们的功能类似于指针，但拥有额外的元数据和附加功能
+引用只是借用数据指针，而智能指针一般拥有数据所有权
+String和Vec<T>是智能指针，他们拥有一片内存区域并允许进行操作，他们还拥有元数据（如容量），并提供额外的功能或保障。
+
+智能指针一般使用结构体来实现，需要实现Drop和Deref两个trait。
+Deref trait使得此结构体的实例可以拥有与引用一致的行为
+Drop trait使得在离开作用域时运行一段自定义代码
+
+常用指针：
+Box<T>： 可用于在堆上分配值
+Rc<T>: 允许多重所有权的引用计数智能指针
+Ref<T>，RefMut<T>：可以通过RefCell<T>访问，是一种可以在运行时而非编译时执行借用规则的类型
+
+内部可变性：不可变对象可以暴露出能够改变内部值的API
+规避循环引用导致的内存泄露
+
+### 使用Box<T>在堆上分配内存
+
+使用场景
+1. 在需要固定尺寸变量的上下文中使用编译期无法确定大小的类型
+2. 需要传递大量数据的所有权，但又不希望对数据进行复制
+3. 当希望使用实现了某个trait的类型，而又不关心具体类型时
+
+基本使用方法：
+使用Box::new(T)在堆上空间，将T保存于这一空间内，并返回指向堆上这一空间的指针。
+在变量前加*(解引用运算符)来获取堆上真正的值，称为解引用
+
+
+
+```rust
+    // Box的基本使用方法
+    // a和b都是Box<i32>类型，与i32不同的是，Box<i32>类似于指向堆上两个i32类型的指针
+    let a = Box::new(128);
+    let b = Box::new(256);
+    // 所以a和b无法直接进行操作，因为Box实现了Deref这一trait，所以可以使用*来解引用
+    let c: i64 = *a + *b;
+    println!("{}", c); // 384
+```
+
+定义递归类型时需要使用Box，因为不能在编译期确定内存空间的大小
+
+```rust
+    // 递归类型必须使用Box
+    enum List {
+        Cons(i32, Box<List>),
+        // 使用Cons(i32, List)将无法通过编译：recursive type `List` has infinite size
+        Nil,
+    }
+
+    use List::{Nil, Cons};
+
+    let list = Cons(
+        1,
+        Box::new(Cons(
+            2,
+            Box::new(Cons(
+                3, Box::new(
+                    Nil
+                ),
+            )),
+        )),
+    );
+
+    fn print_list(l: List) {
+        match l {
+            Cons(i, nl) => {
+                print!("{}=>", i);
+                print_list(*nl);
+            }
+            Nil => {
+                println!("end");
+            }
+        }
+    }
+    print_list(list);
+```
+
+一个类型实现了Deref trait时，可以使用解引用运算符
+隐式解引用转换：当函数参数为某个类型的引用时，如果传入的参数与此不匹配，则编译器会自动进行解引用转换，直到类型满足要求。
+
+解可变引用：实现DerefMut trait，要实现这一trait，必须首先实现Deref trait
+可变性转换有三条：
+1. 当T: Deref<Target=U>时，允许&T转换为&U。
+2. 当T: DerefMut<Target=U>时，允许&mut T转换为&mut U。
+3. 当T: Deref<Target=U>时，允许&mut T转换为&U。
+这三条规则 不会破坏借用规则
+
+### 自定义智能指针
+
+```rust
+    // 为MyBox实现Deref，这样就可以使用解引用运算符
+    impl<T> Deref for MyBox<T> {
+        // 关联类型
+        type Target = T;
+
+        // 也可以写成fn deref(&self) -> &T {
+        fn deref(&self) -> &Self::Target {
+            // 以下等价于self.0
+            match self {
+                MyBox(i) => i
+            }
+        }
+    }
+    let a = MyBox(10);
+    // 这里的*a类似于*(a.deref())，称之为隐式展开
+    println!("{}", *a + 10)
+```
 
 
 
 
-
-
+rustPrime: https://hardocs.com/d/rustprimer/heap-stack/heap-stack.html
+Rust Magazine: https://rustmagazine.github.io/rust_magazine_2021/chapter_1/rustc_part1.html
+Rust 数据内存布局: https://juejin.cn/post/6987960007245430797
 <style>
 center{
 	font-size: 0.7em;
