@@ -1903,17 +1903,25 @@ Ref<T>，RefMut<T>：可以通过RefCell<T>访问，是一种可以在运行时�
     print_list(list);
 ```
 
-一个类型实现了Deref trait时，可以使用解引用运算符
-隐式解引用转换：当函数参数为某个类型的引用时，如果传入的参数与此不匹配，则编译器会自动进行解引用转换，直到类型满足要求。
-
-解可变引用：实现DerefMut trait，要实现这一trait，必须首先实现Deref trait
-可变性转换有三条：
-1. 当T: Deref<Target=U>时，允许&T转换为&U。
-2. 当T: DerefMut<Target=U>时，允许&mut T转换为&mut U。
-3. 当T: Deref<Target=U>时，允许&mut T转换为&U。
-这三条规则 不会破坏借用规则
-
 ### 自定义智能指针
+
+
+```rust
+   // 自定义类似于Box的智能指针(但数据存在在栈上)
+    struct MyBox<T> (T); // 元组结构体
+    impl<T> MyBox<T> {
+        // 提供一个参数，并将此存入结构体中
+        fn new(x: T) -> MyBox<T> {
+            MyBox(x)
+        }
+    }
+```
+
+涉及到两个trait: Deref 和Drop
+
+#### Deref
+
+Deref解引用trait，一个类型实现了Deref trait时，可以使用解引用运算符
 
 ```rust
     // 为MyBox实现Deref，这样就可以使用解引用运算符
@@ -1933,6 +1941,294 @@ Ref<T>，RefMut<T>：可以通过RefCell<T>访问，是一种可以在运行时�
     // 这里的*a类似于*(a.deref())，称之为隐式展开
     println!("{}", *a + 10)
 ```
+
+隐式解引用转换：当函数参数为某个类型的引用时，如果传入的参数与此不匹配，则编译器会自动进行解引用转换，直到类型满足要求。
+
+解可变引用：实现DerefMut trait，要实现这一trait，必须首先实现Deref trait
+可变性转换有三条：
+1. 当T: Deref<Target=U>时，允许&T转换为&U。
+2. 当T: DerefMut<Target=U>时，允许&mut T转换为&mut U。
+3. 当T: Deref<Target=U>时，允许&mut T转换为&U。
+这三条规则 不会破坏借用规则
+
+
+```rust
+    // 隐式解引用转换
+    fn hello(name: &str) {
+        println!("hello, {}", name);
+    }
+    let mb: MyBox<String> = MyBox::new("lee".to_string());
+    // 正常的写法如下，其发生的步骤1. 需要将MyBox解引用转化为String，2. 使用[..]将String转化为切片&str，这样才符合参数要求
+    hello(&(*mb)[..]);
+    // 使用自动解引用也能满足这个要求，mb实现了Deref，所以可以获取到String，String也实现了deref，其返回为&str，所以编译器进行了两次解引用转换
+    // 以上是编译期完成，不会有任何运行时开销
+    hello(&mb);
+
+    // 实现可变解引用运算符，实现DerefMut之前必须实现Deref
+    impl<T> DerefMut for MyBox<T> {
+        fn deref_mut(&mut self) -> &mut Self::Target {
+            &mut self.0
+        }
+    }
+    // 满足自动解引用的三条规则
+    // 当T: Deref<Target=U>时，允许&T转换为&U。
+    // 当T: DerefMut<Target=U>时，允许&mut T转换为&mut U。
+    // 当T: Deref<Target=U>时，允许&mut T转换为&U。
+    fn hello_exp(name: &mut String) -> &mut String {
+        name.push_str(", hello!");
+        name
+    }
+
+    let mut b = Box::new("abc".to_string());
+    // 当T: DerefMut<Target=U>时，允许&mut T转换为&mut U，与&mut *b是一样的
+    let c = hello_exp(&mut b);
+    println!("{}", c);
+    //  当T: Deref<Target=U>时，允许&mut T转换为&U。
+    hello(&mut b);
+```
+
+#### Drop
+
+Drop trait允许我们在离开变量作用域时执行某些自定义的操作，例如释放文件和网络连接等。
+
+Box<T>类型通过Drop释放指向堆上的内存
+
+drop的执行顺序与变量的创建顺序相反
+
+无法禁用drop的功能，也无法手动调用Drop的drop方法，但可以使用std::mem::drop来提前清理某个值，这个函数在预导入模块中，所以可以直播使用drop来调用
+
+```rust
+    // 实现Drop的例子
+    {
+        struct TestDropStruct {
+            data:String,
+        }
+        impl Drop for TestDropStruct{
+            fn drop(&mut self) {
+                println!("{}", self.data)
+            }
+        }
+        let _a = TestDropStruct{data:"first object".to_string()};
+        let _b = TestDropStruct{data:"second object".to_string()};
+        let _c = TestDropStruct{data:"third object".to_string()};
+        println!("main end");
+        // 手动使用std::mem::drop函数来提前清理_c的值
+        drop(_a);
+
+        // 以上输出顺序为
+        // main end
+        // first object
+        // third object
+        // second object
+        // 对于_b，_c来说，丢弃顺序与创建顺序相反，所以_c先调用drop函数
+        // _a则是由于手动释放导致先执行
+    }
+```
+
+### Rc<T>基于引用计数的智能指针
+
+Rc<T>只能用于单线程中，用于那些在编译期无法确认哪个部分会最后释放的场景
+RC<T>只能持有不可变的引用，否则会打破引用规则 
+
+```rust
+     {
+        // 测试引用计数智能指针Rc<T>类型
+        enum RcList {
+            RcCons(i32, Rc<RcList>),
+            RcNil,
+        }
+        use RcList::*;
+        // 新建一个引用记录类型使用Rc::new来创建，此处a为Rc<RcList>类型
+        let a = Rc::new( RcCons(3, Rc::new(
+            RcCons(4, Rc::new(RcNil)),
+        )));
+        {
+            // Rc::clone全程参数对应的引用计数增加1
+            let _b = RcCons(1, Rc::clone(&a));
+            let _c = RcCons(2, Rc::clone(&a));
+            // 目前有a,_b,_c三个变量引用a，所以a的引用计数为3
+            // 除了strong_count，还有week_count，用于避免循环引用
+            println!("{}", Rc::strong_count(&a))
+        }
+        // _b，_c离开作用域，减少了引用计数，但a还在，所以这块的数量是1
+        println!("{}", Rc::strong_count(&a))
+    }
+```
+
+
+### RefCell<T>和内部可变性模式
+
+内部可变性是rust的设计模式之一，它允许你在只持有不可变引用的情况下修改数据。这在现有的借用规则下是禁止的，所以此类数据结构借用了unsafe代码来绕过可变性和借用规则的限制。
+
+RefCell<T>是使用了内部可变性模式的类型。
+
+与Rc<T>不同，RefCell<T>持有数据的维一所有权。而与Box<T>不同，RefCell<T>会在运行时检查借用规则，而非在编译时期，如果运行时发现不满足规则 ，则直接panic。所以RefCell<T>类型由开发者来保证借用规则 ，则不是编译器。
+
+此类型只能用于单线程中
+
+Box<T>，Rc<T>，RefCell<T>三者的区别
+
+1. Rc<T>允许一份数据有多个所有者，而Box<T>和RefCell<T>都只有一个所有者。
+2. Box<T>允许在编译时检查的可变或不可变借用，Rc<T>仅允许编译时检查的不可变借用，RefCell<T>允许运行时检查的可变或不可变借用。
+3. 由于RefCell<T>允许我们在运行时检查可变借用，所以即便RefCell<T>本身是不可变的，我们仍然能够更改其中存储的值。
+
+```rust
+{
+        // 假设有一个消息trait，需要实现send方法，而这一方法传递self的不可变引用
+        pub trait Messenger {
+            fn send(&self, msg: &str);
+        }
+
+        // 但是在测试的时候，我们使用Mock类来模拟Messenger的send的时候，需要把消息存储下来
+        // 这样就可以验证存下来的消息是否符合预期，但传入不可变的self阻止了这种做法
+        // 此时就需要使用RefCell来实现
+        struct Mock {
+            message: RefCell<Vec<String>>,
+        }
+        impl Mock{
+            fn new()->Mock{
+                Mock{
+                    // 使用RefCell::new来创建新的RefCell
+                    message:RefCell::new(vec![])
+                }
+            }
+        }
+        impl Messenger for Mock {
+            fn send(&self, msg: &str) {
+                // 如果这里的self.message是普通的Vec<String>，则无法执行push方法
+                // 而使用RefCell的borrow_mut来绕过此限制，得到可变引用
+                self.message.borrow_mut().push(String::from(msg))
+            }
+        }
+        let m = Mock::new();
+        m.send("message1");
+        m.send("message2");
+        // ["message1", "message2"]
+        println!("{:?}", m.message.borrow());
+        // 以下两行可以通过编译，但在运行时报错：thread 'main' panicked at 'already borrowed: BorrowMutError'
+        // 这是因为a是不可变引用，在已经持有不可变引用的情况下，又搞出了一个可变的引用，破坏了借用规则 ，所以panic
+        // let a = m.message.borrow();
+        // let mut b = m.message.borrow_mut();
+    }
+```
+
+结合使用Rc<T>和RefCell<T>来实现某个数据 有多个所有者，并且都可以对数据进行修改。
+
+```rust
+    {
+        #[derive(Debug)]
+        enum RcRefCellList {
+            RcRefCellCons(Rc<RefCell<i32>>, Rc<RcRefCellList>),
+            RcRefCellNil,
+        }
+        use RcRefCellList::*;
+        let val = Rc::new(RefCell::new(5));
+        let a = Rc::new(RcRefCellCons(Rc::clone(&val), Rc::new(RcRefCellNil)));
+        let b = RcRefCellCons(Rc::new(RefCell::new(6)), Rc::clone(&a));
+        let c = RcRefCellCons(Rc::new(RefCell::new(6)), Rc::clone(&a));
+        // 这块改动将a，b和c以及val都修改了
+        *val.borrow_mut() = 10;
+        // a:RcRefCellCons(RefCell { value: 10 }, RcRefCellNil)
+        // b:RcRefCellCons(RefCell { value: 6 }, RcRefCellCons(RefCell { value: 10 }, RcRefCellNil))
+        // c:RcRefCellCons(RefCell { value: 6 }, RcRefCellCons(RefCell { value: 10 }, RcRefCellNil))
+        println!("a:{:?}", a);
+        println!("b:{:?}", b);
+        println!("c:{:?}", c);
+
+    }
+```
+
+Rust不保证在编译器彻底防止内存泄露。我们可以创建出一个环状引用使得引用计数不会减到0，对应的值不会被丢弃，从而造成内存泄露。
+
+
+```rust
+    {
+        // 创建出循环引用
+        // 定义一个链接，为了方便改动，这次的链接使用ReCell来处理
+        enum RefCellRcList {
+            RefCellRcCons(i32, RefCell<Rc<RefCellRcList>>),
+            RefCellRcNil,
+        }
+        use RefCellRcList::*;
+        // 定义一个a，指向b
+        // a -> 5 -> Nil
+        let a = Rc::new(
+            RefCellRcCons(5, RefCell::new(Rc::new(RefCellRcNil))),
+        );
+        println!("reference count:a:{}", Rc::strong_count(&a));
+
+        // b -> 10 -> a
+        let b = Rc::new(
+            RefCellRcCons(10, RefCell::new(Rc::clone(&a))),
+        );
+        println!("reference count:a:{}, b:{}", Rc::strong_count(&a), Rc::strong_count(&b));
+        // 将a -> b；最终变成a->b->10->a
+        if let RefCellRcCons(i, r) = a.borrow() {
+            *r.borrow_mut() = Rc::clone(&b);
+        };
+        println!("reference count:a:{}, b:{}", Rc::strong_count(&a), Rc::strong_count(&b));
+        // reference count:a:1
+        // reference count:a:2, b:1
+        // reference count:a:2, b:2
+        // 此时a和b的引用计数都是2，在结束时，先释放b，将b的引用计数减1，但此时b已经无法将引用计数减成0了，所以无法释放
+    }
+```
+
+可以合理使用弱引用Weak<T>来规避这个问题，rust在回收内存时不需要强制弱引用减成0
+与Rc::clone()类似，使用Rc::downgrade()获取Rc<T>的弱引用，获取对应弱引用的值时，使用对应弱引用的upgrade()方法，注意这个方法可能返回None。
+
+```rust
+    {
+        // 使用Weak<T>创建树结构，子节点指向父节点使用弱引用
+        #[derive(Debug)]
+        struct Node {
+            val: i32,
+            // 多个子节点使用Vec来保存子节点的强引用，RefCell方便修改对应的值
+            children: RefCell<Vec<Rc<Node>>>,
+            // 父节点点使用弱引用
+            parent: RefCell<Weak<Node>>,
+        }
+
+        let leaf = Rc::new(Node {
+            val: 10,
+            children: RefCell::new(vec![]),
+            // Weak::new()创建出一个空的弱引用
+            parent: RefCell::new(Weak::new()),
+        });
+        // 弱引用获取时，由于不确定值是否回收，所以使用upgrade()时会返回Option<T>，如果已经回收或者没有值，返回None
+        // 以下返回None
+        println!("{:?}", leaf.parent.borrow().upgrade());
+
+        let branch = Rc::new(Node {
+            val: 5,
+            children: RefCell::new(vec![Rc::clone(&leaf)]),
+            parent: RefCell::new(Weak::new()),
+        });
+        *(leaf.parent.borrow_mut()) = Rc::downgrade(&branch);
+        println!("leaf's parent:{:?}", leaf.parent.borrow().upgrade());
+        println!("branch's parent:{:?}", branch.parent.borrow().upgrade());
+        {
+            // 在另外一个作用域中添加branch的parent
+            let new_branch = Rc::new(Node {
+                val: 6,
+                children: RefCell::new(vec![Rc::clone(&branch)]),
+                parent: RefCell::new(Weak::new()),
+            });
+            *branch.parent.borrow_mut() = Rc::downgrade(&new_branch);
+            println!("branch's parent in new area:{:?}", branch.parent.borrow().upgrade());
+        }
+
+        // 由于new_branch离开了作用域，所以被销毁，这块拿到的是None
+        println!("branch's parent out area:{:?}", branch.parent.borrow().upgrade());
+    }
+```
+
+
+
+
+
+
+
 
 
 
