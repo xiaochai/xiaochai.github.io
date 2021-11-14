@@ -2536,6 +2536,613 @@ impl State for Publish {
 
 ## 匹配模式
 
+模式匹配分成可失败匹配(refutable)和不可失败匹配(irrefutable)。
+不可失败匹配是指可以匹配任何输入值的场景，例如let x = 5;
+可失败是指有可能出现某些值不匹配导致匹配失败的，例如let Some(x) = a; 如果a为None时，这个匹配就不成功了
+
+for， let , 函数参数只接收不可失败的匹配，如果下代码将报错
+```rust
+    // let只接收不可失败的匹配，所以下将编译报错
+    // refutable pattern in local binding: `None` not covered
+    //  `let` bindings require an "irrefutable pattern", like a `struct` or an `enum` with only one variant
+    // let Some(x) = v.iter().next();
+```
+
+
+使用匹配模式的场景
+
+
+| 模式匹配场景        | 可失败or不可失败          | 例子说明|
+| ------------- |:-------------| :----------|
+|match |除了最后一个模式，其它模式是可失败的模式，最后一个可以是可失败的也可以是不可失败的|  |
+|if let | 可失败，如果使用不可失败将收到warning| |
+|while |let 可失败，如果使用不可失败将收到warning| |
+|for |不可失败, 这里的不可失败是指Some里面的值，而不包含Some匹配| |
+|let | 不可失败| |
+|函数参数 |不可失败| |
+
+匹配的类型
+
+| 模式匹配场景        | 可失败or不可失败          |
+| ------------- |:-------------|
+|字面量匹配| |
+|变量名匹配| |
+|使用|的多重模式| |
+|使用..=来匹配区间，注意...已经不推荐使用| |
+|    解构结构体匹配| |
+|    解构枚举匹配| |
+|    解构嵌套的枚举和结构体匹配| |
+|    解析结构体和元组匹配| |
+|忽略模式匹配中的某些值| |
+|使用..来忽略值的剩余部分| |
+|使用匹配守卫(match guard)添加额外条件| |
+|@绑定| |
+
+```rust
+    // match匹配模式
+    // 必须穷尽所有的可能性；为了满足这一条件，可以使用两种方式
+    // 1. 最后一个分支使用全匹配模式，可以使用一个变量名来处理
+    // 2. 使用下划线这一特殊的模式来匹配所有值
+    let m = 5;
+    match m {
+        // 字面量匹配
+        1 => println!("is 1"),
+        // 变量名匹配
+        x => println!("is not 1, is {}", x)
+    }
+    match m {
+        // 匹配区间值
+        // 在老的版本中1..=5的语法也写作1...5，但最新的rust 2021只能使用1..=5，表示1~5包含1和5
+        // 也可以使用|来表示，等价于1|2|3|4|5，但写起来更简单，字符类型也可以使用，例如'a'..='k'
+        1..=5 => println!("between 1~5"),
+        _ => println!("others")
+    }
+
+    // if let条件表达式
+    // if let表达式只匹配match中的一种情况
+    // 可以与if, else if, else, else if let等混合使用，以下是一个例子
+    let favorite_color: Option<&str> = None;
+    let is_friday = false;
+    let age: Result<u8, _> = "34".parse();
+    if let Some(c) = favorite_color {
+        println!("using your favorite color: {}", c);
+    } else if is_friday {
+        println!("using friday color: red");
+    } else if let Ok(a) = age {
+        println!("your age {} colour: blue", a);
+    } else {
+        println!("default color: black");
+    }
+
+    // while let 条件循环
+    // 与if let类似，当匹配不上时，结束循环
+    let v = vec![1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let mut i = v.iter();
+    while let Some(elem) = i.next() {
+        // 123456789
+        print!("{}", elem)
+    }
+    println!();
+    let mut i = v.iter();
+    // 任何能用于match的分支都能用于其它的匹配模式
+    while let Some(1..=5) = i.next() {
+        // aaaaa
+        print!("a")
+    }
+    println!();
+
+    // for循环
+    // for循环自动把Some给解构了，并且自动调用了迭代器的next函数
+    for (i, v) in v.iter().enumerate() {
+        print!("({},{})", i, v);
+    }
+    println!();
+    // 以上与以下等价
+    let mut it = v.iter().enumerate();
+    while let Some((i, v)) = it.next() {
+        print!("({},{})", i, v);
+    }
+    println!();
+
+    // let语句
+    // 我们日常使用的let语句也是使用了模式匹配
+    let (x, y, z) = (1, 2, 3);
+    println!("x:{}, y:{}, z{}", x, y, z);
+
+    // 函数参数也使用了模式匹配
+    // 如下例子的函数参数类似于let &(x,y) = &p
+    fn print_point(&(x, y): &(i32, i32)) {
+        println!("point({},{})", x, y);
+    }
+    let p = (3, 4);
+    print_point(&p); // point(3,4)
+
+    // 可失败模式匹配和不可失败模式匹配
+    // let, for, 函数参数必须是不可失败的模式匹配，在不可失败的模式匹配中使用可失败的模式，将发生编译报错
+    // let只接收不可失败的匹配，所以下将编译报错
+    // refutable pattern in local binding: `None` not covered
+    //  `let` bindings require an "irrefutable pattern", like a `struct` or an `enum` with only one variant
+    // let Some(x) = v.iter().next();
+
+    // 在接收可失败的模式中使用不可失败模式，将收到编译器警告
+    // irrefutable `if let` pattern
+    // this pattern will always match, so the `if let` is useless
+    if let x = 5 {
+        println!("no meaning:{}", x)
+    }
+    let p = Point { x: 10, y: 10 };
+    if let Point { x, y } = p {
+        println!("pppp({}, {})", x, y);
+    }
+
+    // 使用解构来分解值
+    // 可以使用模式来分解结构体、枚举、元组、引用
+    // 解构结构体
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+    let p = Point { x: 10, y: 2 };
+    // 指定字段值赋于的变量名a和b
+    let Point { x: a, y: b } = p;
+    println!("a:{}, b:{}", a, b); // a:10, b:2
+    // 如果字段名与变量名一致时，可以简写成如下
+    let Point { x, y } = p;
+    println!("x:{}, x:{}", x, y); // x:10, x:2
+    // 也可以使用match让某个字段指定某个值来匹配
+    match p {
+        Point { x: 0, y } => { println!("point at y axial, y:{}", y) }
+        Point { x, y: 0 } => { println!("point at x axial, x:{}", x) }
+        Point { x, y } => { println!("point at space:({}, {})", x, y) }
+    }
+    // 解构枚举之前看到的Option已经使用过多次了
+    // 这里看一下解构嵌套的结构体和枚举
+    let p = Some(Point { x: 10, y: 20 });
+    if let Some(Point { x, y }) = p {
+        println!("x:{}, x:{}", x, y); // x:10, x:20
+    }
+    // 解析结构体和元组
+    let ((feat, inches), Point { x, y }) = ((3, 10), Point { x: 3, y: -10 });
+    println!("{},{},{},{}", feat, inches, x, y); // 3,10,3,-10
+
+    // 使用_来忽略某些值
+    // 忽略第一个参数
+    fn foo(_: i32, y: i32) {
+        println!("{}", y);
+    }
+    // 忽略元组中的第二个元素
+    let (x, _, z) = (1, 2, 3);
+    println!("x:{}, z:{}", x, z);
+    // 使用下划线开头的变量来防止编译器未使用的报警
+    // 以下如果不使用_，则会有警告：unused variable: `x`
+    // 注意，你还是可以使用下划线开头的变量的 println!("{}", _x);
+    let _x = 10;
+    // 下划线开头的变量依然会绑定值，这与纯下划线忽略值不一样
+    let s = Some("hello".to_string());
+    // 这里的_如果替换成_k，则最后打印s将报错，因为此时s中的值的所有权已经移到_k中了
+    // 而_不会绑定值，所以还可以使用s
+    if let Some(_) = s {}
+    println!("{:?}", s);
+
+    // 使用..来忽略值的值的剩余部分
+    // 只匹配x的值，忽略剩下部分的字段
+    let Point { x: _x, .. } = Point { x: 10, y: 10 };
+    // 匹配第一个和最后一个，分别是1和9
+    let (_first, .., _last) = (1, 2, 3, 4, 5, 6, 7, 8, 9);
+    // 如果编译器无法确认匹配，即..产生歧义的匹配时，将报错
+    //  can only be used once per tuple pattern
+    // let (.., middle, ..) = (1,2,3,4,5,6,7,8,9);
+
+    // 使用匹配守卫额外添加条件
+    let c = Some(10);
+    match c {
+        // 在匹配分支后面添加if表达来额外限定匹配条件
+        Some(x) if x > 6 => {}
+        Some(_) => {}
+        None => {}
+    }
+
+    // 使用@绑定
+    // 用于像范围匹配这种条件的情况下，将匹配到的值赋值到变量
+    let c = Some(2);
+    if let Some(i @ 1..=5) = c {
+        println!("c is between 1~5:{}", i);
+    }
+```
+
+## 高级特性
+
+### 不安全rust
+
+不安全超能力(unsafe superpower)
+
+1. 解引用裸指针
+2. 调用不安全的函数或者方法
+3. 访问或者修改可变的静态变量
+4. 实现不安全的trait
+
+
+#### 裸指针
+
+裸指针要么可变(\*mut T)，要么不可变(\*const T)，不可变意味着不能对解引用后的指针直接赋值
+
+
+与引用和智能指针的区别：
+
+1. 允许忽略借用规则，即可以同时拥有同一内存地址的可变和不可变指针，或者拥有多个同一内存地址的可变指针
+2. 不能保证自己总是指向了有效的内存地址
+3. 允许为空
+4. 没有实现任何自动清理机制
+
+优势：
+1. 更好的性能
+2. 与其它语言、硬件交互的能力
+
+```rust
+    // 解引用裸指针
+    let mut num = 5;
+    // 如果只是创建裸针针，并不需要unsafe关键字
+    // 使用as关键来转化类型，以下两个指针都是从有效引用创建的，所以是有效的
+    let r1 = &num as *const i32;
+    let r2 = &mut num as *mut i32;
+    // 从任意地址创建指针，这里的r3可能就不是一个可用的指针
+    let t = 0x423243242usize;
+    let _r3 = t as *const i32;
+
+    // 如果需要解引用裸指针，则要将代码包在unsafe里
+    unsafe {
+        // 只有可变的裸指针才能赋值，不能对*r1进行赋值
+        // 其实以下如果不是裸指针，已经破坏了引用规则，同一个地址的可变和不可变引用，但在裸指针中不受此限制
+        *r2 = 10;
+        println!("r1 val:{}", *r1); // r1 val:10
+        // 以下由于指到了不合法的内存地址，直接段错误： segmentation fault
+        // println!("r3 val:{}", *_r3);
+    }
+```
+
+
+裸指针一个主要用途是与C代码接口进行交互。
+
+不安全的方法与普通方法一样，只是在fn之前添加unsafe关键字，在不安全的函数中不需要使用unsafe关键字就可以使用不安全的特性。
+
+```rust
+    // 使用不安全的函数
+    // 不安全的方法与普通方法一样，只是在fn之前添加unsafe关键字
+    // 在不安全的函数体内使用不安全特性就不需要包裹unsafe了
+    unsafe fn dangerous() {}
+    // 不安全的方法需要包裹在unsafe中调用
+    unsafe {
+        dangerous();
+    }
+```
+
+使用不安全特性的函数不一定都是不安全的函数，可以基于不安全的代码创建一个安全的抽象，例如标准库中的split_at_mut方法：
+
+```rust
+    pub fn split_at_mut(&mut self, mid: usize) -> (&mut [T], &mut [T]) {
+        assert!(mid <= self.len());
+        // SAFETY: `[ptr; mid]` and `[mid; len]` are inside `self`, which
+        // fulfills the requirements of `from_raw_parts_mut`.
+        unsafe { self.split_at_mut_unchecked(mid) }
+    }
+```
+
+这个函数无法仅仅使用安全的Rust来实现，因为返回的两个切片都是self的一部分，造成两个可变引用的存在。
+我们尝试通过实现简化的版本来验证一下。
+
+```rust
+// 尝试实现自己的简化版本split_at_mut，使用了不安全特性
+    fn split_at_mut(v: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+        assert!(mid <= v.len());
+        // 仅仅使用安全的Rust，会报两个可变指针的错误，而我们能保证这两个可变指针其实指向的是切片非重合的两部分
+        // (&mut v[..mid], &mut v[mid..])
+        // 所以可以使用unsafe特性来实现
+        // 获取指向切片的可变裸指针
+        let p = v.as_mut_ptr();
+        unsafe {
+            // 以下的from_raw_parts_mut函数是unsafe的，所以这块要包含在unsafe中
+            (core::slice::from_raw_parts_mut(p, mid),
+             core::slice::from_raw_parts_mut(p.offset(mid as isize), v.len() - mid)
+            )
+        }
+    }
+    let mut v = vec![1, 2, 3, 4, 5];
+    let (a, b) = split_at_mut(&mut v[..], 3);
+    println!("{:?}, {:?}", a, b);
+```
+
+使用extern关键字可以引入其它语言的函数，所有通过extern引入的函数都是不安全的，需要使用unsafe关键字
+
+```rust
+    extern "C"{
+        fn abs(input:i32)->i32;
+    }
+
+    unsafe {
+        println!("{}", abs(-20));
+    }
+```
+
+#### 访问或者修改可变的静态变量
+
+静态变量，也称为全局变量。
+
+不可变的静态变量与常量类似，静态变量的值在内存中拥有固定的地址，使用它的值总是会访问到同样的数据。与之相反的是，常量则允许在任何被使用到的时候复制其数据。
+
+静态变量还可以是可变的，但访问或者修改可变的静态变量，都是unsafe的操作。
+这是因为Rust无法保证全局变量的修改和访问是否有发生竞争。
+
+```rust
+// 可变静态变量
+static mut COUNTER:u32 = 10;
+// 访问和修改可变静态变量需要使用unsafe特性
+fn incr_counter(){
+    unsafe {
+        COUNTER += 1;
+    }
+}
+fn get_counter() -> u32{
+    unsafe {
+        COUNTER
+    }
+}
+fn main(){
+    incr_counter();
+    println!("{}", get_counter()); // 11
+}
+```
+
+#### 使用不安全的trait
+
+当trait中存在至少一个拥有编译器无法校验的不安全因素时，这个trait也需要声明为unsafe。
+实现这个unsafe trait的impl需要添加unsafe声明。
+
+
+```rust
+    // 不安全的trait
+    unsafe trait Foo {}
+    unsafe impl Foo for i32 {}
+    
+    // 在并发章节说明的Send和Sync这两个trait就是不安全的trait，要为某个不安全的类型实现trait，需要使用unsafe关键字
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+    unsafe impl Send for Point {}
+    unsafe impl Sync for Point {}
+```
+
+### 高级trait
+
+#### 在trait定义中使用关联类型指定占位类型
+
+例如Iterator trait，使用关联类型定义了Item，这个Item类型做为next的返回值
+实现Iterator的时候，需要将Item赋值到对应的类型，这样next就能返回此类型。
+
+与泛型不同的是，如果Iterator是泛型，那么我们需要实现某个特定版本的泛型，例如实现Iterator<i32>这种泛型，调用的时候也要显示地指定对应的类型
+
+
+```rust
+    // 标准库中Iterator迭代器trait的声明，内有关联类型Item
+    // next返回的类型是Option<Self::Item>类型，即返回Item指定的类型
+    pub trait Iterator {
+        type Item;
+        fn next(&mut self) -> Option<Self::Item>;
+    }
+
+    // 定义一个无限计数器，将关联类型指定成i32，返回一个Some(i32)
+    struct Counter(i32);
+    impl Iterator for Counter {
+        type Item = i32;
+        fn next(&mut self) -> Option<Self::Item> {
+            self.0 += 1;
+            Some(self.0)
+        }
+    }
+
+    // 如果使用泛型来实现就显得很奇怪
+    pub trait Iterator2<T> {
+        fn next(&mut self) -> Option<T>;
+    }
+
+    // 在指定实现泛型trait时，需要显示指定实现的版本是什么
+    // 如果有多个类型的实现，在调用的时候还要指定调用的是哪个版本的实现
+    // 而使用关联类型则可以保证只有一种实现
+    impl Iterator2<i32> for Counter {
+        fn next(&mut self) -> Option<i32> {
+            self.0 += 1;
+            Some(self.0)
+        }
+    }
+```
+
+#### 默认泛型参数
+
+即在实现泛型的trait时，不指定实现的类型，此时默认泛型参数发挥作用，实现的这个默认类型。
+
+这个功能经常用于运算符重载，Rust提供了有限的运算符重载功能。
+
+这个功能还能让在原来的实现上添加新的类型而不用修改原来的代码实现，只需要在这个新的泛型类型上添加默认值即可
+
+```rust
+    // 默认泛型参数
+    // 公共库中的Add trait实现加法运算符的重载，默认类型与被加数(Right-hand side)相同(Rhs = Self)
+    pub trait Add<Rhs = Self> {
+        type Output;
+        fn add(self, rhs: Rhs) -> Self::Output;
+    }
+    #[derive(Debug, PartialEq)]
+    struct Point(i32, i32);
+    // 为Point实现了Add trait，没有指定泛型的类型，默认是Self，即Point类型
+    // 等价于impl std::ops::Add<Point> for Point
+    impl std::ops::Add for Point {
+        type Output = Point;
+
+        fn add(self, rhs: Point) -> Self::Output {
+            Point(self.0 + rhs.0, self.1 + rhs.1)
+        }
+    }
+    assert_eq!(Point(1, 2) + Point(2, 3), Point(3, 5));
+
+    // 为非默认类型(i32)实现Add操作
+    impl std::ops::Add<i32> for Point {
+        type Output = Point;
+        fn add(self, rhs: i32) -> Self::Output {
+            Point(self.0 + rhs, self.1 + rhs)
+        }
+    }
+    assert_eq!(Point(1, 2) + 2, Point(3, 4));
+```
+
+#### 完全限定语法
+
+两个trait可以定义同名的方法，而且一个类型可以同时实现这两个trait，但当调用方法时，就有可能出现冲突，编译器报错。
+
+此时可以使用完全限定语法来处理，例子如下：
+
+```rust
+    // 有两个同名函数的trait，以及同时实现这两个trait的类型在调用时发生的歧义调用
+    trait Pilot {
+        fn fly(&self) {
+            println!("Engine start!")
+        }
+        fn name(){
+            println!("Pilot")
+        }
+    }
+
+    trait Wizard {
+        fn fly(&self) {
+            println!("Up!")
+        }
+        fn name(){
+            println!("Wizard")
+        }
+    }
+    struct Human {}
+    impl Pilot for Human {}
+    impl Wizard for Human {}
+    impl Human {
+        fn fly(&self) {
+            println!("Dreaming!")
+        }
+        fn name(){
+            println!("Human")
+        }
+    }
+    // Human实现了Wizard的fly、Pilot的fly、以及自己也有fly方法
+    let h = Human {};
+    // 此时在调用fly时，会直接使用类型定义的方法
+    // 如果Human没有实现自己的fly，此时将出现编译错误：multiple `fly` found
+    h.fly(); // Dreaming!
+    // 可以使用全限定的语法来指定调用哪一个fly方法
+    Human::fly(&h); // Dreaming!
+    Wizard::fly(&h); // Up!
+    Pilot::fly(&h); //Engine start!
+
+    // 对于没有self参数的函数冲突，原来的办法无能为力
+    // 以下报错：cannot infer type
+    // note: cannot satisfy `_: Wizard`
+    // Wizard::name();
+    // Human可以直接调用，输出Human的方法内容
+    Human::name(); // Human
+    // trait不能直接调用其函数，需要使用以下的限定语法
+    <Human as Pilot>::name(); // Pilot
+    <Human as Wizard>::name(); // Wizard
+```
+
+
+#### 超trait
+
+当一个trait功能依赖于另外一个trait时，被依赖的这个trait称为当前trait的超trait(super trait)
+
+```rust
+    // 超trait，依赖于另外一个trait的trait
+    trait Animal {
+        fn class(&self){}
+    }
+    // 依赖于类型实现了Animal，因为需要调用其class方法
+    trait Cat:Animal{
+        fn miao(&self){
+            self.class()
+        }
+    }
+    struct Persian{}
+    // Persian必须实现了Animal，才能实现Cat
+    impl Animal for Persian{}
+    impl Cat for Persian{}
+```
+
+#### newtype模式
+
+newtype模式是指将一个类型使用struct的元组模式封装一下成为一个新类型，这个类型只有一个字段，这种类型称之为瘦封闭(thin wrapper)。
+
+在Rust中，这一模式不会导致运行时开销，编译器在在编译阶段优化掉。
+
+可以使用这一模式绕过为类型实现trait的孤儿规则，即可以在trait、类型包之外的其它包中为类型实现trait。
+
+但其实并没有真正地为类型实现了对应的trait，毕竟进行了封装，但可以使用Deref来实现与原来类型一样的效果
+
+```rust
+    // newtype模式
+    // 绕过孤儿规则，为Vec<String>实现Display trait
+    struct Wrapper<'a>(Vec<&'a str>);
+    impl<'a> std::fmt::Display for Wrapper<'a> {
+        fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+            write!(f, "[{}]", self.0.join(","))
+        }
+    }
+    let w = Wrapper(vec!["i", "am", "supper", "man"]);
+    println!("{}", w); // [i,am,supper,man]
+    // 但是封装类型并没有实现所有Vec<&str>的能力，比如len函数，w.len()将报错，因为没有实现
+    // 此时可以使用Deref解引用trait以及自动解引用的性质来实现Wrapper与Vec<&str>更一致
+    impl<'a> std::ops::Deref for Wrapper<'a> {
+        type Target = Vec<&'a str>;
+
+        fn deref(&self) -> &Self::Target {
+            &self.0
+        }
+    }
+    println!("len:{}", w.len());
+```
+
+### 高级类型
+
+* newtype模式实现的类型，可以隐藏原始类型的一些实现，提供封装抽象能力。并且新的类型与原来的类型为两种不同的类型，编译器检查为这两种类型不能混用提供了检查。
+
+* 而类型别名，则与newtype不同，他只是原类型的别名，两者等价可以混用，一般用于简化类型的书写，例如io库中的Result
+
+```rust
+pub type Result<T> = result::Result<T, Error>;
+```
+
+* 永不返回的Never类型(!)；一般用于在match中处理异常等情况，例如exit()，panic!等都是返回Never类型
+
+```rust 
+pub fn exit(code: i32) -> ! {
+    crate::sys_common::rt::cleanup();
+    crate::sys::os::exit(code)
+}
+```
+
+
+### 动态大小类型与Size trait
+
+str是动态大小类型，只能在运行时确认类型的大小。
+我们无法创建动态大小类型的变量，也无法使用其作为函数参数，这种类型需要放在某种指针的后面，例如&str。
+
+Rust提供了一个特殊的Size trait，编译时可确定大小的类型自动实现了Size trait，另外Rust为泛型类型隐式地添加了Size约束，也就是说泛型默认只能用于编译期可确定大小的类型
+但可以显示地使用?Size来解除限制。
+
+```rust
+// 解除了Size的限制，并且参数需要使用&T，因为在编译期无法确定大小的类型，必须使用某种指针来引用。
+fn generic<T:?Size> (t:&T){}
+```
+
+
+
+
+
 
 
 
