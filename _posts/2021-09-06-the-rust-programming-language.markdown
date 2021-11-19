@@ -2340,7 +2340,12 @@ Send trait表示可以在线程间安全地转移所有权，Sync trait表示此
 除了裸指针外，所有基础类型都实现了Send trait，任何有Send类型组成的复合类型也都实现了Send
 如果类型T是Send类型，则&T满足Sync约束
 
-Send和Sync属于标签trait，没有可供实现的方法，手动实现需要使用不安全的语言特性。
+Send和Sync属于标签trait(marker trait)，没有可供实现的方法，手动实现需要使用不安全的语言特性。
+自动实现了Send和Sync的语法特性称之为自动trait(auto trait)，与此相对，如果不想使某个类型自动实现trait，则可以使用negative impl语法来处理，例如
+
+```rust
+impl<T: ?Sized> !Send for MutexGuard<'_, T> {}
+```
 
 Rc<T>无法在多个线程场景下安全地更新引用计数值，所以Rc只设计用于单线程的场景，没有实现Send trait和Sync trait。
 
@@ -3171,6 +3176,11 @@ rust reference: https://doc.rust-lang.org/reference/introduction.html
 rustPrime: https://hardocs.com/d/rustprimer/heap-stack/heap-stack.html
 Rust Magazine: https://rustmagazine.github.io/rust_magazine_2021/chapter_1/rustc_part1.html
 Rust 数据内存布局: https://juejin.cn/post/6987960007245430797
+The Rustonomicon: https://doc.rust-lang.org/nomicon/intro.html#the-rustonomicon
+The unstable book: https://doc.rust-lang.org/beta/unstable-book/the-unstable-book.html
+
+
+标准库文档：https://doc.rust-lang.org/std/
 <style>
 center{
 	font-size: 0.7em;
