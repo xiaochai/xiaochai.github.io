@@ -5,8 +5,8 @@ date: 2021-11-20
 categories:
   - Reading
 description: 陆陆续续将《Rust权威指南》看完了，文中的例子全部按自己的理解重新实现了一遍。回望来途，可谓困难坎坷，步履艰辛；即是如此，也收获满满。Rust语言的学习给我耳目一新的感觉，上一次对学习语言有这种感觉还是在Haskell的学习中。他完全颠覆我理解的语言设计，在除了垃圾回收语言和内存自主控制语言，竟然还有如此方式来保证内存安全。震撼的同时，也感觉整体学习非常吃力，学习曲线异常陡峭。虽然把整本书都看完了，但还有非常多的细节似懂非懂，也无法完全不参照例子自行写出相对复杂的程序；一些语言中很容易实现的代码在Rust中也无法自行实现出来。所以目前只是第一阶段，即入门，以此为记。后面需要通过开源项目学习练手，通过了解常用的写法去深刻体验Rust的设计精髓。
-image: /assets/images/traffic_light.jpg
-image-sm: /assets/images/traffic_light.jpg
+image: /assets/images/rust_programer_cover.jpeg
+image-sm: /assets/images/rust_programer_cover.jpeg
 
 ---
 * ignore but need
