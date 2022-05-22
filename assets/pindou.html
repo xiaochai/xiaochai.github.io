@@ -1,0 +1,352 @@
+<style>
+    table {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border: solid;
+        border-width: thin;
+        text-align: center;
+    }
+
+    .legend {
+        width: 80px;
+        height: 20px;
+        background-color: red;
+        float: left;
+        margin: 2px;
+    }
+
+    .legend-text {
+        line-height: 25px;
+    }
+
+    .legend-text-selected {
+        font-size: large;
+        background-color: grey;
+        color: darkred;
+    }
+</style>
+
+<body>
+    <div style="text-align: center;width: 1200px;margin: auto;">
+        <div>
+            <input type="file" accept="image/*" />
+            <input type="input" id="scale" placeholder="scale" value="1">
+        </div>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tr>
+                <td style="width: 400px;">原图</td>
+                <td style="width: 400px;">效果图</td>
+                <td style="width: 300px;">图例</td>
+            </tr>
+            <tr>
+                <td><canvas id="sourceCanvas"></canvas></td>
+                <td><canvas id="destCanvas"></canvas></td>
+                <td style="text-align: left;" id="legend-td">
+                </td>
+            </tr>
+        </table>
+        <div id="tuli">
+        </div>
+
+
+    </div>
+</body>
+<script>
+
+
+    const colorSpace = new Map();
+    colorSpace.set('W6', '5c0f1a');
+    colorSpace.set('S6', '980e1e');
+    colorSpace.set('S5', 'a61123');
+    colorSpace.set('F12', 'ad1a26');
+    colorSpace.set('F13', 'c32028');
+    colorSpace.set('W5', 'bf2223');
+    colorSpace.set('S4', 'bf2223');
+    colorSpace.set('F15(gd)', 'f84b51');
+    colorSpace.set('E8', 'a1214e');
+    colorSpace.set('T6', '2c1668');
+    colorSpace.set('X6', '231c45');
+    colorSpace.set('X5', '361d5c');
+    colorSpace.set('XC14', '55215e');
+    colorSpace.set('D21', '612b6f');
+    colorSpace.set('T5', '76499a');
+    colorSpace.set('D7', '6c538c');
+    colorSpace.set('T4', '7e3f8e');
+    colorSpace.set('T3(GD)', '94328b');
+    colorSpace.set('XC13', 'a8308f');
+    colorSpace.set('E13', '9b1959');
+    colorSpace.set('U6', '7e2512');
+    colorSpace.set('U4', '883d1b');
+    colorSpace.set('F10', 'ca3513');
+    colorSpace.set('F9', 'dd4f37');
+    colorSpace.set('Z6', 'ce4d28');
+    colorSpace.set('N6', 'fd662a');
+    colorSpace.set('F8', 'fb5f4c');
+    colorSpace.set('Z5', 'fd7839');
+    colorSpace.set('E10', 'ba2b66');
+    colorSpace.set('S3', 'ff4b7e');
+    colorSpace.set('S2(GD)', 'fb5590');
+    colorSpace.set('W4(GD)', 'fe1d97');
+    colorSpace.set('W1', 'e769aa');
+    colorSpace.set('D14', '996995');
+    colorSpace.set('DE7', 'b4395d');
+    colorSpace.set('D10', 'ad95b6');
+    colorSpace.set('T2', 'b08fc5');
+    colorSpace.set('N1(GD)', 'ccb4d8');
+    colorSpace.set('W3', 'd97b95');
+    colorSpace.set('W2', 'dd6b82');
+    colorSpace.set('T1', 'e4b3d0');
+    colorSpace.set('Y6', '422115');
+    colorSpace.set('U5', '5e3715');
+    colorSpace.set('G13', '5c3f1e');
+    colorSpace.set('U3', '95561d');
+    colorSpace.set('M18', '7f412e');
+    colorSpace.set('G15', '76461e');
+    colorSpace.set('M17', '865637');
+    colorSpace.set('M10', '9c6c3c');
+    colorSpace.set('S1', 'f3b3d5');
+    colorSpace.set('E12', 'f59aba');
+    colorSpace.set('D8', '9d8fa5');
+    colorSpace.set('D13', 'bdb9c1');
+    colorSpace.set('M14', '6f555b');
+    colorSpace.set('M11', '73665c');
+    colorSpace.set('H11', 'b6afad');
+    colorSpace.set('H9', 'beb097');
+    colorSpace.set('Y2', 'd9d508');
+    colorSpace.set('Y1', 'd4c949');
+    colorSpace.set('A9', 'd8d392');
+    colorSpace.set('P1', 'c3cc6a');
+    colorSpace.set('F11', 'c2525e');
+    colorSpace.set('F7', 'fd8057');
+    colorSpace.set('F14', 'ca7862');
+    colorSpace.set('Z4(gd)', 'ff853e');
+    colorSpace.set('N5', 'fd7c19');
+    colorSpace.set('Z3', 'de711a');
+    colorSpace.set('G9', 'c26926');
+    colorSpace.set('U2', 'ca7a45');
+    colorSpace.set('G10', 'c78749');
+    colorSpace.set('A12', 'f7a829');
+    colorSpace.set('A13', 'f9c214');
+    colorSpace.set('N4(GD)', 'fec233');
+    colorSpace.set('A11', 'dca341');
+    colorSpace.set('U1', 'cfaa76');
+    colorSpace.set('G12', 'a07034');
+    colorSpace.set('A8', 'bc920d');
+    colorSpace.set('P6', 'd2a717');
+    colorSpace.set('P4', 'dcc748');
+    colorSpace.set('P5(GD)', 'd8ca14');
+    colorSpace.set('Z2', 'ddd56e');
+    colorSpace.set('Z1', 'd6cd8c');
+    colorSpace.set('H10', 'd8d0a9');
+    colorSpace.set('N3', 'f6a77c');
+    colorSpace.set('XC11', 'e78b4e');
+    colorSpace.set('G7', 'c88c58');
+    colorSpace.set('N2', 'dfac89');
+    colorSpace.set('E11', 'edcbba');
+    colorSpace.set('E14', 'e4bb8f');
+    colorSpace.set('E15', 'cfab93');
+    colorSpace.set('E9', 'e2d0b4');
+    colorSpace.set('G8', 'd5b679');
+    colorSpace.set('B17', '083519');
+    colorSpace.set('Q6', '037343');
+    colorSpace.set('Q5', '298845');
+    colorSpace.set('B9', '2f8a5a');
+    colorSpace.set('Q4', '50d520');
+    colorSpace.set('Y5', '4ece23');
+    colorSpace.set('Y4', '46c61f');
+    colorSpace.set('B14', '437e21');
+    colorSpace.set('Q2', '77cb5c');
+    colorSpace.set('Y3(GD)', '8fe590');
+    colorSpace.set('Q3', 'a8e108');
+    colorSpace.set('B12', 'bdca1c');
+    colorSpace.set('B7', '60b31a');
+    colorSpace.set('G14', '362f1f');
+    colorSpace.set('M16', '3e332f');
+    colorSpace.set('G17', '5d4633');
+    colorSpace.set('XM13', '75675e');
+    colorSpace.set('M9', '735c45');
+    colorSpace.set('M13', '7b6955');
+    colorSpace.set('M8', '736a43');
+    colorSpace.set('M7', '988b53');
+    colorSpace.set('M20', '948b6b', '');
+    colorSpace.set('X4', '080a21');
+    colorSpace.set('C14', '09304c');
+    colorSpace.set('R6', '001975');
+    colorSpace.set('R5', '003e82');
+    colorSpace.set('C13', '184386');
+    colorSpace.set('R4', '0d7cb6');
+    colorSpace.set('C12', '0d6c88');
+    colorSpace.set('R2', '2e8bc6');
+    colorSpace.set('C15', '3a97b1');
+    colorSpace.set('C10', '228087');
+    colorSpace.set('C11', '166f6e');
+    colorSpace.set('XC15', '228f8a');
+    colorSpace.set('B11', '419c7c');
+    colorSpace.set('Q1', '09908d');
+    colorSpace.set('V6', '040300');
+    colorSpace.set('H15', '222317');
+    colorSpace.set('H8', '31322c');
+    colorSpace.set('V5', '404131');
+    colorSpace.set('M19', '4e5043');
+    colorSpace.set('H7', '656253');
+    colorSpace.set('V4', '6d6a57');
+    colorSpace.set('V3', '888164');
+    colorSpace.set('H14', '898b72');
+    colorSpace.set('D9', '49577a');
+    colorSpace.set('XD8', '5f728a');
+    colorSpace.set('D12', '7e839c');
+    colorSpace.set('D11', '748596');
+    colorSpace.set('X3', '447295');
+    colorSpace.set('X2', '3e8088');
+    colorSpace.set('X1', '6999a3');
+    colorSpace.set('R3(GD)', '6ab4d6');
+    colorSpace.set('C8', '52958b');
+    colorSpace.set('C7', '76b5ad');
+    colorSpace.set('C9', '9ac2c8');
+    colorSpace.set('R1', 'aecdd3');
+    colorSpace.set('C17', 'c5d6dc');
+    colorSpace.set('H13', 'ae9c7c');
+    colorSpace.set('G11', 'aa8d4e');
+    colorSpace.set('G19', 'c0ac81');
+    colorSpace.set('G16', 'cec792');
+    colorSpace.set('H16', 'b6ad8b');
+    colorSpace.set('V2', 'dfddce');
+    colorSpace.set('V1(GD)', 'e1e5e4');
+    colorSpace.set('B8', '393f0f');
+    colorSpace.set('M15', '324634');
+    colorSpace.set('M12', '545f37');
+    colorSpace.set('B15', '677406');
+    colorSpace.set('H12', '858e61');
+    colorSpace.set('B21', 'acc684');
+    colorSpace.set('B20', 'afcea6');
+    colorSpace.set('C16', 'b2c5ac');
+    colorSpace.set('B13', 'cedb58');
+    colorSpace.set('P3(GD)', 'c3f80a');
+    colorSpace.set('P2(GD)', 'cdf713');
+
+    const sCanvas = document.getElementById("sourceCanvas");
+    const sCtx = sCanvas.getContext("2d");
+
+    const dCanvas = document.getElementById("destCanvas");
+    const dCtx = dCanvas.getContext("2d");
+
+    const inputFile = document.querySelector("input[type=file]");
+
+    const inputScale = document.getElementById("scale");
+
+    const content = document.getElementById("content")
+
+    const tuli = document.getElementById("tuli");
+    const legendTD = document.getElementById("legend-td")
+
+    inputFile.onchange = load;
+    function load(event) {
+        const files = event.target.files;
+        if (files.length == 0) {
+            console.log("no file");
+            return;
+        }
+        const file = files[0];
+        const image = new Image()
+        image.src = URL.createObjectURL(file);
+        image.onload = (event) => {
+            scale = Math.floor(400/image.width);
+            scale = scale ==0 ?1:scale;
+            inputScale.value = scale;
+            URL.revokeObjectURL(this.src);
+            sCanvas.width = image.width * scale;
+            sCanvas.height = image.height * scale;
+            sCtx.imageSmoothingEnabled = false;
+            sCtx.drawImage(image, 0, 0, image.width, image.height, 0, 0, image.width * scale, image.height * scale);
+
+            const imageData = sCtx.getImageData(0, 0, image.width * scale, image.height * scale);
+            console.log(imageData);
+
+            legendMap = new Map();
+            for (var i = 0; i < imageData.data.length; i += 4) {
+                res = getColor(imageData.data[i], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]);
+                imageData.data[i] = res[0];
+                imageData.data[i + 1] = res[1];
+                imageData.data[i + 2] = res[2];
+                imageData.data[i + 3] = imageData.data[i + 3];
+                if (imageData.data[i + 3] > 0) {
+                    legendMap.set(res[4], legendMap.get(res[4]) == undefined ? 1 : (legendMap.get(res[4]) + 1))
+                }
+            }
+            dCanvas.width = image.width * scale;
+            dCanvas.height = image.height * scale;
+            dCtx.imageSmoothingEnabled = false;
+            dCtx.putImageData(imageData, 0, 0);
+
+            // 渲染图例
+            legendTD.innerHTML = "";
+            for (const [key, value] of legendMap) {
+                color = colorSpace.get(key);
+                p = document.createElement("div");
+                l = document.createElement("div");
+                l.setAttribute("class", "legend");
+                l.setAttribute("style", "background-color:#" + color + ";");
+                s = document.createElement("span");
+                s.setAttribute("class", "legend-text");
+                s.setAttribute("id", "legend-text-"+color);
+                s.appendChild(document.createTextNode(key + ":" + color + ";" + value / scale / scale));
+                p.appendChild(l);
+                p.appendChild(s);
+                legendTD.appendChild(p);
+            }
+        }
+
+    }
+
+    dCanvas.addEventListener('click', function (event) {
+        var rect = dCanvas.getBoundingClientRect();
+        var x = event.layerX - rect.left;
+        var y = event.layerY - rect.top;
+        var pixel = dCtx.getImageData(x, y, 1, 1);
+        var data = pixel.data;
+
+        a = document.getElementsByClassName("legend-text-selected");
+        for(const v of a ){
+            v.setAttribute("class", "legend-text");
+        }
+
+        hex = data[0].toString(16).padStart(2,'0') + data[1].toString(16).padStart(2,'0')+data[2].toString(16).padStart(2,'0')
+        elem = document.getElementById("legend-text-"+hex);
+
+        console.log(elem, hex);
+        elem.setAttribute("class", "legend-text legend-text-selected");
+    });
+
+    function getColor(sr, sg, sb, sa) {
+        if (sa == 0) {
+            return [sr, sg, sb, sa];
+        }
+        var diff = 9999999999;
+        var res = [0, 0, 0, sa, "unknow"];
+        for (const [key, value] of colorSpace) {
+            c = parseInt(value, 16);
+            b = c & 0xff;
+            g = (c >> 8) & 0xff;
+            r = (c >> 16) & 0xff;
+            d = Math.sqrt(Math.pow(sr - r, 2) + Math.pow((sg - g), 2) + Math.pow((sb - b), 2));
+            if (d < diff) {
+                diff = d;
+                res = [r, g, b, sa, key, value];
+            }
+        }
+        return res;
+    }
+
+    function generateTuli() {
+        for (const [key, value] of colorSpace) {
+            t = document.createElement("div");
+            t.setAttribute("id", key);
+            t.setAttribute("style", "float:left;margin:2px;width:100px;height:20px;background-color:#" + value + ";")
+            t.appendChild(document.createTextNode(key + ":" + value))
+            tuli.appendChild(t)
+        }
+    }
+    generateTuli()
+</script>
