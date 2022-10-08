@@ -100,7 +100,7 @@ DH协商中服务端私钥$$a$$可以使用证书中的私钥，也可以使用�
 
 与此类似的，如果将计算过程替换成椭圆曲线的方式，就产生了ECDH和ECDHE(Elliptic-curve Diffie–Hellman ephemeral)，由于ECDH的非前向安全性，目前已经废弃。
 
-在DHE/ECDHE算法中，证书的公私钥不再参与密钥的计算，只是做为服务端的身份认证。
+在DHE/ECDHE算法中，证书的公私钥不再参与密钥的计算，只是做为服务端的身份认证(在Server Key Exchange Message中用作签名)。
 
 承载协商消息的包包括Server Key Exchange、Client Key Exchange，本文后面详细分析包结构时会再次详细介绍。
 
@@ -795,7 +795,7 @@ Handshake Protocol: Certificate
 
 #### Server Key Exchange Message
 
-用于密钥交换时所需要的额外信息，例如在密钥交换使用DHE算法时，就需要发送服务端算出来的值。
+用于密钥交换时所需要的额外信息，例如在密钥交换使用DHE算法时，就需要发送服务端算出来的值。另外这里会使用服务端的私钥对内容的摘要进行签名，以证明服务端拥有私钥，签名算法的选择，根据ClientHello中的signature_algorithms扩展决定。
 
 ```
 TLSv1.2 Record Layer: Handshake Protocol: Server Key Exchange
