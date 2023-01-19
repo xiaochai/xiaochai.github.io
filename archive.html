@@ -14,6 +14,7 @@ permalink: /archive/
   </header>
   <div class="section-padding archives__container">
     {% for post in site.posts %}
+    {% if post.categories[0] != "Dixit" %}
       <article class="card" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         <a class="card__link" href="{{ post.url | prepend: site.baseurl }}" itemprop="url">
           <div class="card__img">
@@ -35,6 +36,7 @@ permalink: /archive/
           </div>
         </a>
       </article>
+    {% endif %}
     {% endfor %}
   </div>
 </section>

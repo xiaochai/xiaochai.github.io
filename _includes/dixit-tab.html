@@ -1,0 +1,14 @@
+<div class="tab">
+  <ul itemscope itemtype="http://schema.org/Blog">
+    {% for post in site.categories.Dixit %}
+      <li class="preview" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        <a class="preview__link" itemprop="url" href ="javascript:return false;" onclick="return false;">
+          <span class="preview__date" itemprop="datePublished" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</span>
+          <p class="preview__excerpt" itemprop="description">{{ post.content }} </p>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% include archive-link.html %}
+</div>
