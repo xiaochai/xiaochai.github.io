@@ -132,11 +132,11 @@ She said she just wanted me to invite her to dinner... and that dad would be ver
 > 整体漫画比较意识流，所以很难翻译，可能与作者要表达的意见有出入，酌情参考。<br/>
 > 另外漫画中作者分段较多，翻译可能不能与英文一一对应。<br/>
 
-![](/assets/images/forager/ForagerComic%231.jpg)
-
+![](/assets/images/forager/Comic1/1.jpg)<br/>
 A comic by Jon Nielsen<br/>
 Jon Nielsen的漫画<br/>
 
+![](/assets/images/forager/Comic1/2.jpg)<br/>
 What would you do...<br/>
 如果你在一个陌生地方醒来，<br/>
 ...If you woke up...<br/>
@@ -152,6 +152,7 @@ A lot of nothing.<br/>
 You probably wouldn't take it well.<br/>
 你可能无法接受。<br/>
 
+![](/assets/images/forager/Comic1/3.jpg)<br/>
 You'd turn to what's familiar.<br/>
 你寻找一些你所熟悉的东西。<br/>
 A small comfort.<br/>
@@ -169,6 +170,7 @@ When everything you love is gone...<br/>
 ...But your memories?<br/>
 只剩回忆？<br/>
 
+![](/assets/images/forager/Comic1/4.jpg)<br/>
 But memories aren't reliable.<br/>
 但记忆并不可靠。<br/>
 They morph and shift.<br/>
@@ -187,6 +189,7 @@ It's scary<br/>
 Is this what you think about when you're alone?<br/>
 这就是你在独处的时候所想的东西吗？<br/>
 
+![](/assets/images/forager/Comic1/5.jpg)<br/>
 What do you do when you find yourself alone with your memories?<br/>
 当你发现你只与记忆独处的时候，你会做什么？<br/>
 Do you seek to relive them?<br/>
@@ -196,6 +199,7 @@ Or do you seek new ones?<br/>
 Is there a wrong answer?<br/>
 这个问题是否有标准答案？<br/>
 
+![](/assets/images/forager/Comic1/6.jpg)<br/>
 What would you do if you woke up surrounded by your memories...<br/>
 如果你醒来时周围都是新的和旧的记忆，<br/>
 ...new and old ...<br/>
@@ -205,11 +209,13 @@ What would you do if you woke up surrounded by your memories...<br/>
 What would you do?<br/>
 怎么做才好呢？<br/>
 
+![](/assets/images/forager/Comic1/7.jpg)<br/>
 Would you give up ?<br/>
 你会放弃吗？<br/>
 It'd be understandable if you do .<br/>
 选择放弃也是能理解的。<br/>
 
+![](/assets/images/forager/Comic1/8.jpg)<br/>
 Would you seek comfort in the past?<br/>
 你会去寻找过去美好的回忆？<br/>
 Would you return to a time...<br/>
@@ -225,6 +231,7 @@ Would you return to a time...<br/>
 "...are all I need"<br/>
 “就是我需要的全部”<br/>
 
+![](/assets/images/forager/Comic1/9.jpg)<br/>
 But just like the past ...<br/>
 如同过去一样<br/>
 ...your dream would crumble and end.<br/>
@@ -240,6 +247,7 @@ Perfect as it was ...<br/>
 ...it's over.<br/>
 但也都过去了。<br/>
 
+![](/assets/images/forager/Comic1/10.jpg)<br/>
 "What if I can have both?" you think to yourself.<br/>
 “如果我全都要呢？”你这样对你说<br/>
 This thought gives you strength.<br/>
@@ -251,6 +259,7 @@ It gives you the resolve...<br/>
 And most helpfully it keeps your busy.<br/>
 更重要地，他让你保持忙碌。<br/>
 
+![](/assets/images/forager/Comic1/11.jpg)<br/>
 What would you do...<br/>
 如果你<br/>
 ...if you lost everything...<br/>
@@ -270,6 +279,7 @@ No mather how long it took...<br/>
 ...on the foundations of your memories.<br/>
 建立一个新的未来。<br/>
 
+![](/assets/images/forager/Comic1/12.jpg)<br/>
 Learn more about Forager at hopfrogsa.net.<br/>
 更多内容可以访问 hopfrogsa.net<br/>
 Find more of Jon Nielsen's work on twitter @encifer<br/>
