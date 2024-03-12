@@ -101,17 +101,9 @@ pil_img.show()
 
 <style>
 table{
-	font-size:0.7em;
-	margin-bottom: 29px;
-	border: 1px solid #dee0e3;
   text-align: center;
 }
 
-table th {
-	 background: #2b5fa8;
-    color: white;
-    padding: 5px;
-}
 table td{
   border-right:1px solid #dee0e3;
 }

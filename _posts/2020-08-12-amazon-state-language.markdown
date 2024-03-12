@@ -618,32 +618,11 @@ Catcher可以匹配多个错误。
 
 
 <style>
-center{
-	font-size: 0.7em;
-    margin-top: -20px;
-    margin-bottom: 15px;
-}
 table{
-	font-size:0.7em;
-	margin-bottom: 29px;
 	border: 2px solid #2b5fa8;
 }
-
-table th {
-	background: #cef;
-    padding: 5px;
-}
-.post ul {
-    font-size: 0.75em;
-    list-style-type: disc;
-    padding-left: 16px;
-}
-
 td{
-padding: 8px;
-}
-td.special-title{
-color: #a30623;
+  padding: 8px;
 }
 table .field{
   background-color:#cef
@@ -653,7 +632,6 @@ table .allowed{
 }
 table .required{
     background-color:#cfa
-
 }
 table .empty{
   background-color:#fbb

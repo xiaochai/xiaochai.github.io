@@ -8,11 +8,6 @@ description:
 image: /assets/images/sina/b52af14839da1eeaf080253ddaa7831a.jpg
 image-sm: /assets/images/sina/b52af14839da1eeaf080253ddaa7831a.jpg
 ---
-<style>
-.myMJSmall {
-	font-size: 0.8em;
-}
-</style>
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>

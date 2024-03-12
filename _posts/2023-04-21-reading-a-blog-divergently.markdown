@@ -10,36 +10,10 @@ image-sm: /assets/images/go-motorcycle.svg
 
 ---
 <style>
-center{
-	font-size: 0.7em;
-    margin-top: -20px;
-    margin-bottom: 15px;
-    border-spacing: 0;
-}
-table{
-	font-size:0.7em;
-	margin-bottom: 29px;
-	border: 2px none #dee0e3;
-}
-
-table th {
-	background: #2b5fa8;
-    color: white;
-    padding: 5px;
-}
-.post ul {
-    font-size: 0.75em;
-    list-style-type: disc;
-    padding-left: 16px;
-}
 
 td{
-
-	border: 2px solid #dee0e3;
-padding: 5px;
-}
-td.special-title{
-color: #a30623;
+  border: 2px solid #dee0e3;
+  padding: 5px;
 }
 </style>
 

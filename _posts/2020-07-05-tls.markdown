@@ -12,19 +12,6 @@ image-sm: /assets/images/tls-flow.png
 * ignore but need
 {:toc}
 
-<style>
-center{
-	font-size: 0.7em;
-    margin-top: -20px;
-    margin-bottom: 15px;
-}
-</style>
-
-<style>
-.myMJSmall {
-	font-size: 0.8em;
-}
-</style>
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>

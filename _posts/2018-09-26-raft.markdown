@@ -10,34 +10,21 @@ image: /assets/images/sina/69491d1c247383bf41a1f9f3abd22599.jpg
 image-sm: /assets/images/sina/69491d1c247383bf41a1f9f3abd22599.jpg
 ---
 <style>
-center{
-	font-size: 0.7em;
-    margin-top: -20px;
-    margin-bottom: 15px;
-}
 table{
-	font-size:0.7em;
-	margin-bottom: 29px;
-	border: 2px solid #2b5fa8;
+    border: 2px solid #2b5fa8;
 	border-spacing: 0;
 }
 
 table th {
 	background: #2b5fa8;
     color: white;
-    padding: 5px;
-}
-.post ul {
-    font-size: 0.75em;
-    list-style-type: disc;
-    padding-left: 16px;
 }
 
 td{
-padding: 5px;
+    padding: 5px;
 }
 td.special-title{
-color: #a30623;
+    color: #a30623;
 }
 </style>
 ### 寻找一种易于理解的一致性算法(扩展版)
