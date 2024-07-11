@@ -69,7 +69,7 @@ h3,h4{
 
 <div class="image-block-in-two" 
   data-image-src1="/assets/images/the_story_of_mankind/rossetta_stone.jpg" 
-  data-image-src2="/assets/images/the_story_of_mankind/egypt_word.png" 
+  data-image-src2="/assets/images/the_story_of_mankind/egypt_word.jpg" 
   data-width="calc(33.5388% - 5.36621px)"></div>
 
 ### 5. 金字塔
