@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <title>地图显示</title>
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div id="container"></div>
+<script>
+    window._AMapSecurityConfig = {
+        securityJsCode: '195bfb7983cf42035fc117aa3d23a1d8'
+    };
+</script>
+<!-- 加载地图JSAPI脚本 -->
+<script src="https://webapi.amap.com/maps?v=2.0&key=4c44d7b6c3a165b57ebc9aae7381f120"></script>
+<script src="./js/data.js"></script>
+<script>
+    // 给定两个矩形坐标，判断两个矩形是否相交，矩形给定的是左上和右下两个点，分别为x1,y1和x2,y2
+    function in_box(rect1, rect2) {
+        if (rect1.x1 > rect2.x2 || rect1.x2 < rect2.x1 || rect1.y1 > rect2.y2 || rect1.y2 < rect2.y1) {
+            return false;
+        }
+        return true;
+    }
+    var map = new AMap.Map('container', {
+        viewMode: '2D', // 默认使用 2D 模式，如果希望使用带有俯仰角的 3D 模式，请设置 viewMode: '3D'
+        zoom: 8, // 初始化地图层级
+        center: [116.397428, 39.90923] // 初始化地图中心点
+    });
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext("2d");
+    var customLayer = new AMap.CustomLayer(canvas, {
+        zooms: [2, 20],
+        zIndex: 120
+    });
+    var tranGPS = [[116.02180718316004, 39.910992296007], [116.72486653645899, 40.448243543837]];
+    var retina = AMap.Browser.retina;
+
+    customLayer.render = function () {
+        if (points === undefined) {
+            return
+        }
+        var win_size = map.getSize();
+        canvas.style.width = win_size.width + 'px';
+        canvas.style.height = win_size.height + 'px';
+        if (retina) {
+            canvas.width = win_size.width * 2;
+            canvas.height = win_size.height * 2;//清除画布
+        }
+        let f2 = function (p2) {
+            var pos1 = map.lngLatToContainer(p2.west_north);
+            var pos2 = map.lngLatToContainer(p2.east_south);
+
+            if (!in_box(
+                {
+                    x1: pos1.x,
+                    y1: pos1.y,
+                    x2: pos2.x,
+                    y2: pos2.y
+                },
+                {
+                    x1: 0,
+                    y1: 0,
+                    x2: win_size.width,
+                    y2: win_size.height
+                }
+            )) {
+                return;
+            }
+            // var circle_r = Math.max((map.getZoom() - 15)*3+3,3);
+            var tile_size = {width: pos2.x - pos1.x, height: pos2.y - pos1.y};
+            var circle_r = Math.max(tile_size.width / 8192, 2);
+            console.log(circle_r, tile_size.width);
+            for (i in p2.data) {
+                pos = p2.data[i];
+                row = parseInt(pos / 8192);
+                col = pos % 8192;
+
+                x = tile_size.width / 8192 * col + pos1.x;
+                y = tile_size.height / 8192 * row + pos1.y;
+
+                ctx.beginPath();
+                ctx.arc(x * 2 + circle_r, y * 2 + circle_r, circle_r, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
+
+        let f = function (p1) {
+            if (p1.color !== undefined) {
+                // ctx.fillStyle = p1.color;
+            }
+            for (p2 in p1.points) {
+                f2(p1.points[p2]);
+            }
+        }
+
+        ctx.fillStyle = "#08f";
+        for (p1 in points) {
+            f(points[p1])
+        }
+    }
+    window.addEventListener('load', function() {
+        // 页面所有资源都加载完毕后执行的代码
+        customLayer.render();
+    });
+
+    customLayer.setMap(map);
+
+</script>
+</body>
+
+</html>

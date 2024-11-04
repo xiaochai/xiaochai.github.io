@@ -54,13 +54,13 @@ J(\theta)  = \frac{1}{m}\sum_{i=1}^{m} \left [ -y^{(i)}log(h_\theta(x^{(i)})) - 
 * 使用cost函数代替
 
 $$\class{myMJSmall}{
-J(\theta)  = \frac{1}{m}\sum_{i=1}^{m} \left [ y^{(i)}cost_1(\theta^Tx^{(i)})+ (1-y^{(i)})cost_0(\theta^Tx^{(i)} \right] + \frac{\lambda}{2m}\sum_{j=1}^{n}\theta_j^2
+J(\theta)  = \frac{1}{m}\sum_{i=1}^{m} \left [ y^{(i)}cost_1(\theta^Tx^{(i)})+ (1-y^{(i)})cost_0(\theta^Tx^{(i)}) \right] + \frac{\lambda}{2m}\sum_{j=1}^{n}\theta_j^2
 }$$
 
 * 去掉$$m$$，并除以$$\lambda$$
 
 $$\class{myMJSmall}{
-J(\theta)  = C\sum_{i=1}^{m} \left [ y^{(i)}cost_1(\theta^Tx^{(i)})+ (1-y^{(i)})cost_0(\theta^Tx^{(i)} \right] + \frac{1}{2}\sum_{j=1}^{n}\theta_j^2
+J(\theta)  = C\sum_{i=1}^{m} \left [ y^{(i)}cost_1(\theta^Tx^{(i)})+ (1-y^{(i)})cost_0(\theta^Tx^{(i)}) \right] + \frac{1}{2}\sum_{j=1}^{n}\theta_j^2
 }$$
 
 > 以上的$$C$$相当于$$\frac{1}{\lambda}$$，所以当过拟合时，可以通过减少$$C$$来实现；当欠拟合时，增加$$C$$的值

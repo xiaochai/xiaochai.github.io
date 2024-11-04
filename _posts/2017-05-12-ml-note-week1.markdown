@@ -106,7 +106,7 @@ $$\class{myMJSmall}{\theta_j := \theta_j - \alpha \frac{\partial}{\partial \thet
 > = \frac{\partial}{\partial \theta_1} \frac{1}{2m} (\theta_0+\theta_1 x^{(1)} -y^{(1)})^2 + \cdots + \frac{\partial}{\partial \theta_1} \frac{1}{2m} (\theta_0+\theta_1 x^{(m)} -y^{(m)})^2 \\ 
 > = \frac{\partial(\frac{1}{2m}(\theta_0+\theta_1 x^{(1)} -y^{(1)})^2)}{\partial(\theta_0+\theta_1 x^{(1)} -y^{(1)})} \cdot \frac{\partial(\theta_0+\theta_1 x^{(1)} -y^{(1)})}{\partial\theta_1} + \cdots + \frac{\partial(\frac{1}{2m}(\theta_0+\theta_1 x^{(m)} -y^{(m)})^2)}{\partial(\theta_0+\theta_1 x^{(m)} -y^{(m)})} \cdot \frac{\partial(\theta_0+\theta_1 x^{(m)} -y^{(m)})}{\partial\theta_1}\\
 > = \frac{1}{m}(\theta_0+\theta_1 x^{(1)} - y^{(1)}) \cdot x^{(1)} + \cdots + \frac{1}{m}(\theta_0 + \theta_1 x^{(m)} - y^{(m)}) \cdot x^{(m)} \\
-> = \frac{1}{m}\sum_{i=1}^m(\theta_0+\theta_1 x^{(i)}+y^{(i)})x^{(i)} \\
+> = \frac{1}{m}\sum_{i=1}^m(\theta_0+\theta_1 x^{(i)}-y^{(i)})x^{(i)} \\
 > = \frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)}) - y^{(i)})x^{(i)}
 > $$
 
