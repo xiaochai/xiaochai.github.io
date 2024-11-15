@@ -14,7 +14,7 @@ image-sm: /assets/images/theory_of_special_relativity/cover-sm.jpeg
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="/assets/js/jquery-3.7.1.min.js"></script>
 <script src="/assets/js/image_block.js"></script>
 
 

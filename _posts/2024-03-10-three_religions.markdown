@@ -8,7 +8,7 @@ description: 我们知道世界有三大宗教，基督教、伊斯兰教、佛�
 image: /assets/images/three_religions/1.avif
 image-sm: /assets/images/three_religions/1.avif
 ---
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="/assets/js/jquery-3.7.1.min.js"></script>
 <script src="/assets/js/image_block.js"></script>
 
 * ignore but need

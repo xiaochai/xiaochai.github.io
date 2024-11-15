@@ -25,7 +25,7 @@ h3,h4{
 
 </style>
 
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="/assets/js/jquery-3.7.1.min.js"></script>
 <script src="/assets/js/image_block.js"></script>
 
 * ignore but need
