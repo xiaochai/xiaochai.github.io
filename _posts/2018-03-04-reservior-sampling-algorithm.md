@@ -5,8 +5,8 @@ date: 2018-03-04
 categories:
   - Tech
 description: 
-image: /assets/images/sina/3c47988184eb6f93c5ddc211fa14bf5b.jpg
-image-sm: /assets/images/sina/73ff8fe862fac07682ab608589dcd758.jpg
+image: "{{ site.baseurl }}/assets/images/sina/3c47988184eb6f93c5ddc211fa14bf5b.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/73ff8fe862fac07682ab608589dcd758.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">

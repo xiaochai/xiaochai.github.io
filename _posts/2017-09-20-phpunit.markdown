@@ -5,8 +5,8 @@ date: 2017-09-20
 categories:
   - Tech
 description: 
-image: /assets/images/phpunit.jpg
-image-sm: /assets/images/phpunit.jpg
+image: "{{ site.baseurl }}/assets/images/phpunit.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/phpunit.jpg"
 ---
 单元测试在日常的编程中占有十分重要的地位，但大部分公司为了敏捷开发的效率要求，往往都忽略了测试用例的编写，而把这部分工作丢到了QA的身上。
 
@@ -1235,7 +1235,7 @@ phpunit.phar test/CoverageTest.php --whitelist mymath.php --coverage-html /var/w
 
 其中```--coverage-html```表示将报告以html的形式输出到```/var/www/html/coverage```目录，如下图：（由于只测试了一个方法，所以目前覆盖率比较低）
 
-![coverage1](/assets/images/sina/8ffa2a2d242cd46d60137b8838c9fecc.jpg)
+![coverage1]({{ site.baseurl }}/assets/images/sina/8ffa2a2d242cd46d60137b8838c9fecc.jpg)
 
 也可以使用xml配置来说明需要测试的白名单：
 
@@ -1304,7 +1304,7 @@ phpunit.phar test/CoverageTest.php --whitelist mymath.php --coverage-html /var/w
 
 此报告不管从完整程度到页面的精美程度都可以说非常地另人满意
 
-![coverage2](/assets/images/sina/c856e3942cdde02c5d25b7b54f4e8591.jpg)
+![coverage2]({{ site.baseurl }}/assets/images/sina/c856e3942cdde02c5d25b7b54f4e8591.jpg)
 
 ### 常用断言
 

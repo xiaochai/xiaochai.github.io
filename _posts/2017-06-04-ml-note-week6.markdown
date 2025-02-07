@@ -5,8 +5,8 @@ date: 2017-6-04
 categories:
   - Tech
 description: 
-image: /assets/images/sina/57303f9b360252b8f974c056b5eb011c.jpg
-image-sm: /assets/images/sina/57303f9b360252b8f974c056b5eb011c.jpg
+image: "{{ site.baseurl }}/assets/images/sina/57303f9b360252b8f974c056b5eb011c.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/57303f9b360252b8f974c056b5eb011c.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -67,7 +67,7 @@ $$
 
 * 随着多项式的度数增加(degree of the polynomial)，$$J_{train}$$和$$J_{cv}$$的变化如图
 
-![bias vs. variance](/assets/images/bias_variance.png)
+![bias vs. variance]({{ site.baseurl }}/assets/images/bias_variance.png)
 
 
 ##### 正规化与拟合问题
@@ -81,19 +81,19 @@ $$
 > 选出最优的模型和最优的$$\lambda$$<br/>
 > 使用测试集合，来评估选出来的模型和$$\lambda$$值的泛化能力
 
-![lambda](/assets/images/sina/3cf34772afca25481467e780396067ab.jpg)
+![lambda]({{ site.baseurl }}/assets/images/sina/3cf34772afca25481467e780396067ab.jpg)
 
 ##### 学习曲线(Learning Curves)
 
 * 欠拟合情况下，样本数量与训练集错误，测试集错误的关系
 
-![high_bias](/assets/images/high_bias.png)
+![high_bias]({{ site.baseurl }}/assets/images/high_bias.png)
 
 > 如果算法模型处理欠拟合状态，那么增加样本并不会有太大的改善
 
 * 过拟合情况下，样本数量与训练集错误，测试集错误的关系
 
-![high_variance](/assets/images/high_variance.png)
+![high_variance]({{ site.baseurl }}/assets/images/high_variance.png)
 
 > 如果算法模型处于过拟合状态，那么可以通过增加样本来改善
 

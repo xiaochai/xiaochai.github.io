@@ -5,8 +5,8 @@ date: 2017-5-24
 categories:
   - Tech
 description: 
-image: /assets/images/neural_network.jpeg
-image-sm: /assets/images/neural_network.jpeg
+image: "{{ site.baseurl }}/assets/images/neural_network.jpeg"
+image-sm: "{{ site.baseurl }}/assets/images/neural_network.jpeg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -214,7 +214,7 @@ $$\class{myMJSmall}{
 }$$
 
 *过程如下图*
-![xnor](/assets/images/xnor.png)
+![xnor]({{ site.baseurl }}/assets/images/xnor.png)
 
 #### 多分类分类问题（Multiclass Classification）
 
@@ -253,7 +253,7 @@ h_\theta(x)_4 \\
 
 *如下图*
 
-![lr](/assets/images/mulrg.png)
+![lr]({{ site.baseurl }}/assets/images/mulrg.png)
 
 
 

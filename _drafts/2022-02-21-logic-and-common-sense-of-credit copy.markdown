@@ -5,8 +5,8 @@ date: 2022-02-21
 categories:
   - Reading
 description: 
-image: /assets/images/rust_programer_cover.jpeg
-image-sm: /assets/images/rust_programer_cover.jpeg
+image: "{{ site.baseurl }}/assets/images/rust_programer_cover.jpeg"
+image-sm: "{{ site.baseurl }}/assets/images/rust_programer_cover.jpeg"
 
 ---
 * ignore but need

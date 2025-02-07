@@ -5,16 +5,16 @@ date: 2024-11-11
 categories:
   - Tech
 description: 在日常使用百度和谷歌地图的时候，你有没有想过缩小后的整个世界的地图是什么样子的？不过目前这两个地图的缩小比例都存在上限，无法在一个屏幕中全部展示。但你会发现东西向的地图是循环的，南北南的地图却是有限的，甚至看不到北极或者南极点。
-image: /assets/images/mercator_projection/cover.jpg
-image-sm: /assets/images/mercator_projection/cover_s@0.5x.jpg
+image: "{{ site.baseurl }}/assets/images/mercator_projection/cover.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/mercator_projection/cover_s@0.5x.jpg"
 ---
 * ignore but need
 {:toc}
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
-<script src="/assets/js/jquery-3.7.1.min.js"></script>
-<script src="/assets/js/image_block.js"></script>
+<script src="{{ site.baseurl }}/assets/js/jquery-3.7.1.min.js"></script>
+<script src="{{ site.baseurl }}/assets/js/image_block.js"></script>
 
 
 ## 引言
@@ -25,7 +25,7 @@ image-sm: /assets/images/mercator_projection/cover_s@0.5x.jpg
 
 我通过一些小手段，我把完整的百度世界地图下载下来了，如下图：
 
-![Image](/assets/images/mercator_projection/cover.jpg)
+![Image]({{ site.baseurl }}/assets/images/mercator_projection/cover.jpg)
 
 很快你会发现一些有趣的现象：
 
@@ -51,7 +51,7 @@ image-sm: /assets/images/mercator_projection/cover_s@0.5x.jpg
 
 180° 与-180° 重合，这条线几乎与国际日界线重合（为了避免一些国家被日界线分割，国际日界线在一些地方有弯曲)。如上面的地图，从左到右就是-180° 到180° 。
 
-![Image](/assets/images/mercator_projection/lon.jpg)
+![Image]({{ site.baseurl }}/assets/images/mercator_projection/lon.jpg)
 
 ### 纬线
 
@@ -61,13 +61,13 @@ image-sm: /assets/images/mercator_projection/cover_s@0.5x.jpg
 
 南纬一般用负数表示，例如南纬30° 也记作-30° 。
 
-![Image](/assets/images/mercator_projection/lng.jpg)
+![Image]({{ site.baseurl }}/assets/images/mercator_projection/lng.jpg)
 
 纬度是当前纬线上任意一点与球心的连线与赤道面所形成的夹角。
 
 如下图是地球沿经线的横截面，计算A点的纬度，可以将A点与球心O做连线，他与赤道直径的夹角就是纬度。
 
-<img src="/assets/images/mercator_projection/lng2.png" style="height:300px">
+<img src="{{ site.baseurl }}/assets/images/mercator_projection/lng2.png" style="height:300px">
 
 根据这一定义，假设地球的半径为1，A点的纬度是$$\theta$$，将其转为弧度制的纬度$$\varphi=\frac{\theta}{180} \pi$$，则A点所在纬线的长度为$$2\pi \cos\varphi$$，$$\cos\varphi$$即为此点所在纬度圆的半径。
 
@@ -79,7 +79,7 @@ image-sm: /assets/images/mercator_projection/cover_s@0.5x.jpg
 
 根据弧度的定义，此角在弧度制中的表示为$$\varphi = \frac{2\pi r\frac{\theta}{360}} {r} = \frac{\theta}{180}\pi$$。
 
-<img src="/assets/images/mercator_projection/radian.png" style="height:300px">
+<img src="{{ site.baseurl }}/assets/images/mercator_projection/radian.png" style="height:300px">
 
 
 ## 墨卡托投影
@@ -90,7 +90,7 @@ image-sm: /assets/images/mercator_projection/cover_s@0.5x.jpg
 
 首先为地球套上一个与赤道相切的圆柱体，再从球心出发，将地球表面投影到圆柱体内壁上，最后将圆柱体展开，即可得到我们想要的地图（如下图）。
 
-![Image](/assets/images/mercator_projection/mercator.jpg)
+![Image]({{ site.baseurl }}/assets/images/mercator_projection/mercator.jpg)
 
 这种投影方法称为墨卡托投影，也称等角正轴圆柱投影。采用这种方法所投影出来的地图称为墨卡托地图。
 
@@ -149,7 +149,7 @@ Python代码实现：
 
 除了墨卡托地图外，还有其它多种的制图方式，常见的如下图，他减少了两极的畸变，但并非等角。可以从[这个网站](https://desktop.arcgis.com/zh-cn/arcmap/latest/map/projections/list-of-supported-map-projections.htm)上看到各式各样的制图方式。
 
-![Image](/assets/images/mercator_projection/map2.jpg)
+![Image]({{ site.baseurl }}/assets/images/mercator_projection/map2.jpg)
 
 ## 参考
 

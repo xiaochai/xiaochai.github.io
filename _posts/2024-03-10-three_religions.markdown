@@ -5,11 +5,11 @@ date: 2024-03-10
 categories:
   - Reading
 description: 我们知道世界有三大宗教，基督教、伊斯兰教、佛教；而按信仰人数排序又为基督教、伊斯兰教、印度教、佛教；由此可见基督教和伊斯兰教传播之广、影响之众。基督教和伊斯兰教相差甚大，你很难想象在带着十字架的教皇与带着头巾在麦加朝圣的穆斯林有什么共同之处。但事实总带有些戏剧性，戏剧总有现实感，基督教和伊斯兰教都起源于犹太教，这三教他们信着同一个神、他们都认为耶路撒冷是他们的圣地、他们造就了世界上最难调解的冲突——巴以冲突。
-image: /assets/images/three_religions/1.avif
-image-sm: /assets/images/three_religions/1.avif
+image: "{{ site.baseurl }}/assets/images/three_religions/1.avif"
+image-sm: "{{ site.baseurl }}/assets/images/three_religions/1.avif"
 ---
-<script src="/assets/js/jquery-3.7.1.min.js"></script>
-<script src="/assets/js/image_block.js"></script>
+<script src="{{ site.baseurl }}/assets/js/jquery-3.7.1.min.js"></script>
+<script src="{{ site.baseurl }}/assets/js/image_block.js"></script>
 
 * ignore but need
 {:toc}
@@ -39,22 +39,22 @@ image-sm: /assets/images/three_religions/1.avif
 我们知道世界有三大宗教，基督教、伊斯兰教、佛教；而按信仰人数排序又为基督教、伊斯兰教、印度教、佛教；由此可见基督教和伊斯兰教传播之广、影响之众。
 
 <div class="image-block-with-desc" 
-  data-image-src="/assets/images/three_religions/1.avif" 
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/1.avif" 
   data-desc="https://www.visualcapitalist.com/wp-content/uploads/2022/02/Worlds-Major-Religions.html"></div>
 
 基督教和伊斯兰教相差甚大，你很难想象在带着十字架的教皇与带着头巾在麦加朝圣的穆斯林有什么共同之处。但事实总带有些戏剧性，戏剧总有现实感，基督教和伊斯兰教都起源于犹太教，这三教他们信着同一个神、他们都认为耶路撒冷是他们的圣地、他们造就了世界上最难调解的冲突——巴以冲突。
 
 <div class="image-block-in-two" 
-  data-image-src1="/assets/images/three_religions/2.avif" 
+  data-image-src1="{{ site.baseurl }}/assets/images/three_religions/2.avif" 
   data-desc1="教皇"
-  data-image-src2="/assets/images/three_religions/3.avif" 
+  data-image-src2="{{ site.baseurl }}/assets/images/three_religions/3.avif" 
   data-desc2="麦加朝圣"
   data-width="calc(52.3217% - 8.37148px)"></div>
 
 <div class="image-block-in-two" 
-  data-image-src1="/assets/images/three_religions/4.avif" 
+  data-image-src1="{{ site.baseurl }}/assets/images/three_religions/4.avif" 
   data-desc1="耶路撒冷圆顶清真寺"
-  data-image-src2="/assets/images/three_religions/5.avif" 
+  data-image-src2="{{ site.baseurl }}/assets/images/three_religions/5.avif" 
   data-desc2="23.10.8巴以新一轮冲突"
   data-width="calc(46.3003% - 7.40804px)"></div>
 
@@ -62,22 +62,22 @@ image-sm: /assets/images/three_religions/1.avif
 
 本文从犹太教开始，分别介绍了三教的起源和发展中的一些故事。在开始之前，我们顺着以下这张缩减版的时间轴和中东地区的地图，串一下整体的脉络，使得大家对于整体的脉络有个映像后，再深入到各个历史时期所发生的事情和故事。
 
-![图片](/assets/images/three_religions/6.png)
+![图片]({{ site.baseurl }}/assets/images/three_religions/6.png)
 
-![图片](/assets/images/three_religions/7.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/7.avif)
 
 ## 犹太教
 
 ### 上帝创世纪
 
-![图片](/assets/images/three_religions/8.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/8.avif)
 
 上帝用了5天的时间创立了天地万物、花鸟虫鱼，第六天用泥土照自己的样子捏了个人叫亚当（是不是跟女娲造人很像）。
 
 上帝让亚当给地球上所有的生物动物起名字，另外他看亚当一个人很孤单，于是趁他睡觉的时候，用他的一根肋骨造了个女人陪他，这个女人就是夏娃。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/9.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/9.avif"
   data-desc="米开朗基罗于西斯汀小堂天顶画《创造亚当》"></div>
 
 然后就是大家熟悉的亚当和夏娃在伊甸园的故事：
@@ -87,7 +87,7 @@ image-sm: /assets/images/three_religions/1.avif
 上帝回来的时候，看到他们俩害羞躲在树后，就知道他们俩偷吃了禁果，他老人家很生气，就把亚当和夏娃驱逐出了伊甸园。那条毒蛇，上帝也对他下了诅咒，让他一辈子只能趴在地上用肚子走（所以在这个故事中蛇最早是有脚的），让人类永远与它为敌，看见蛇就会砸烂蛇的头。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/10.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/10.avif"
   data-desc="亚历山大·卡巴内尔《亚当夏娃被逐出伊甸园》"></div>
 
 
@@ -96,14 +96,14 @@ image-sm: /assets/images/three_religions/1.avif
 过了很多很多年后，上帝发现人类变得品德败坏，到处都充斥着贪婪和邪恶，于是他决定重启一下。怎么做呢？他找到了一个叫诺亚的人，诺亚和他的族人都是品格高尚的人，上帝告诉诺亚自己要发一次超级大的洪水，淹死所有人，让他赶紧去建造一艘大船，带着他的妻儿老小、族人、还有一些野兽鸟类上到船上去躲避大洪水，等到洪水消散后再回到大陆上修养生息。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/11.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/11.avif"></div>
 
 关于这个大洪水，中国山海经、古巴比伦文明、玛雅文明都对大洪水有过描写，那这个事情是不是真发生过呢？
 
 说回大洪水，它淹没了地球上所有的陆地，除了诺亚等人，所有的人类都淹死了。过了一阵子之后，洪水渐渐消退了，诺亚想看看外面是不是有大陆出现了，于是放出了一只乌鸦去探听消息。但乌鸦隔了很多天都没有回来，于是又放出了一只白鸽，这时候外面到处还是只有水，白鸽找不到落脚的地方，就又飞回了方舟。又过了很多天后，诺亚第二次放出白鸽，结果很快白鸽就飞回来了，嘴里还衔着新鲜的橄榄枝，于是诺亚就知道可以返回陆地了。后来毕加索画了一幅画，智利著名诗人聂鲁达把它命名为"和平鸽"，于是白鸽橄榄枝就成了和平的象征。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/12.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/12.avif"
   data-desc="毕加索 《和平鸽》"></div>
 
 大洪水之后，诺亚等人回到陆地上繁衍生息，他有三个儿子，闪，含，雅弗：
@@ -116,11 +116,11 @@ image-sm: /assets/images/three_religions/1.avif
 
 ### 亚伯拉罕与神订立契约
 
-![图片](/assets/images/three_religions/13.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/13.avif)
 
 我们单说闪米特人这一支，大约公元前13世纪，在两河流域的一个叫乌尔的地方生活着一群牧羊人，为首的老头，名叫亚伯(兰)。
 
-![图片](/assets/images/three_religions/14.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/14.avif)
 
 有一天，他在放羊的时候，听到有人在耳边说：你是我选中的人，我会赐福于你和你的族人，并且应许你一个神圣的地方，叫做迦南之地。当然亚伯只是听到声音，没有看到说话的人，我们现在知道说话的就是神。神还说凡是祝福你的，我必将赐福于你，凡是加害你的，我也将诅咒他，只要你和你的族人追随我。
 
@@ -129,7 +129,7 @@ image-sm: /assets/images/three_religions/1.avif
 神让他离开乌尔到应许你的的迦南之地。迦南之地就是巴勒斯坦地区，如今以色列以及周边部分领土，也就是现在耶路撒冷所在的地方。亚伯拉罕带着他的族人离开了乌尔走到哈兰再往西走，当地人管他们叫希伯来人，意思是从河的另一面过来的人。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/15.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/15.avif"></div>
 
 这一路上并不是很顺利，在去的路上碰到的了饥荒，于是先去了埃及这个地方。
 
@@ -146,7 +146,7 @@ image-sm: /assets/images/three_religions/1.avif
 说回亚伯拉罕的妻子所生的儿子，叫作以撒，意思是喜悦。上帝为了测试亚伯拉罕的忠诚，托梦说要让他以他的儿子做为祭品献祭。亚伯拉罕没有办法只能照做，就在他要割断儿子喉咙的时候，天使出现并阻止了他，告诉他这只是上帝给他的磨练。亚伯拉罕松了口气，正好这时有一中山羊路过，于是就用这只山羊献祭了（山羊：一头问号）。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/16.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/16.avif"
   data-desc="伦勃朗《亚伯拉罕的献祭》"></div>
 
 以撒和妻子利百加生了两个孩子，以扫和雅各。两人性格迥异，老大以扫非常勇猛，擅长打猎；弟弟沉稳内敛，富有心计。雅各觉得他比哥要强，更适合领导族群，于是趁人之危，以欺骗手段获取族人的继承权。
@@ -156,7 +156,7 @@ image-sm: /assets/images/three_religions/1.avif
 雅各就问对方，你是谁。对方说自己是神派来的天使，测试雅各的实力的。这样，你以后就不要叫雅各了，叫以色列吧。以色列翻译过来就是与神角力之人。以色列这个名字就是这么由来的，这个故事也形成了犹太教后来的一个习俗就是不吃牛羊大腿上的筋。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/17.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/17.avif"
   data-desc="古斯塔夫·多雷《雅各与天使摔跤》"></div>
 
 ### 摩西出埃及记
@@ -164,14 +164,14 @@ image-sm: /assets/images/three_religions/1.avif
 以色列有12子，流便、西缅、利未、犹大、但、拿弗他利、迦得、亚设、以萨迦、西布伦、约瑟、便雅悯；其中十一子约瑟尤其得到父亲的喜爱。他的哥哥们就心生妒忌，秘密将他卖给了埃及的商人，谎称被野兽咬死了。不想约瑟在埃及发展很好，由于解梦的能力，受到法老的喜欢，位至宰相。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/18.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/18.avif"
   data-desc="Joseph's Bloody Coat Brought to Jacob by Diego Velázquez, 1630"></div>
 
 话说某年，迦南这个地方发生了大饥荒，以色列人到埃及避难，约瑟看到了父老乡亲们，不但没有记旧恨，还让埃及法老给划了块地让同胞们繁衍。就这样，时间过了400多年。但以色列人繁衍又快，又会做生意，埃及人就担心他们抢占了资源，于是就把他们打为奴隶。就这样又过了几百年，这期间的法老对以色列人越来越不待见，后来一个法老下了一道非常残忍的命令，不允许他们再生孩子，已经生的，就要扔到河里淹死掉，这是一道灭绝性的命令，无奈以色列人也只能执行。
 某天呢，法老的女儿在河里发现了一个装有小孩的小竹篮，小孩特别好看，公主就特别喜欢，就偷偷养了起来，这个人就是摩西。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/19.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/19.avif"
   data-desc="电影《The Prince of Egypt》1998"></div>
 
 大概在公元前1250年某天，摩西受到神的启示，让他带着族人回到迦南。埃及法老不肯，但神降十灾到埃及，最残酷的是第十灾长子之灾，当天午夜时分上帝将会降临埃及并杀死每一个埃及人家里的长子，无论是皇宫的皇子还是普通百姓的儿子，一个也不会放过，上帝让整个埃及陷入鬼哭狼嚎的巨大悲痛中。而以色列人已经照吩咐做好了准备：摩西让他们杀死自己家里最肥的羊，把羊血涂抹在自己家的门框上，用这只羊做晚餐，夜幕降临之后大家都围坐一桌，吃羊肉，谁都不能跑出门去。这一天也被犹太人流传为逾越节。
@@ -179,7 +179,7 @@ image-sm: /assets/images/three_religions/1.avif
 法老感受到了巨大的痛苦和害怕，于是答应让他们走，但他们一走就后悔了，派人追杀，一直追到了红海边上，正当走头无路之时，摩西向上帝祈祷，神让他举起双手，此时呼啦啦海水分开到两边，露出海床，这才让摩西等以色列人通过，通过之后海水又复合了，因此躲过埃及人的追杀。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/20.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/20.avif"
   data-desc="电影《法老与众神》，2014"></div>
 
 随后，摩西一行人来到了西奈山，神与摩西谈话，颁布十诫，刻在石板上，称之为摩西十诫。这十诫主要是告诉犹太人应该怎么生活，什么能做什么不能做之类的。比如不允许信仰其它神、不允许说出上帝的名字、也不允许以上帝的名字来起誓，不许杀人、奸淫、盗窃，跟上帝一样一天工作六天，第七天用来向上帝祷告，这天被称为安息日。摩西十诫的石板被放在约柜中，是犹太教中最神圣的东西。
@@ -187,32 +187,32 @@ image-sm: /assets/images/three_religions/1.avif
 摩西拿着石板，正打算下山的时候突然想起一个问题，就问我所信的这位尊敬的神，您的名字叫什么呢？神就很生气，说了一句话：我就是我。在希伯来语中发音是YHWH，中文音为雅威、耶和华，摩西以为神说的就是神自己的名字，于是耶和华这个神的名字就被流传下来。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/21.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/21.avif"
   data-desc="电影《The Ten Commandments》，2006"></div>
 
 摩西其实最终并没有带着以色列人回到迦南，而是后来的约书亚才把大家带回到了迦南。
 
 ### 以色列三王时代
 
-![图片](/assets/images/three_religions/22.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/22.avif)
 
 公元前1200年左右，以色列人就在迦南地区生活下来，其中的部落是以当年以色列的12子划分的。不久后，从爱琴海上来了一伙腓力斯丁人，从地中海入侵了以色列。在公元前1050年时，双方交战，以色列惨败，约柜被抢走。这时候他们意识到需要一个国王来建立国家，领导军队抗击外来侵略。属于十二子便雅悯/本杰明/本雅明部落的扫罗进入了历史舞台，建立了以色列联合王国，成为初代君王。
 
 扫罗的优点是努力并且能力强，缺点是心胸狭隘。所以上帝放弃了他，选择了大卫（米开朗基罗的雕塑就是大卫）。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/23.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/23.avif"
   data-desc="Rembrandt 《Saul and David》，1658"></div>
 
 大卫是犹大部落的一名牧羊人，由于战胜了腓力斯丁巨人歌利亚（不是邓紫棋），受到扫罗王赏识。随着大卫在以色人中的威望越来越高，就受到了扫罗的妒忌。后来为躲避扫罗追杀四处漂泊流浪跑到了被他打败的腓力斯丁人那去。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/24.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/24.avif"></div>
 
 扫罗王死后，大卫就回到了迦南成为了以色列国王。这中间扫罗的儿子跑到北方建立了另外一个国家，以色列分裂成南北两个国家，内战开始。经过大概7年战争，大卫消灭了扫罗儿子，统一了整个北方，重新建立以色列国，并把首都改名为耶路撒冷，意思为和平之城，这是耶路撒冷第一次出现在历史舞台上。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/25.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/25.avif"
   data-desc="米开朗基罗《大卫像》，1504"></div>
 
 大卫是个生性轻浮的人，就是好色的人，与自己手下将领乌利亚的妻子拔示巴通奸使其怀孕，并使用阴谋害死了乌利亚，将拔示巴取进宫中，并生了个孩子，这个孩子就是所罗门。
@@ -222,19 +222,19 @@ image-sm: /assets/images/three_religions/1.avif
 所罗门上位后第一件事件就是杀死与他竞争的兄弟，消除王位的威胁。并且推行贸易，特别是海上贸易，提升国力，积累了大量的财富，所罗门时代应该是以色列的顶峰时期。所罗门几乎没有什么缺点，民间也流传他充满智慧的故事，比如智断亲子案。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/26.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/26.avif"
   data-desc="The Visit of the Queen of Sheba to King Solomon by Edward Poynter, 1890"></div>
 
 所罗门时代还做了一件对耶路撒冷影响非常大的事情，就是扩建了耶路撒冷的城墙，并在锡安山上修建了一座宏伟的圣殿，被称为第一圣殿。这座山也叫圣殿山，其实就是当时亚伯拉罕献祭儿子的地方。
 
 <div class="image-block-in-two"
-  data-image-src1="/assets/images/three_religions/27.avif"
-  data-image-src2="/assets/images/three_religions/28.avif"
+  data-image-src1="{{ site.baseurl }}/assets/images/three_religions/27.avif"
+  data-image-src2="{{ site.baseurl }}/assets/images/three_religions/28.avif"
   data-width="calc(30% - 5px)"></div>
 扫罗、大卫、所罗门是以色列著名的三个国王，这个时期也称之为三王时代。
 
 ### 以色列王国的分裂
-![图片](/assets/images/three_religions/29.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/29.avif)
 
 所罗门死后，国家再次分裂。北方十部落组成了以色列王国，都城在撒玛利亚，南方以犹大部落为首，组成犹大王国。这也使得以色列人的力量被削弱了许多。
 
@@ -247,8 +247,8 @@ image-sm: /assets/images/three_religions/1.avif
 亚述之后是新巴比伦，在尼布甲尼撒的领导下，慢慢强大起来。尼布甲尼撒是个建筑天才，先后建成了奢华的巴比伦城、巴别塔、空中花园，后者被称为世界七大奇迹之一。
 
 <div class="image-block-in-two"
-  data-image-src1="/assets/images/three_religions/30.avif"
-  data-image-src2="/assets/images/three_religions/31.avif"
+  data-image-src1="{{ site.baseurl }}/assets/images/three_religions/30.avif"
+  data-image-src2="{{ site.baseurl }}/assets/images/three_religions/31.avif"
   data-desc1="阿塔纳斯·珂雪《螺旋巴别塔》"
   data-desc2="Hanging Gardens of Babylon by Heemskerck"
   data-width="calc(39.289% - 6.28624px);"></div>
@@ -261,7 +261,7 @@ image-sm: /assets/images/three_religions/1.avif
 没想到西底家与约亚敬一样，又背叛尼布甲尼撒投靠埃及，结果也好不到哪去。前586年尼布甲尼撒派兵围住了耶路撒冷，18个月后城里在断水断粮的情况下实在撑不住了出城突围，结果被抓住了，尼布甲尼撒当着西底家的面杀死了他的三个儿子，还挖了他的眼睛，这次不仅也带回了很多犹太人当奴隶，还在城里杀了非常多的犹太人，并且摧毁了整个耶路撒冷城，包括所罗门花费巨资建立的圣殿，约柜也在这个时候消失了。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/32.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/32.avif"
   data-desc="The Flight of the Prisoners (1896) by James Tissot; the exile of the Jews from Canaan to Babylon"></div>
 
 ### 波斯、马其顿、罗马
@@ -272,13 +272,13 @@ image-sm: /assets/images/three_religions/1.avif
 波斯帝国出了几位著名的大帝，居鲁士、大流士、薛西斯；他们征服了很多地方，但有一个地方一直没有打下来，这就是希腊，三次波希战争全部失败（著名的故事和典故有第二次马拉松战役延续下来的马拉松长途中，温泉关战役的斯巴达三百勇士等）；但是希腊虽然打赢了，但他们很快就陷入了内乱，雅典和斯巴达两个主要的城邦互相打了起来，史称伯罗奔尼撒战争，这也使得希腊文明走向下坡路。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/33.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/33.avif"></div>
 
 #### 马其顿
 
 然后就是战神亚历山大出场了。公元前336年，亚历山大出生在希腊的马其顿城邦，14岁随父上马征战，20岁继承 王位，随后就像开了挂一样，横扫了欧亚大陆，大家可以看一下马其顿的版图。
 
-![图片](/assets/images/three_religions/34.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/34.avif)
 
 亚历山大说世界就是我的故乡。但马其顿帝国也仅仅是昙花一现，这位战神只活了33岁，死在了尼布甲尼撒当年的行宫里面。他的死因一直是个谜。
 
@@ -289,7 +289,7 @@ image-sm: /assets/images/three_religions/1.avif
 首先是托勒密占领了埃及，自封为法老，在埃及建立了长达270年的托勒密王朝。另外是安条克三世，其帝国为赛琉古王朝。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/35.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/35.avif"
   data-desc="马其顿广场的亚历山大雕塑"></div>
 
 #### 马卡比王朝
@@ -297,7 +297,7 @@ image-sm: /assets/images/three_religions/1.avif
 说回托勒密王朝，他对犹太人不像波斯和亚其顿那样宽容，任由其自治发展，而是很快占领了耶路撒冷，洗劫了犹太人的财富，并将他们赶到埃及，直到托勒密二世才慢慢恢复了对犹太人和其宗教的好感，帮忙翻译了《塔纳赫》这本经典。《塔纳赫》是犹太教的经典，又称希伯来圣经，其主要有《妥拉》、《先知书》、《文集/圣录》组成，记录了神的教诲，先知事迹等等，与圣经中的旧约相对应。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/36.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/36.avif"></div>
 
 说回安条克三世这边，他一直想恢复亚历山大的荣光，但一直没有打下埃及，于是转而攻打耶路撒冷，很快就打跑了托勒密的军队，占领了耶路撒冷。
 
@@ -308,7 +308,7 @@ image-sm: /assets/images/three_religions/1.avif
 此时一位犹太的老祭司与其儿子马卡比举起了反抗赛琉古王朝的大旗。马卡比是个非常厉害的首领，他带领着犹太人把安条克的军队赶出了耶路撒冷，并且摧毁了希腊神庙，并且与希腊人进行了长达20年的战争，打得有来有回。想想当时的犹太国只是一个非常小的国家，与赛琉古王朝、托勒密、希腊等大国比起来非常悬殊，能坚持打这么长时间，并互有胜负，确实是一个奇迹。尽管如此，长期作战肯定也不是办法，所以他们投靠了罗马，罗马也很快承认了马卡比为犹太人的国王，获得自治权。此时的犹太人王朝称之为马卡比王朝。这是继大卫王朝后的第二个独立王朝，也称铁锤马卡比。以色列现有有一支足球俱乐部就叫马卡比。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/37.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/37.avif"
   data-desc="Wojciech Korneli Stattler, 'Machabeusze', 1830-1842"></div>
 
 #### 希律王朝
@@ -316,7 +316,7 @@ image-sm: /assets/images/three_religions/1.avif
 罗马时期，庞培与克拉苏都为了筹措战争经费洗劫了耶路撒冷，并残忍地杀害了大量的犹太人民。约公元前60年左右，庞培攻入耶路撒冷并占领，此时犹太国成为罗马的一个行省。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/38.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/38.avif"
   data-desc="Pompey in the Temple of Jerusalem, Jean Fouquet 1470-1475"></div>
 
 罗马历史中关于庞培、克拉苏、还有凯撒、安东尼、屋大伟等有众多的故事，包括与埃及艳后克里奥佩特拉的故事，由于与宗教历史关系不大，就略过了。
@@ -324,7 +324,7 @@ image-sm: /assets/images/three_religions/1.avif
 当时罗马在耶路撒冷的代理人是希律王，这个西律王并不是犹太人，而是以东人。他通过迎娶马卡比公主米利暗巩固自己的地位。大西律王一方面在长达37年的统治中，扩建耶路撒冷，重建了第二圣殿，甚至比之前的更辉煌，修建了许城堡；另一方面，他也是一个非常残暴多疑的人，比如他怀疑两个儿子要篡位就把他们都杀掉了，包括他也杀死了他的妻子米利暗。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/39.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/39.avif"
   data-desc="第二圣殿重建模型"></div>
 
 ### 犹太人的千年大流散
@@ -334,13 +334,13 @@ image-sm: /assets/images/three_religions/1.avif
 罗马在尼禄皇帝时期对包括耶路撒冷在内各个地区制定了非常沉重的苛捐杂税，这激起了当地犹太人的反抗，西律王的后人镇压不住，罗马派来了老将苇斯巴芗围困夜路撒冷。正当此时，尼禄自杀，为公元68年，苇斯巴芗回到罗马争夺王位，留下自己的儿子提图斯继续围攻夜路撒冷。耶路撒冷内部的起义军也不团结，内部互相厮杀削弱了整体的防御力。但耶路撒冷的围墙还是非常坚固，提图斯使用罗马最先近的攻城技术，用了整整15天时间也只打开了第一道围墙，于是改成围困。整整六个月后，耶路撒冷被攻破，提图斯进城后，下令屠城。成千上万的犹太人被杀，第二圣殿也被摧毁，全城被洗劫一空。这一年是公元70年。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/40.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/40.avif"
   data-desc="Destruction of the Temple in Jerusalem by Francesco Hayez. Oil on canvas, 1867"></div>
 
 近千名犹太将士及家人在耶路撒冷失陷后，退守至死海西岸的马萨达要塞，在那里坚守了三年，最后在寡不敌众的情况下集体自杀，全军壮烈牺牲，马萨达精神也成为犹太历史上大书特书的事件。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/41.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/41.avif"
   data-desc="马萨达"></div>
 
 第二圣殿被毁后，大批犹太人开始向外流散，但耶路撒冷南部仍然有不少犹太人居住。
@@ -350,13 +350,13 @@ image-sm: /assets/images/three_religions/1.avif
 更糟糕的事情发生在公元129年，罗马皇帝哈德良来到耶路撒冷，打算在这里建造一座罗马神殿，并禁止犹太人在新城居住，消息传开，引发了犹太人极大的愤怒，在大卫王后裔“科赫巴“的领导下发起第二次大起义，因势单力孤，起义最终最镇压。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/42.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/42.avif"
   data-desc="现今耶路撒冷残存的罗马建筑"></div>
 
 为了彻底毁灭犹太人的希望，哈德良皇帝下令摧毁所有建筑，把耶路撒冷夷为平地，并在圣殿山的废墟上撒满盐，当年辉煌的圣殿留下的唯一遗迹就是一堵西外墙，犹太人称为“西墙”，也叫哭墙，犹太人也被宣布禁止在圣城居住，圣城这块的土地也被哈德良改名为巴勒斯坦（Pelāshet/ Palestine），犹太历史进入了长达1800年的“千年大流散时期”。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/43.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/43.avif"
   data-desc="正对面的就是哭墙，可以看到圆顶清真寺"></div>
 
 ### 犹太复国主义
@@ -370,7 +370,7 @@ image-sm: /assets/images/three_religions/1.avif
 但锡安主义的实行并非简单，各地的犹太人已经有自己世俗的身份了，生活在不同的国家不同的文化下。即使这样，在屡屡发生的反犹暴动驱使下，越来越多的人投身于锡安主义的推动，开始了犹太移民浪潮。到1914年约7万人涌入了巴勒斯坦地区。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/44.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/44.avif"
   data-desc="犹太移民，被称为Aliyah"></div>
 
 但是迦南地区，现在已经有阿拉伯人居住了，他们信仰的是伊斯兰教，随着犹太人越来越多，当地人怀疑：现在少数民族犹太人怎么突然多了起来，是不是来抢我们的地盘？于是两个群体之间就发生多次的暴力冲突。
@@ -378,7 +378,7 @@ image-sm: /assets/images/three_religions/1.avif
 1917年英国外交大臣贝尔福公开发表了寄给犹太复国代表的一份信，支持犹太人在巴勒斯坦地区建立一个民族之家，称之为【贝尔福宣言】，是犹太建国的里程碑。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/45.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/45.avif"
   data-desc="英国外交大臣贝尔福和《贝尔福宣言》"></div>
 
 随后又发生了第三次第四次第五次移民，随着移民的增加，与阿拉伯人的冲突不断升级，英国也尽力从中调节。
@@ -388,20 +388,20 @@ image-sm: /assets/images/three_religions/1.avif
 二战后，世界掀起了一场国家独立浪潮，黎巴嫩、约旦、叙利亚等一大批中东国家也不断独立，只有巴勒斯坦地区主权问题迟迟无法解决。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/46.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/46.avif"
   data-desc="中东地图"></div>
 
 此时管理此地的英国政府也无力解决，于是把这个难题交给了联合国。1947年11月29日，联合国通过了181号决议，提出了巴勒斯坦托管地分割方案（其实是美苏大国主导控制的），将约旦河西岸的巴勒斯坦地区划分成两个国家，一个是以犹太人为主的犹太国家，另外一个以阿拉伯人为主的阿拉伯国家，中心的耶路撒冷属于国际共管区域。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/47.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/47.avif"></div>
 
 决议投票结果为33票赞成，包括美、苏、法；13票反对，包括所有的中东国家以及埃及、希腊、土耳其、古巴；10票弃权，包括中国、英国等。从中东全部反对阿拉伯世界对这个决议非常不满，他们认为这个决议偏向了以色列，犹太人仅占33%，却分走了57%的土地，而且巴勒斯坦的领土首尾被分成3块，再者阿拉伯人在此生活了将近1300年，怎么犹太人才几年时间就来瓜分我们的土地。所以这个决议并没有被执行，两边的冲突依然不断。
 
 1948年5月14日，在英国人结束托管之日，离开耶路撒冷之时，犹太人宣布以色列正式建国。国旗取自象征大卫王的六芒星。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/48.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/48.avif"
   data-desc="1948年5月14日，本古里安总理在特拉维夫宣布以色列国成立。"></div>
 
 
@@ -417,7 +417,7 @@ image-sm: /assets/images/three_religions/1.avif
 战后，巴勒斯坦的领土不但没有增加，反而比181号决议所划分的还少了许多。如下图，其中靠近埃及的这块橙色称为加沙地带，靠近约旦这块由于位于约旦河西岸，所以被称为约旦河西岸，耶路撒冷也被分为东西耶路撒冷，东耶路撒冷归了以色列。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/49.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/49.avif"
   data-desc="第一次中东战争后的地图"></div>
 
 #### 第二次中东战争(1956年10月29日 ~ 1956年11月7日)
@@ -443,7 +443,7 @@ image-sm: /assets/images/three_religions/1.avif
 接下来的两天内，以同样的方式摧毁了约旦和叙利亚，至此，以色列取得了完全的制空权。阿拉伯联军的士气上也深受打击。最后的胜负不言而喻。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/50.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/50.avif"></div>
 
 这场战争只打了短短的六天（六日战争），却完全改变了中东局面，阿拉伯国家原有的军力优势不复存在，再也没有办法将以色列逼入绝境。通过这次战争，以色列占领了加沙地带和埃及的西奈半岛，约旦河西岸，耶路撒冷旧城和叙利亚的戈兰高地共6.5万平方公里的土地，彻底改善了以色列的战略劣势。战争中有100万巴勒斯坦人被以色列赶出家园，沦为难民。
 
@@ -464,14 +464,14 @@ image-sm: /assets/images/three_religions/1.avif
 这次战争是巴勒斯坦问题的延续，以色列发动战争的主要目的是消灭巴勒斯坦解放组织，企图在黎巴嫩建立一个亲以政权，赶走叙利亚在黎驻军。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/51.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/51.avif"></div>
 
 ### 奥斯陆协议与和平进程
 
 在美国的撮合下达成了奥斯陆协议，进入和平进程，但现实并不如意，和平进程变成冲突一直持续至今。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/52.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/52.avif"
   data-desc="伊扎克·拉宾、比尔·克林顿和阿拉法特于1993年9月13日达成奥斯陆协议的一刻"></div>
 
 1995年11月4日，奥斯陆和平协议不久，在特拉维夫的以色列国王广场上参加和平集会之后，一名极右翼激进犹太主义分子伊盖尔·阿米尔用一把装有自制达姆弹的九毫米口径左轮手枪袭击了他，他对着拉宾的胸口开了两枪，再向他的背部上补了两枪，后拉宾在特拉维夫伊契洛夫医院的手术台上不治身亡，享年73岁。拉宾去世后，奥斯陆和平协议名存实亡，以巴和平无以为继。
@@ -497,7 +497,7 @@ image-sm: /assets/images/three_religions/1.avif
 一段时间后，罗马皇帝突然要进行人口普查，将要临产的玛利亚就跟丈夫约瑟去伯利恒申报户口。由于走得很慢，到达的时候已经天黑了，客店已经全满，所们只好临时在马厩里住了下来。说来也巧，当晚玛利亚就临产了，诞下了圣婴耶稣，并将他放在马槽里过了一夜。这个马槽如今成为了马槽广场，旁边还有一个圣诞教堂。耶稣诞生的当晚在天空中出现了一颗亮星，大家都顺着星星的方向前去拜访。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/53.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/53.avif"
   data-desc="海亨特·托特·桑特·扬斯《基督圣诞》"></div>
 
 这事传到了当时耶路撒冷统治者希律的耳朵里，这可不得了，你想想未来的犹太王要诞生了，那现在我的位置是不是就不保了，要赶快杀掉。于是派人打听耶稣的下落，耶稣一家受到了神的提醒，连夜逃命，几经周转来到了加利利的拿撒勒这里，并在这里长大。
@@ -511,7 +511,7 @@ image-sm: /assets/images/three_religions/1.avif
 耶稣说自己是上帝的儿子，并且展示出惊人的智慧，也展示了许多神迹，比如手碰一碰，病就好了，在水上行走，将水变成美酒等。这样他就有了许多追随者。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/54.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/54.avif"
   data-desc="耶稣布道"></div>
 
 在这期间，他收了12个门徒，并带他们前往耶路撒冷。他预言自己必须要去耶路撒冷，去接受他的命运，也就是死在耶路撒冷，并在那里重生。但是耶路撒冷也会为此付出代价，这座城市将被重兵围困，遭到外邦人的屠杀和践踏。
@@ -521,26 +521,26 @@ image-sm: /assets/images/three_religions/1.avif
 犹太长老们早就起了杀心。此时耶稣的十二门徒中出现了一个叛徒，叫犹大，他为了30银币出卖了耶稣。在逾越节那天，耶稣和门徒们一起吃晚餐，吃到一半耶稣说我已经知道你们中有一个人出卖了我，12门徒闻言后表现不出一样的表情，这就是最后的晚餐所描绘的场景。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/55.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/55.avif"
   data-desc="The Last Supper by Leonardo da Vinci, 1495-1498"></div>
 
 吃过饭后，叛徒犹大就突然消失了，他回来时带着一批人过来抓捕耶稣，在黑暗中大家都认不出来谁是耶稣，还是犹大上前亲吻了耶稣，相当于指认了他，于是耶稣就被抓起来了。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/56.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/56.avif"
   data-desc="犹大之吻 by 乔托，1304-1306"></div>
 
 耶稣就这样被犹太长老们抓住，并交到了掌权者罗马人前，被判钉死在十字架上。他先是被严刑拷打，然后自己背着十字架往骷髅地走去，最后被钉死在十字架上。在这中间耶稣中途停留了14次，这条路也被称为苦路14站。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/57.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/57.avif"
   data-desc="马蒂亚斯·哥特哈德《耶稣磔刑》"></div>
 
 
 耶稣说自己将在死后第三天复活，让门徒们到加利利山上再会。在山上，耶稣给他们颁布了重要的使命：你们将我的平生事迹告诉世人，将我教导你们的教导给他们，我将陪伴你们直到永远。之后耶稣就升天了。此时大约为公元33年左右。耶稣复活的那天就是现在复活节的来历。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/58.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/58.avif"
   data-desc="约翰·辛格顿·科普利1775年《基督升入天国》"></div>
 
 ### 基督与犹太
@@ -560,7 +560,7 @@ image-sm: /assets/images/three_religions/1.avif
 耶稣的门徒将耶稣的事迹和话语整理成册进行宣传，这些人所写的书，在后面的历史中被整编起来，与犹太教的塔纳赫组成圣经。这其中，犹太教的塔纳赫是上帝与子民旧的约定，所以称之为《旧约》，而耶稣门徒所记录耶稣事迹和话语的各种福音书被认为上帝与子民新的约定，所以称之为《新约》。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/59.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/59.avif"></div>
 
 在基督教的传播过程中，门徒们迈出了重要的一步，他们不像犹太教是封闭的，只传犹太人。任何人，只要信耶稣，就能入教，这大大降低了成为基督徒的门槛，使得基督教能在全球大范围内传播。
 
@@ -569,7 +569,7 @@ image-sm: /assets/images/three_religions/1.avif
 转折发生在公元312年， 罗马皇帝君士坦丁大帝在一场关键性战争时，看到了天空中的十字架，他将十字架放在军旗上，果然战争取得了胜利。从此君士坦丁对基督教深信不疑，在313年，君士坦丁签署《米兰敕令》宣布基督教与其它宗教有平等的地位。至此，基督教得到了帝国政府的认可，使得地位迅速攀升。 君士坦丁在临终前受洗成为第一位基督徒皇帝。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/60.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/60.avif"
   data-desc="君士坦丁雕塑"></div>
 
 公元325年，君士坦丁大帝号召在拜占庭尼西亚（今土耳其布尔萨省伊兹尼克）召开的基督教大公会议（第一次尼西亚大会会议）。此会议乃基督教历史第一次的欧洲世界性主教会议，确立了一些影响深远的宗教法规和现今普遍基督教会接纳的传统教义，例如圣子与圣父同质而非从属。
@@ -577,7 +577,7 @@ image-sm: /assets/images/three_religions/1.avif
 类似的会议往后又开了几次，例如在公381年的君士坦丁堡公会议中确认了三位一体的教义。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/61.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/61.avif"
   data-desc="三位一体"></div>
 
 公元380年，狄奥多西一世颁布“萨洛尼卡敕令”，从此确立尼西亚基督教为帝国国教。此后基督教迅速在罗马领土范围内传播开来。
@@ -587,7 +587,7 @@ image-sm: /assets/images/three_religions/1.avif
 公元395年，狄奥多西一世死后，罗马分裂成东西两部分，东罗马帝国都城君士坦丁堡，是在希腊古城拜占庭的基础上建立起来的，所以也叫拜占庭帝国。西罗马帝国的都城为罗马。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/62.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/62.avif"></div>
 
 随着时间推移，东西罗马的基督教也因语言和文化产生了一些差异。西罗马以拉丁语为主，东边以希腊语为主。罗马的主教给自己起了个称号叫做教皇，习惯称之为罗马教皇。
 
@@ -606,7 +606,7 @@ image-sm: /assets/images/three_religions/1.avif
 接下来的200年间陆续发起了七次十字军东征。十字军东征从军事上是失败的，1244年，耶路撒冷完全落入土耳其之手。但这次运动也给欧洲带来了新的发展机遇。他们见到了灿烂美好的东方文明，得到了教会和帝国无法提供的一种新的希冀。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/63.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/63.avif"
   data-desc="电影《天国王朝》，2005"></div>
 
 ### 新教产生
@@ -616,7 +616,7 @@ image-sm: /assets/images/three_religions/1.avif
 公元1517年，德国修士马丁路德，原本是个虔诚的天主教徒，认为这种腐败的现象存在一些问题。于是自己研究希腊原文圣经，发表了《九十五条论纲》，提出了对教义不同的理解，总结为因信称义。原来的天主教的教义为因行为称义，就是通过自己做善行，做圣事来对自己救赎，马丁路德则认为只要信上帝信耶稣就可以赎罪了，自然就不认同赎罪券之类的做法。马丁路德的阵营不断扩大，形成自己的群体，被之为Protestant 新教。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/64.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/64.avif"
   data-desc="Martin Luther at the Diet of Worms by Prussia (1877)"></div>
 
 ### 粗粒度区分三教
@@ -638,18 +638,18 @@ image-sm: /assets/images/three_religions/1.avif
 新教：主要分布于北美（主要是美国），北欧，南非等地；
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/65.avif"></div>
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/65.avif"></div>
 
 
 <div class="image-block-in-three">
   <div class="image-block-with-desc" style="flex-grow: 0;flex-shrink: 0;width: calc(30% - 5px)"
-    data-image-src="/assets/images/three_religions/66.avif" data-desc="天主教分布"></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/66.avif" data-desc="天主教分布"></div>
   <div style="width:60px"></div>
   <div class="image-block-with-desc"
-    data-image-src="/assets/images/three_religions/67.avif" data-desc="东正教分布"></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/67.avif" data-desc="东正教分布"></div>
   <div style="width:60px"></div>
   <div class="image-block-with-desc"
-    data-image-src="/assets/images/three_religions/68.avif" data-desc="新教分布"></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/68.avif" data-desc="新教分布"></div>
 </div>
 
 #### 看标志
@@ -657,9 +657,9 @@ image-sm: /assets/images/three_religions/1.avif
 基督教总的来说都使用十字架做为标记，但在东正教中可以看到如下右图所示的标记，特别是在教堂的顶端，可以明显看到对应的标记。
 
 <div class="image-block-in-two"
-  data-image-src1="/assets/images/three_religions/69.avif"
+  data-image-src1="{{ site.baseurl }}/assets/images/three_religions/69.avif"
   data-desc1="通用十字架标记"
-  data-image-src2="/assets/images/three_religions/70.png"
+  data-image-src2="{{ site.baseurl }}/assets/images/three_religions/70.png"
   data-desc2="东正教标记(俄罗斯)"
   data-width="calc(41.5958% - 8.25533px)"></div>
 
@@ -674,29 +674,29 @@ image-sm: /assets/images/three_religions/1.avif
 
 <div class="image-block-in-three">
   <div class="image-block-with-desc" style="flex-grow: 0;flex-shrink: 0;width: calc(40.0617% - 14.4222px);"
-    data-image-src="/assets/images/three_religions/71.avif" data-desc="梵蒂冈圣伯多禄大殿-天主教"></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/71.avif" data-desc="梵蒂冈圣伯多禄大殿-天主教"></div>
   <div style="width:60px"></div>
   <div class="image-block-with-desc" style="flex-grow: 0;flex-shrink: 0;width: calc(24.3286% - 8.7583px);"
-    data-image-src="/assets/images/three_religions/72.avif" data-desc="哈尔滨索菲亚大教堂-东正教"></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/72.avif" data-desc="哈尔滨索菲亚大教堂-东正教"></div>
   <div style="width:60px"></div>
   <div class="image-block-with-desc"
-    data-image-src="/assets/images/three_religions/73.avif" data-desc="新教教堂"></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/73.avif" data-desc="新教教堂"></div>
 </div>
 
 <div class="image-block-in-three">
   <div class="image-block-with-desc" style="flex-grow: 0;flex-shrink: 0;width: calc(34.5671% - 12.4441px)"
-    data-image-src="/assets/images/three_religions/74.avif" ></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/74.avif" ></div>
   <div style="width:60px"></div>
   <div class="image-block-with-desc" style="flex-grow: 0;flex-shrink: 0;width: calc(34.6525% - 12.4749px);"
-    data-image-src="/assets/images/three_religions/75.avif"></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/75.avif"></div>
   <div style="width:60px"></div>
   <div class="image-block-with-desc"
-    data-image-src="/assets/images/three_religions/76.avif" ></div>
+    data-image-src="{{ site.baseurl }}/assets/images/three_religions/76.avif" ></div>
 </div>
 
 #### 细分派系
 
-![图片](/assets/images/three_religions/77.avif)
+![图片]({{ site.baseurl }}/assets/images/three_religions/77.avif)
 
 ## 伊斯兰教
 
@@ -707,7 +707,7 @@ image-sm: /assets/images/three_religions/1.avif
 话说夏甲带着他的儿子离开了迦南之地，他们走到半路的时候非常渴，这时天使出现，变出一口井，这就是如今的麦加圣泉扎姆泉(Zamzam Well)。天使告诉夏甲，要坚持活下去，将孩子带大，你将成为一国之母。以实玛丽的后人就是现在的阿拉伯人。在阿拉伯人中，亚伯拉罕叫易卜拉欣。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/78.avif"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/78.avif"
   data-desc="Grigoriy Ugryumov《Hagar and Ishmael in desert》"></div>
 
 历史中的阿拉伯人也是从两河流域迁徙而来。在阿拉伯半岛上，由于气候环境等因素的影响，分成了南北两支，其中生活在南部的一支，发展出了以农业和贸易为主的定居生活，而在中北部的贝都因人，则以游牧生活为主。他们的信仰也比较繁杂，犹太教、基督教、拜火教都有。
@@ -729,7 +729,7 @@ image-sm: /assets/images/three_religions/1.avif
 公元621年7月27日的夜晚，真主命令天使加百列带著神兽布拉克到麦加迎接先知穆罕默德。穆罕默德遂在加百列的陪伴下，瞬间即乘布拉克赶到了远寺（耶路撒冷）。然后，穆罕默德登上登霄石从耶路撒冷的阿克萨清真寺登上七重天。在这七重天中相继见到了摩西(穆撒)、亚伯拉罕(易卜拉欣)、亚当(阿丹)、耶稣(尔萨)等人，最后见到了真主安拉。所以耶路撒冷也是伊斯兰教除麦加和麦迪娜之后的第三个圣城。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/79.webp"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/79.webp"
   data-desc="夜行登霄"></div>
 
 #### 麦加与麦迪娜
@@ -737,13 +737,13 @@ image-sm: /assets/images/three_religions/1.avif
 公元622年，穆罕默德和他的追随者受到的迫害越来越大，于是穆罕默德离开麦加移居麦迪娜，这一年也为伊斯兰历的开始。在麦迪娜，穆罕穆德的教义深爱欢迎，追随者越来越多。他在伊斯兰教的基础上建立政教合一的宗教公社和穆斯林武装，古兰经既是他们的经书，也是他们的律法。并在此后与麦加的一系列冲突中多次以少胜多，击败麦加的军队。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/80.webp"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/80.webp"
   data-desc="卢特菲·阿卜杜拉《锡耶尔内比》插画，遵照伊斯兰教教规，插图里的穆罕默德总是白纱遮面，这反映出伊斯兰教对偶像崇拜的禁忌"></div>
 
 公元630年，穆罕穆德率领数万穆斯林武装进驻麦加，迫使麦加权贵归顺投降。随后伊斯兰教的影响力不断扩大，逐渐扩散到半岛上的其它部落。穆罕穆德通过圣战的方式，几乎统一了整个阿拉伯半岛，结束了半岛部落割据的局面。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/81.webp"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/81.webp"
   data-desc="圣城麦加"></div>
 
 
@@ -789,7 +789,7 @@ image-sm: /assets/images/three_religions/1.avif
 
 倭马亚王朝在100年的统治期间，向东征服了中亚内陆的广大地区，直到在帕米尔高原遇到大唐的军队才停下脚步。向南攻入印度河流域，征服了印度次大陆西北部的大小诸国。向北与拜占庭多次交战，逼近君士坦丁堡。向西征服北非，并跨海远征西班牙。
 
-![图片](/assets/images/three_religions/82.webp)
+![图片]({{ site.baseurl }}/assets/images/three_religions/82.webp)
 
 ### 阿拔斯王朝
 
@@ -803,7 +803,7 @@ image-sm: /assets/images/three_religions/1.avif
 
 在王朝后期，在朝中任职的突厥禁军把持了军政大权，哈里发就成了他们的傀儡。
 
-![图片](/assets/images/three_religions/83.webp)
+![图片]({{ site.baseurl }}/assets/images/three_religions/83.webp)
 
 ### 法蒂玛王朝以及各其它王朝
 
@@ -836,7 +836,7 @@ image-sm: /assets/images/three_religions/1.avif
 当时英国外交官麦克马洪就找到侯赛因谈判，希望阿拉伯人能起义，与英军里应外合，赶走土耳其人；侯赛因的条件是起义成功后，要将整个阿拉伯半岛划归哈希姆家族统治。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/84.webp"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/84.webp"
   data-desc="麦克马洪"></div>
 
 其实英国对这个条件是不会答应的，于是在措辞上含糊起来，并且将阿拉伯起义的消息放给了奥斯曼，逼着阿拉伯人与自己合作。最终双方在1916年签定了条约：英国承认和保护阿拉伯独立，向侯赛因提供武器弹药，并向侯赛因及其儿子每月提供6万英镑津贴。侯赛因保证利用其全部人力物力发动反土起义。
@@ -844,19 +844,19 @@ image-sm: /assets/images/three_religions/1.avif
 在英国人劳伦斯的帮助下，阿拉伯起义配合英军赶走了奥斯曼土耳其。但战争一结束，大英就翻脸了，当初答应建立一个阿拉伯国家也没说是你哈希姆家族的阿拉伯国家啊，于是转而支持伊本.沙特。在1924年，伊本·沙特征服了汉志并驱逐了哈希姆家族，后续又统一了整个阿拉伯半岛，在1932年9月23日宣告建立沙特阿拉伯王国。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/85.webp"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/85.webp"
   data-desc="伊本·沙特"></div>
 
 侯赛因的儿子阿卜杜拉靠了英国，1921年英国将约旦给了阿卜杜拉，现在的约旦国王是阿卜杜拉二世·本·侯赛因，虽然约旦是穆罕默德的后人，全称也叫约旦哈西姆王国，但他却是逊尼派穆斯林。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/86.webp"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/86.webp"
   data-desc="阿卜杜拉二世"></div>
 
 侯赛因另外一个儿子费塞尔则比较坎坷，他先是攻下了叙利亚大马士革，但在一战后被法国驱逐，1920年底在英国的支持下跑到伊拉克做了国王。1958年，伊拉克发生政变，费塞尔二世及王世成员全部被杀，王朝灭亡，伊拉克共和国成立，后又几经易主，到了萨达姆手里，有了后来的两伊战争和伊拉克战争。
 
 <div class="image-block-with-desc"
-  data-image-src="/assets/images/three_religions/87.webp"
+  data-image-src="{{ site.baseurl }}/assets/images/three_religions/87.webp"
   data-desc="萨达姆"></div>
 
 回头到英国这边，1917年，英国外长贝尔福发表著名的贝尔福宣言，支持犹太人在巴勒斯坦建立一个民族家园(A National Home)。这相当于把当初许诺给阿拉伯人的地区又分割出来一份给到犹太人。更为甚者，一战结束之后，大英又一次翻脸，与法国瓜分了这一片地区。

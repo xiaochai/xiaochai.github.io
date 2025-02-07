@@ -5,8 +5,8 @@ date: 2020-08-12
 categories:
   - Translation
 description: 
-image: /assets/images/traffic_light.jpg
-image-sm: /assets/images/traffic_light.jpg
+image: "{{ site.baseurl }}/assets/images/traffic_light.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/traffic_light.jpg"
 
 ---
 * ignore but need

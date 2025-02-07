@@ -5,8 +5,8 @@ date: 2019-10-11
 categories:
   - Reading
 description: 笔者对于函数式编程纯属完全的门外汉，但一直想窥觑其一隅。故开坑精读《Hashkell函数式编程入门》以求入门，以此笔记为据。以至于此文大量初级知识，博君见笑。
-image: /assets/images/haskell.jpg
-image-sm: /assets/images/haskell.jpg
+image: "{{ site.baseurl }}/assets/images/haskell.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/haskell.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -434,7 +434,7 @@ Prelude> minBound::Char
 
 如下图
 
-![](/assets/images/numtype.jpeg)
+![]({{ site.baseurl }}/assets/images/numtype.jpeg)
 
 
 ```haskell
@@ -782,7 +782,7 @@ infixl 2 ||
 
 ### 半加法器和全加法器的实现
 
-![](/assets/images/halfadd.png)
+![]({{ site.baseurl }}/assets/images/halfadd.png)
 
 ```haskel
 -- 半加法器，即不含有进位的加法器

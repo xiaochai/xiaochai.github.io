@@ -5,8 +5,8 @@ date: 2024-07-19
 categories:
   - Tech
 description: 我们都看过很多的相对论的科普视频，大概了解狭义相对论的结论。但是如果想让我定量地分析这些结论的推导过程，或者从一个实际例子出发求解其中的具体值，我并不能很好地解决。甚至我都有可能直觉性地给出相反的结论。这篇文章梳理了狭义相对论中的几个基本概念和推导过程，基本上涵盖了狭义相对论的所有场景，以及补充了一部分广义相对论的结论，做为备忘录。
-image: /assets/images/theory_of_special_relativity/cover.jpeg
-image-sm: /assets/images/theory_of_special_relativity/cover-sm.jpeg
+image: "{{ site.baseurl }}/assets/images/theory_of_special_relativity/cover.jpeg"
+image-sm: "{{ site.baseurl }}/assets/images/theory_of_special_relativity/cover-sm.jpeg"
 
 ---
 * ignore but need
@@ -14,8 +14,8 @@ image-sm: /assets/images/theory_of_special_relativity/cover-sm.jpeg
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
-<script src="/assets/js/jquery-3.7.1.min.js"></script>
-<script src="/assets/js/image_block.js"></script>
+<script src="{{ site.baseurl }}/assets/js/jquery-3.7.1.min.js"></script>
+<script src="{{ site.baseurl }}/assets/js/image_block.js"></script>
 
 
 
@@ -41,7 +41,7 @@ image-sm: /assets/images/theory_of_special_relativity/cover-sm.jpeg
 
 **结论：运动物体的时间流速$$t'$$相对于静止的物体流速$$t$$更慢，其关系为$$\bbox[lightgreen,4px]{t = {1 \over {\sqrt{1-({v \over c})^2}}}t'}$$，其中$${1 \over {\sqrt{1-({v \over c})^2}}}$$为洛伦兹因子，一般记为$$γ$$；速度越快，时间越慢。**
 
-![](/assets/images/theory_of_special_relativity/time_slow.jpg)
+![]({{ site.baseurl }}/assets/images/theory_of_special_relativity/time_slow.jpg)
 
 假设在一个惯性参考系统中，有一列匀速运动的火车，其速度为$$v$$；
 
@@ -97,7 +97,7 @@ $$t=\sqrt{\frac{c^2}{c^2-v^2}} t'={\frac{1}{\sqrt{1-({\frac{v}{c}})^2}}}t'$$&nbs
 
 为了简化过程，坐标系$$S'$$以速度$$v$$沿$$X$$轴运动；
 
-![](/assets/images/theory_of_special_relativity/lorentz_transformation.jpg)
+![]({{ site.baseurl }}/assets/images/theory_of_special_relativity/lorentz_transformation.jpg)
 
 如图中有一时刻的事件$$P$$，在$$S$$坐标系中坐标为$$P(x,y,z,t)$$，在$$S'$$坐标系中坐标为$$P(x',y',z',t')$$；
 
@@ -450,7 +450,7 @@ $$\bbox[lightgreen,4px]{E=mc^2}$$
 假设一个处于自由落体的车厢，根据等价原则，车厢内相当于一个惯性系。一束激光从车厢的左边射向右边，由于是惯性系，车厢内的人看到激光到达右边相同的位置，但在车厢外的人看来，由于加速度的存在，光线并不是做直线运动，而是曲线，向地心方向弯曲，也就是光线会受引力影响弯曲。
 
 <div style="width:40%" class="image-block-with-desc" 
-  data-image-src="/assets/images/theory_of_special_relativity/bending_of_light_rays.png" ></div>
+  data-image-src="{{ site.baseurl }}/assets/images/theory_of_special_relativity/bending_of_light_rays.png" ></div>
 
 #### 2. 引力红移
 
@@ -465,7 +465,7 @@ $$\bbox[lightgreen,4px]{E=mc^2}$$
 另外一个简单的解释是任何物质包括光线逃离引力场都需要消耗能量，而光的能量$$E=hv$$，$$h$$为普朗克常数，$$E$$减少，则$$v$$减少，即频率降低，也就是发生了红移。
 
 <div style="width:40%" class="image-block-with-desc" 
-  data-image-src="/assets/images/theory_of_special_relativity/gravitational_redshift.png" ></div>
+  data-image-src="{{ site.baseurl }}/assets/images/theory_of_special_relativity/gravitational_redshift.png" ></div>
 
 #### 3. 引力是不平坦时空的结果
 
@@ -473,7 +473,7 @@ $$\bbox[lightgreen,4px]{E=mc^2}$$
 
 在广义相对论中，引力并不是真正的力，与离线心一样，他是一种等效力。在三维空间内看到的引力使光线发生弯曲，正是光线在四维时空中沿测地线运动的结果。
 
-![图片](/assets/images/theory_of_special_relativity/space_curvature.gif)
+![图片]({{ site.baseurl }}/assets/images/theory_of_special_relativity/space_curvature.gif)
 
 #### 4. 引力越大，时间越慢
 

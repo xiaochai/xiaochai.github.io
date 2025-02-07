@@ -5,8 +5,8 @@ date: 2019-11-14
 categories:
   - Tech
 description: Java自JDK 5引入泛型以来，泛型已经体现在我们代码的各个角落。借助看《Java编程思想》的机会，来全方面理清一下对泛型的理解。
-image: /assets/images/java.jpg
-image-sm: /assets/images/java.jpg
+image: "{{ site.baseurl }}/assets/images/java.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/java.jpg"
 ---
 
 Java自JDK 5引入泛型以来，泛型已经体现在我们代码的各个角落。例如我们日常中不断使用的各种容器：
@@ -293,7 +293,7 @@ class GenericHolder<T> {
 ```
 
 
-![一样的字节码](/assets/images/samecode.png)
+![一样的字节码]({{ site.baseurl }}/assets/images/samecode.png)
 
 
 使用类型擦除另外一个原因是使用真实泛型的"Code specialization"实现会有代码膨胀的缺陷，因为当不同类应用于泛型时，都要产生一份字节码或者机器码，而Java的"Code sharing"方式则可以避免这个问题。

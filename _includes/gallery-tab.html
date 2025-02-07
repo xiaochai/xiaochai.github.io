@@ -2,7 +2,7 @@
   <ul class="galleries">
     {% for post in site.categories.Gallery %}
       <li class="gallery">
-	    <a class="gallery__link" href="{{ post.url }}">
+	    <a class="gallery__link" href="{{ post.url | prepend: site.baseurl }}">
           {% for thumb in post.thumbs %}
             <div class="gallery__img">
 				<figure class="absolute-bg" style="background-image: url('{{ thumb }}');"></figure>

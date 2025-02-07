@@ -6,8 +6,8 @@ date: 2018-04-29
 categories:
   - Tech
 description: 
-image: /assets/images/grpc.svg
-image-sm: /assets/images/grpc.svg
+image: "{{ site.baseurl }}/assets/images/grpc.svg"
+image-sm: "{{ site.baseurl }}/assets/images/grpc.svg"
 ---
 
 作为一篇gRPC调研的总结，本篇主要介绍了gRPC在go语言上的使用方式，并着重记录了如何使用gRPC创建一个简单的聊天程序。
@@ -609,7 +609,7 @@ func input() {
 ### 运行效果
 
 以下为开了一个server和三个client的运行效果：
-![grpc_chat](/assets/images/sina/37c5ebcb76b00b748399cf4c4a93b0d9.jpg)
+![grpc_chat]({{ site.baseurl }}/assets/images/sina/37c5ebcb76b00b748399cf4c4a93b0d9.jpg)
 
 ### 添加证书校验与身份校验
 

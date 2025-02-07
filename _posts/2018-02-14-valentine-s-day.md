@@ -5,8 +5,8 @@ date: 2018-02-14
 categories:
   - Life
 description: 
-image: /assets/images/sina/6c9d83a98e35dd97324740c87a9de4af.jpg
-image-sm: /assets/images/sina/0c7cb261c4e3f6c3d5038aa699e4f84c.jpg
+image: "{{ site.baseurl }}/assets/images/sina/6c9d83a98e35dd97324740c87a9de4af.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/0c7cb261c4e3f6c3d5038aa699e4f84c.jpg"
 ---
 
 如果 你愿意
@@ -54,6 +54,6 @@ image-sm: /assets/images/sina/0c7cb261c4e3f6c3d5038aa699e4f84c.jpg
 
 &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- - - 小差小差
 
-![push1](/assets/images/sina/f11654b6923257b3ed8b09c6b1496afd.jpg)
-![push2](/assets/images/sina/3564a5d3a2348aa3e5e8e6570114a92e.jpg)
+![push1]({{ site.baseurl }}/assets/images/sina/f11654b6923257b3ed8b09c6b1496afd.jpg)
+![push2]({{ site.baseurl }}/assets/images/sina/3564a5d3a2348aa3e5e8e6570114a92e.jpg)
 

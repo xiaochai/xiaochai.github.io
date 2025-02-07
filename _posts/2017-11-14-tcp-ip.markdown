@@ -5,8 +5,8 @@ date: 2017-11-14
 categories:
   - Tech
 description: 
-image: /assets/images/sina/8a80771af721ce4ac331b71cea0d6c03.jpg
-image-sm: /assets/images/sina/8a80771af721ce4ac331b71cea0d6c03.jpg
+image: "{{ site.baseurl }}/assets/images/sina/8a80771af721ce4ac331b71cea0d6c03.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/8a80771af721ce4ac331b71cea0d6c03.jpg"
 ---
 谈到TCP连接，三次握手这个名词都会在大多数人的脑海里浮现。
 
@@ -50,7 +50,7 @@ TCP将应用层交下来的数据看成一连串无结构的字节流，应用�
 
 以下是TCP报文段首部格式
 
-![TCP报文段首部格式](/assets/images/sina/c2947c9a7bdd0fc382f47bb80a5cdcc5.jpg)
+![TCP报文段首部格式]({{ site.baseurl }}/assets/images/sina/c2947c9a7bdd0fc382f47bb80a5cdcc5.jpg)
 
 TCP首部的前20个字节是固定的，后续可以跟4N个可选的选项数据
 
@@ -117,7 +117,7 @@ TCP首部的前20个字节是固定的，后续可以跟4N个可选的选项数�
 
 ### TCP的三次握手和四次挥手
 
-![TCP三次握手](/assets/images/sina/8a80771af721ce4ac331b71cea0d6c03.jpg)
+![TCP三次握手]({{ site.baseurl }}/assets/images/sina/8a80771af721ce4ac331b71cea0d6c03.jpg)
 
 #### 连接的建立（三次握手）
 
@@ -159,8 +159,8 @@ TIME-WAIT的时间一般是4分钟（但在linux上实际测试为1分钟），�
 
 ### Wireshark抓包界面
 
-![TCP层数据汇总](/assets/images/sina/96859487163dd8371fa6d3feb4ce9b53.jpg)
-![整个连接过程](/assets/images/sina/c33db7dd2b49485053a94cea497b8cf4.jpg)
+![TCP层数据汇总]({{ site.baseurl }}/assets/images/sina/96859487163dd8371fa6d3feb4ce9b53.jpg)
+![整个连接过程]({{ site.baseurl }}/assets/images/sina/c33db7dd2b49485053a94cea497b8cf4.jpg)
 
 
 #### 参考

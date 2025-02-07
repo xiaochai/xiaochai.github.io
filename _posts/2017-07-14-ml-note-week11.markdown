@@ -5,8 +5,8 @@ date: 2017-07-14
 categories:
   - Tech
 description: 
-image: /assets/images/sina/d48bc61248fb6b6c9bbb3c21e5ea4c07.jpg
-image-sm: /assets/images/sina/d48bc61248fb6b6c9bbb3c21e5ea4c07.jpg
+image: "{{ site.baseurl }}/assets/images/sina/d48bc61248fb6b6c9bbb3c21e5ea4c07.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/d48bc61248fb6b6c9bbb3c21e5ea4c07.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -51,15 +51,15 @@ image-sm: /assets/images/sina/d48bc61248fb6b6c9bbb3c21e5ea4c07.jpg
 
 > 与之前的行人检测类似，使用一堆有文字和没有文字的小矩形图片样本训练出模型<br/>
 
-![](/assets/images/sina/2574439e7df1f7e3568ed4449779f64b.jpg)
+![]({{ site.baseurl }}/assets/images/sina/2574439e7df1f7e3568ed4449779f64b.jpg)
 
 > 使用滑动窗口，检测对应矩形是否含有文字，使用不同的灰度区块来表示含有文字的概率，如下图<br/>
 
-![](/assets/images/sina/6678398c4aad1ad06ba115bb1e7f2c8f.jpg)
+![]({{ site.baseurl }}/assets/images/sina/6678398c4aad1ad06ba115bb1e7f2c8f.jpg)
 
 > 展开处理（expansion operator），对于某一个白色的点，如果他的附近有白点，那么就把附近的点变成白色<br/>
 
-![](/assets/images/sina/936a72654e55d8547e89bf2df9f193c1.jpg)
+![]({{ site.baseurl }}/assets/images/sina/936a72654e55d8547e89bf2df9f193c1.jpg)
 
 > 找出大块的白色区域，即为文字区域
 
@@ -67,7 +67,7 @@ image-sm: /assets/images/sina/d48bc61248fb6b6c9bbb3c21e5ea4c07.jpg
 
 > 使用那些图片中间为字母分隔的样本做为正样本，那些空白、或者只有一个字符的图片做为负样本，则使用这些样本训练的模型，可以正确分隔字符
 
-![](/assets/images/sina/6a9d93df6b09d312ef742461b84491ee.jpg)
+![]({{ site.baseurl }}/assets/images/sina/6a9d93df6b09d312ef742461b84491ee.jpg)
 
 
 #### 人工合成数据（Artificial Data Synthesis）

@@ -5,8 +5,8 @@ date: 2024-07-07
 categories:
   - Reading
 description: 房龙的《人类的故事》从史前文明一直讲到了一战开始，虽然重点着墨于欧洲的历史，但也兼顾了与之相关联的地区以及中国与印度相关的历史。此文绝不是罗列历史事件，也不是讲述人物传记，而是将众多错综复杂的事件通过一系列承上启下的文笔，以作者自己认为合理的简繁安排，将人类的故事呈现给读者。所以对于没有基本的了解的读者，可能需要诸多外部的资料参考去理解作者想要表达的意思或者当时的历史事件，但如果对于了解了这块史实的读者又比较难从中获取更多有意义的知识。这可以说是本书比较尴尬的定位。但对于我来说，通过本书的阅读以及外部资料的参考，使我建立了相对比较完整的世界历史观，可谓是本书莫大的功劳。
-image: /assets/images/the_story_of_mankind/cover.jpg
-image-sm: /assets/images/the_story_of_mankind/cover.jpg
+image: "{{ site.baseurl }}/assets/images/the_story_of_mankind/cover.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/the_story_of_mankind/cover.jpg"
 
 ---
 <style>
@@ -25,8 +25,8 @@ h3,h4{
 
 </style>
 
-<script src="/assets/js/jquery-3.7.1.min.js"></script>
-<script src="/assets/js/image_block.js"></script>
+<script src="{{ site.baseurl }}/assets/js/jquery-3.7.1.min.js"></script>
+<script src="{{ site.baseurl }}/assets/js/image_block.js"></script>
 
 * ignore but need
 {:toc}
@@ -34,13 +34,13 @@ h3,h4{
 ## 史前人类
 
 <div class="image-block-with-desc"  style="width:60%"
-  data-image-src="/assets/images/the_story_of_mankind/prehistoric_human.png" ></div>
+  data-image-src="{{ site.baseurl }}/assets/images/the_story_of_mankind/prehistoric_human.png" ></div>
 
 
 ## 尼罗河流域：埃及人
 
 <div style="width:60%" class="image-block-with-desc" 
-  data-image-src="/assets/images/the_story_of_mankind/egypt.jpg" ></div>
+  data-image-src="{{ site.baseurl }}/assets/images/the_story_of_mankind/egypt.jpg" ></div>
 
 ### 1. 精通灌溉
 
@@ -68,8 +68,8 @@ h3,h4{
 此文字是象形文字，但实际已经超过这一使用范畴，变成一种表音文字。
 
 <div class="image-block-in-two" 
-  data-image-src1="/assets/images/the_story_of_mankind/rossetta_stone.jpg" 
-  data-image-src2="/assets/images/the_story_of_mankind/egypt_word.jpg" 
+  data-image-src1="{{ site.baseurl }}/assets/images/the_story_of_mankind/rossetta_stone.jpg" 
+  data-image-src2="{{ site.baseurl }}/assets/images/the_story_of_mankind/egypt_word.jpg" 
   data-width="calc(33.5388% - 5.36621px)"></div>
 
 ### 5. 金字塔
@@ -81,7 +81,7 @@ h3,h4{
 - 产生在沙漠上建立的<span class="text-highlight-background">金字塔</span>，目前存在的最大的金字塔为公元前3000年的<span class="text-highlight-background">胡夫金字塔</span>。
 
 <div style="width:60%" class="image-block-with-desc" 
-  data-image-src="/assets/images/the_story_of_mankind/pyramid.jpg" ></div>
+  data-image-src="{{ site.baseurl }}/assets/images/the_story_of_mankind/pyramid.jpg" ></div>
 
 
 ### 6. 王朝兴衰起落
@@ -97,7 +97,7 @@ h3,h4{
 - 公元前 39年，罗马人登上埃及，<span class="text-highlight-background">凯撒大帝</span>和<span class="text-highlight-background">安东尼将军</span>都被<span class="text-highlight-background">克里奥佩特拉</span>（埃及艳后）征服，使得埃及得以苟延残喘；
 - 公元前 30年，<span class="text-highlight-background">奥古斯都大帝（屋大维）</span>击溃女王军队，女王服毒自尽，埃及成为罗马的行省；
 
-![图片](/assets/images/the_story_of_mankind/cleopatra.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/cleopatra.png)
 
 ## 两河流域/美索不达米亚
 
@@ -108,13 +108,13 @@ h3,h4{
 <span class="text-highlight-background">美索不达米亚</span>平原，《<span class="text-highlight-background">圣经.旧约</span>》中的天堂。两河所处位置形成了肥沃的土地，各民族间不断争夺，剩下的都是强悍民族，既而发展出了伟大文明。
 
 <div style="width:60%" class="image-block-with-desc" 
-  data-image-src="/assets/images/the_story_of_mankind/mesopotamia.jpg" ></div>
+  data-image-src="{{ site.baseurl }}/assets/images/the_story_of_mankind/mesopotamia.jpg" ></div>
 
 ### 2. 楔形文字(最早的象形文字)
 
 <span class="text-highlight-background">苏美尔人</span>创建，由象形文字逐渐发展成为表音文字，公元前3000多年前开始使用，公元前 2600年使用增多，公元前500年成为西亚通用文字，公元前1世纪失传，19世纪被陆续破译。
 
-![图片](/assets/images/the_story_of_mankind/cuneiform.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/cuneiform.png)
 
 ### 3. 两河流域历史
 
@@ -127,8 +127,8 @@ h3,h4{
 - 公元前 7世纪末，<span class="text-highlight-background">迦勒底</span>人（另一支闪族人）重建巴比伦（<span class="text-highlight-background">新巴比伦</span>），再次成为最显赫城市；其著名国王<span class="text-highlight-background">尼布甲尼撒</span>建立了<span class="text-highlight-background">巴别通天塔</span>和<span class="text-highlight-background">空中花园</span>（七大奇迹之一）；
 
 <div class="image-block-in-two" 
-  data-image-src1="/assets/images/the_story_of_mankind/hanging_garden.jpg" 
-  data-image-src2="/assets/images/the_story_of_mankind/babel.png" 
+  data-image-src1="{{ site.baseurl }}/assets/images/the_story_of_mankind/hanging_garden.jpg" 
+  data-image-src2="{{ site.baseurl }}/assets/images/the_story_of_mankind/babel.png" 
   data-width="calc(66.3952% - 10.6232px)"></div>
 
 
@@ -175,8 +175,8 @@ h3,h4{
 
 
   <div class="image-block-in-two" 
-  data-image-src1="/assets/images/the_story_of_mankind/europe_africa.jpg" 
-  data-image-src2="/assets/images/the_story_of_mankind/persian_empire.png" 
+  data-image-src1="{{ site.baseurl }}/assets/images/the_story_of_mankind/europe_africa.jpg" 
+  data-image-src2="{{ site.baseurl }}/assets/images/the_story_of_mankind/persian_empire.png" 
   data-width="calc(45.0024% - 7.20039px)"></div>
 
 ## 爱琴海与古希腊
@@ -188,7 +188,7 @@ h3,h4{
 - 再后来遭到了欧洲北部野蛮民族的攻击而被摧毁。
 
 <div style="width:70%" class="image-block-with-desc" 
-  data-image-src="/assets/images/the_story_of_mankind/aegean_sea.jpg" ></div>
+  data-image-src="{{ site.baseurl }}/assets/images/the_story_of_mankind/aegean_sea.jpg" ></div>
 
 ### 2. 古希腊人历史
 
@@ -209,7 +209,7 @@ h3,h4{
 - 古希腊人在文明的方方面面都取得了惊人的成就，包括政治体制、文学成就、文艺理念；
 - 后来公元前 4世纪，马其顿的亚历山大征服了整个文明世界，并将古希腊精神传播给所有他统治子民；但当古希腊自治的城邦失却了独立自主的地位，沦为一个强大帝国的政治附庸时，古老的希腊精神也就宣告死亡了。
 
-![图片](/assets/images/the_story_of_mankind/ancient_greek.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/ancient_greek.png)
 
 ### 4. 古希腊的自治
 
@@ -250,7 +250,7 @@ h3,h4{
   - 公元前 479年斯巴达统帅的<span class="text-highlight-background">伯罗奔尼撒半岛联军</span>在<span class="text-highlight-background">普拉提亚</span>与波斯会战，将波斯人打得溃不成军，史称<span class="text-highlight-background">普拉提亚大捷</span>，与此同时雅典海军也在小亚细亚附近的<span class="text-highlight-background">米卡尔角（米卡尔战役）</span>中摧毁了波斯舰队的残部；
 - 至此欧洲和亚洲之间的第一次争斗就这样结束了，雅典人赢得了荣耀，斯巴达人也因其骁勇善战而声名远播。
 
-![图片](/assets/images/the_story_of_mankind/greco_persian_wars.jpg)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/greco_persian_wars.jpg)
 
 ### 8. 雅典和斯巴达
 
@@ -270,7 +270,7 @@ h3,h4{
 - 在他死后，帝国的将军们开始瓜分国家，但这些人也都在实现着先主的伟大梦想；
 - 这种各自独立的状态保持了些许年，直到罗马人一路席卷和吞并了西亚和埃及。
 
-![图片](/assets/images/the_story_of_mankind/alexander_s_empire.jpg)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/alexander_s_empire.jpg)
 
 ## 罗马
 
@@ -310,18 +310,18 @@ h3,h4{
 - 第二次布匿战争后，迦太基在军事上虽无力再与罗马竞争，但其商业发展迅速，物质财富迅速增加，引起了罗马的妒忌；罗马唯恐迦太基复兴，公元前149年，罗马进犯迦太基，<span class="text-highlight-background">第三次布匿战争</span>爆发；
 - 前146年，迦太基力战三年之后，终于忍不住饥饿而缴械投降，罗马人将迦太基人贩为奴隶，火烧城市重要设施，将迦太基城夷为焦土；至此迦太基淡出历史舞台。
 
-![图片](/assets/images/the_story_of_mankind/punic_wars.jpg)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/punic_wars.jpg)
 
 ### 4. 罗马的崛起
 
 - 作者认为罗马的崛起是出于罗马人的务实，再加上环境驱使，使得对外敌不断入侵时会毫不犹豫地奋起抗击，逐步发展成地中海霸主；而非罗马人的好战或者是通过周密详尽的计划炮制出来的；
 - 叙利亚和马其顿是亚历山大强大帝国的两个残留部分，当时他们正筹划瓜分尼罗河谷，埃及国王向罗马求救；前197年，在希腊中北部<span class="text-highlight-background">塞萨利(色萨利)</span>的<span class="text-highlight-background">基诺斯山</span>，罗马军队击垮了马其顿的步兵方阵；随后罗马人进军<span class="text-highlight-background">阿提卡</span>，宣称要把希腊人从马其顿严厉追害下彻底解救出来；他们放火烧毁了<span class="text-highlight-background">科林斯城</span>以对其它希腊城邦的警示，并把希腊做为一个行省，对其派遣总督，至此，马其顿和希腊就成了罗马东陲的巨大屏障；
 
-![图片](/assets/images/the_story_of_mankind/macedonia.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/macedonia.png)
 
 - 前面说到汉尼拔在<span class="text-highlight-background">第二次布匿战争</span>失败后就流亡于东方，后来成为<span class="text-highlight-background">达达尼乐海峡(黑海海峡南段)</span>对岸叙利亚王国(<span class="text-highlight-background">塞琉古帝国</span>)国王的座上客，他极力劝说攻入罗马城，当时国王<span class="text-highlight-background">安条克三世</span>心动了；前190年<span class="text-highlight-background">小<span class="text-highlight-background">西庇阿</span></span>在马格尼西亚战役大败叙利亚军队，与罗马签订了和约，不久之后<span class="text-highlight-background">安条克三世</span>被刺杀，小亚细亚也成为罗马的附属国家。
 
-![图片](/assets/images/the_story_of_mankind/rome.jpg)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/rome.jpg)
 
 ### 5. 罗马帝国
 
@@ -335,14 +335,14 @@ h3,h4{
 - 前62年，苏拉的亲密战友<span class="text-highlight-background">庞培将军</span>带领罗马军队东征胜利凯旋，这次东征再次讨伐了<span class="text-highlight-background">米特里达斯(<span class="text-highlight-background">帕提亚</span>)</span>，在叙利亚重新树立罗马的威望，他攻克了耶路撒冷，横扫整个西亚地区；
 - 前60年，同<span class="text-highlight-background">尤里乌斯.凯撒</span>和克拉苏组成了三人小组共同管理罗马，称为<span class="text-highlight-background">前三头同盟；</span>克拉苏很快在随军远征<span class="text-highlight-background">帕提亚</span>(伊朗古代奴隶制王国，也称安息帝国)时战死；克拉苏的死拆散了凯撒与庞培的同盟；
 
-![图片](/assets/images/the_story_of_mankind/empire.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/empire.png)
 
 - 凯撒野心勃勃，越过了阿尔卑斯山，征服了现在的法国<span class="text-highlight-background">(高卢)</span>，又在莱茵河上架桥打击了<span class="text-highlight-background">条顿人(古日耳曼人</span>一分支)，后因国内事态紧急和高卢起义而放弃了打下英格兰；国内传来情报，庞培已摇身一变成终身<span class="text-highlight-background">独裁官</span>(前52年)，并通过了两项针对凯撒的法案，削弱其权力；
 - 凯撒只带着一个精锐团渡过<span class="text-highlight-background">卢比孔河</span>(crossing the rubicon，引申为破釜沉舟的意思)，挥军直逼罗马；在路上受到了意大利人的热烈欢迎，并有许多部队投入了凯撒的麾下，就这样，他没费一兵一卒就杀进了罗马城；
 - 此时庞培已经往希腊逃窜，凯撒一路追击，在<span class="text-highlight-background">法萨鲁斯</span>歼灭了庞培的护卫军(前48年8月9日，<span class="text-highlight-background">法萨卢斯战役</span>)；庞培想逃亡埃及避难，但在他刚一上岸就被年轻的埃及国王<span class="text-highlight-background">托勒密十三世</span>(他的姐姐也是妻子是埃及艳后)的手下杀死了；
 - 几天后凯撒也追至埃及，但遭到了埃及士兵和庞培残部的联合袭击，好在凯撒成功烧毁了埃及人的战舰，但同时也把海边的著名文化建筑<span class="text-highlight-background">亚历山大图书馆</span>烧为废墟(<span class="text-highlight-background">亚历山大港战役</span>)；随后凯撒把埃及军队赶入尼罗河，托勒密也随之被淹死；埃及艳后执掌新的埃及政权；
 
-![图片](/assets/images/the_story_of_mankind/the_library_of_alexander.jpg)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/the_library_of_alexander.jpg)
 
 - 随后北方的<span class="text-highlight-background">博斯普鲁斯</span>王国的<span class="text-highlight-background">法尔纳凯斯</span>准备率军南下进攻罗马，凯撒率领大军花了五昼夜将其击败，留下了旷世名言：<span class="text-highlight-background">我来了，我看见了，我征服了(Veni, vidi, vici)</span>。此战称为<span class="text-highlight-background">泽拉战役</span>（前47年）；
 - 随后凯撒回到埃及，爱上了埃及艳后，带他一起返回罗马 ；他向元老院邀功，被封为为期十年的<span class="text-highlight-background">独裁官</span>；
@@ -359,7 +359,7 @@ h3,h4{
 - 西罗马帝国遭受了一系列外族人的入侵，建立了各个短暂的王朝；在公元476年，罗马雇佣兵领袖日耳曼人<span class="text-highlight-background">奥多亚克</span>废黜西罗马末代皇帝罗慕路斯·<span class="text-highlight-background">奥古斯都</span>，西罗马帝国覆灭；随后进入黑暗的中世纪；
 - 而东罗马帝国则延续了千年，但其文化往亚洲方向发展，希腊语代替罗马语；1204年，拜占廷帝国的首都君士坦丁堡曾被第四次十字军东征攻陷，直到1261年收复；1453年5月29日，<span class="text-highlight-background">奥斯曼帝国</span>苏丹穆罕默德二世率军攻入君士坦丁堡（今为<span class="text-highlight-background">伊斯坦布尔</span>），拜占廷帝国正式灭亡。
 
-![图片](/assets/images/the_story_of_mankind/the_devision_of_rome_empire.jpg)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/the_devision_of_rome_empire.jpg)
 
 ## 教会的崛起
 
@@ -387,7 +387,7 @@ h3,h4{
 - 西欧之外的东罗马与此不同，君士坦丁的皇帝既是政治领袖又也是教会领袖；1453年，土耳其人推翻东罗马帝国，将君士坦丁改名为<span class="text-highlight-background">伊斯坦布尔</span>；东罗马的末代皇帝<span class="text-highlight-background">帕里奥罗格</span>的兄弟的女儿<span class="text-highlight-background">佐萼</span>嫁给了俄罗斯的<span class="text-highlight-background">伊凡三世</span>，这使得莫斯科的大公继承了君士坦丁堡的血脉，成了沙皇，享有罗马皇帝的至高威严。
 
 <div class="image-block-with-desc" 
-  data-image-src="/assets/images/the_story_of_mankind/religion.png" 
+  data-image-src="{{ site.baseurl }}/assets/images/the_story_of_mankind/religion.png" 
   data-desc="基督教各分支分布"></div>
 
 ### 3. 伊斯兰教
@@ -469,7 +469,7 @@ h3,h4{
 - 滥用王权的<span class="text-highlight-background">英格兰摄政王</span>，被底下的诸侯囚禁起来，1215年6月15日，签定了《<span class="text-highlight-background">大宪章</span>》，重新阐明了国王的责任和诸侯的权力，但还未关注人民的权利；后来<span class="text-highlight-background">亨利三世</span>由于其伯父在十这军东征时使英国欠下大笔债务，只能找到城市中的代表借钱，这些商人们第一次出现在皇家的会议上，虽然只是以财务专家的角色；不过渐渐地，平民代表们越来越多地出现在各种决定事务的议会上参与讨论；到了1649年，英国人民处决了<span class="text-highlight-background">国王<span class="text-highlight-background">查理一世</span></span>，他的死是英国历史上的一个重大转折；自此之后，英国君主再也没能获得之前那样强大的权力，议会逐渐成为了英国的权力中心。
 
 
-![图片](/assets/images/the_story_of_mankind/autonomy.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/autonomy.png)
 
 ### 8. 中世纪的世界观
 
@@ -548,11 +548,11 @@ h3,h4{
 - 从此西班牙和葡萄牙开始致力于开发与<span class="text-highlight-background">西印度</span>群岛和美洲之间的贸易，以1494年的托德西亚斯条约划定的西经五十度为界，葡萄牙享有东部的世界，包括印度群岛和非洲各地，西班牙享有西部的世界，包括南美大陆；这种情况直到17~18世纪，崛起的英国和荷兰无视教皇的旨意，凭借实力夺取了这些殖民地。
 
 <div class="image-block-with-desc"  style="width:100%"
-  data-image-src="/assets/images/the_story_of_mankind/g_map.png" 
+  data-image-src="{{ site.baseurl }}/assets/images/the_story_of_mankind/g_map.png" 
   data-desc="https://www.google.com/maps/d/u/0/edit?mid=1Oc5lhqsl1erFmkeaGM1Nm1rY5w7Ddfo&ll=-11.333258903927483%2C0&z=3"></div>
 
-![图片](/assets/images/the_story_of_mankind/voyage1.png)
-![图片](/assets/images/the_story_of_mankind/voyage2.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/voyage1.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/voyage2.png)
 
 ## 佛陀与孔子
 
@@ -638,7 +638,7 @@ h3,h4{
   - 威廉一生都在为和法王路易的战争而忙碌，英国政府的管理和重要的事务通常是由内阁进行处理；
 - 1702年威廉去世，他的小姨子<span class="text-highlight-background">安娜(安妮)</span>继位，之后是<span class="text-highlight-background">乔治一世</span>；<span class="text-highlight-background">乔治一世</span>非常粗俗，将所有的事务交由内阁；<span class="text-highlight-background">乔治三世</span>时试图重掌权利，但已不可能，就这样在18世纪初期，英国就成了<span class="text-highlight-background">代议制政府</span>，由责任内阁真正管理国家事务；
 
-![图片](/assets/images/the_story_of_mankind/family_tree.png)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/family_tree.png)
 
 ### 2. 法国（势力均衡）
 
@@ -689,7 +689,7 @@ h3,h4{
 
 ### 6. 普鲁士
 
-![图片](/assets/images/the_story_of_mankind/prussia.jpg)
+![图片]({{ site.baseurl }}/assets/images/the_story_of_mankind/prussia.jpg)
 
 - 9世纪，查理曼大帝将地中海沿岸的文明推到了西北欧，并逐步向东移动；为了抵御野蛮部落的袭击，在东部边境建立了<span class="text-highlight-background">勃兰登堡</span>；
 - 12世纪，<span class="text-highlight-background">霍亨索伦</span>家族中一名为腓特烈的人，凭借一桩婚姻登上了<span class="text-highlight-background">勃兰登堡</span>总督一职。此后不断扩充家族势力。15世纪，<span class="text-highlight-background">霍亨索伦</span>家族终于成为了<span class="text-highlight-background">选帝侯</span>；宗教改革期间支持新政；17世纪，此家族已经成为北德意志最强势的王公之一；

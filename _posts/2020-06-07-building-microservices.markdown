@@ -5,8 +5,8 @@ date: 2020-06-07
 categories:
   - Reading
 description: 第一遍读本书是在我自己状态不太好的一个时间点，很庆幸从书中学到很多东西，可以说系统化地将微服务相关的内容做了一个有条理的组织，把整个知识体系建立起来了。刚巧又碰到了找工作的契机，就又从头读了一遍把知识巩固了一下，把对应的关键点都记录在此笔记中，以供后续回看。在此基础上建立的思考，结合实践中遇到的问题和处理方式，才真正理解了理论的重要性，包括此次面试中也吃了不少理论知识匮乏的亏。所以对于自己定的方向（也与此次找工作的结果一致），本书会是一系列学习的开篇，后续会读取更多类似的理论书籍来丰富自己。
-image: /assets/images/microservices.jpg
-image-sm: /assets/images/microservices.jpg
+image: "{{ site.baseurl }}/assets/images/microservices.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/microservices.jpg"
 ---
 
 ## 1. 微服务总述
@@ -640,7 +640,7 @@ Netflix的经验：Netflix非常强调客户端的使用，以保证系统的可
 #### API组合
 
 让用户界面直接与微服务交互，一个页面可能组合多个接口的返回值并做呈现。
-![api_combine.jpg](/assets/images/api_combine.jpg)
+![api_combine.jpg]({{ site.baseurl }}/assets/images/api_combine.jpg)
  
 
 这种方式的问题是很难为不同的设备定制不同的响应，可以通过让微服务支持客户指定返回字段来解决。
@@ -652,7 +652,7 @@ Netflix的经验：Netflix非常强调客户端的使用，以保证系统的可
 #### UI片段的组合
 
 另外一种方式是服务端接口直接返回UI片段，这样前台只要直接嵌入这些片段即可。
-![ui_combine.jpg](/assets/images/ui_combine.jpg)
+![ui_combine.jpg]({{ site.baseurl }}/assets/images/ui_combine.jpg)
 
 这种方式的优点是服务团队同时可以维护这些UI片段，允许我们快速完成修改。
 
@@ -668,13 +668,13 @@ Netflix的经验：Netflix非常强调客户端的使用，以保证系统的可
 
 添加API入口层，对后端服务进行编排，为不同设备订制不同的内容。但这有可能导致这一层包含太多逻辑，导致难以维护。
 
-![bff](/assets/images/bff.jpg)
+![bff]({{ site.baseurl }}/assets/images/bff.jpg)
 
 
 另一种做法是一个API入口只为一个应用或者用户界面服务，这种模式有时也叫作BFF（Backends For Frontends，为前端服务的后端）。它允许团队在专注于给定UI的同时，也会处理与之相关的服务端组件。
 
 
-![bff2](/assets/images/bff2.jpg)
+![bff2]({{ site.baseurl }}/assets/images/bff2.jpg)
 
 与任何一种聚合层类似，使用这种方法的风险在于包含不该包含的逻辑。业务逻辑应该处在服务中，而不应该泄露到这一层。这些BFF应该仅仅包含与实现某种特定的用户体验相关的逻辑。
 
@@ -884,7 +884,7 @@ CD的各个阶段构建物会被部署到不同的环境，例如开发环境、
 
 #### 6.11.1 传统的虚拟化技术
 
-![vir](/assets/images/vir.jpeg)
+![vir]({{ site.baseurl }}/assets/images/vir.jpeg)
 
 如上图，虚拟化技术分成标准类型2虚拟化和轻量级容器技术这两种技术（类型1虚拟化指的是只能运行在裸机之上，而不能运行在操作系统之上的技术）。像AWS、VMWare、VSphere、Xen和KVM都属于左边这种类型。
 
@@ -977,7 +977,7 @@ deploy artifact=catalog enviroment=ci version=b456
 
 进行端到端测试需要部署多个服务。这就需要考虑两个问题：1. 其它依赖的服务使用哪个版本呢？如果使用生产环境版本，那其它服务也有新版本准备上线呢？2. 这几个服务都进行端到端测试时，会有很多重合的测试用例，浪费资源。
 
-![](/assets/images/ui_test2.jpg)
+![]({{ site.baseurl }}/assets/images/ui_test2.jpg)
 
 如上图，可以让多个流水线扇入（fan in）到一个独立的端到端测试阶段（stage）的方式来解决这个问题。(7.4微妙的端到端测试)
 
@@ -1214,7 +1214,7 @@ SAML和OpenID Connect是两个重要的解决方案。SAML是一个基于SOAP的
 
 为了避免所有服务都处理如何重定向到身份提供者以及共享代码库造成的耦合，使用一层单点登录网关来专门解决处理身份验证重定向的问题，并将处理完成的信息通过诸如HTTP头的方式传到后端服务当中（可以使用Shibboleth工具）。
 
-![](/assets/images/sso.jpg)
+![]({{ site.baseurl }}/assets/images/sso.jpg)
 
 这种方式还需要注意在排查问题以及类生产环境搭建上造成的困难，需要提供一些工具简化这些工作。另外在安全方面虽然网关可以集成大量的安全措施，但是需要从网络边界，到子网，到防火墙，到主机，到操作系统，再到底层硬件等各方面的深度防御，防止网关出现问题后所造成的影响。
 
@@ -1272,7 +1272,7 @@ HTTP基本身份验证时用户名和密码是放在HTTP头中的，但这并不
 
 ### 9.5 一个示例
 
-![](/assets/images/sec_eg.jpg)
+![]({{ site.baseurl }}/assets/images/sec_eg.jpg)
 
 在这个例子中客户会通过浏览器在我们网站上购物。对于无需安全保护的内容，可以使用HTTP以保证缓存和性能，而对于有安全需要的，登录后才能访问所有内容，都使用HTTPS进行传输。注意不能在同一域名下混用HTTPS和HTTP，否则对于Cookie中的内容就可以在HTTP中被中间人劫持，相当于泄漏了HTTPS的内容。
 
@@ -1383,7 +1383,7 @@ Netflix从一开始，就确保其本身是由多个小而独立的团队组成�
 
 ### 10.10 案例研究：RealEstate.com.au
 
-![rea](/assets/images/rea.jpg)
+![rea]({{ site.baseurl }}/assets/images/rea.jpg)
 
 REA的核心业务是房地产，并拥有多条业务线（本土业务以及海外业务等）。
 
@@ -1584,7 +1584,7 @@ DNS实现容易，但也有缺点：一般在网络的各个环节都有DNS的�
 
 ### 12.1 微服务的原则
 
-![principle.jpg](/assets/images/principle.jpeg)
+![principle.jpg]({{ site.baseurl }}/assets/images/principle.jpeg)
 
 让我们回顾一下微服务的原则，如上图。你可以选择全部采用这些原则，或者定制采用一些在自己的组织中有意义的部分。但请注意，组合使用这些原则的价值：整体使用的价值要大于部分使用之和。所以，如果决定要舍弃其中一个原则，请确保你明白其带来的损失。
 
@@ -1668,7 +1668,7 @@ BFF模式，类似与微博
 
 DDD随着微服务的流行又重新回到了大家的视野，他是将整个需求分成底层的各个专有领域，并通过应用层将底层的这些领域专用服务整合起来提供给最上层用户层使用。它其实对某一专项业务的高度抽象，使其成为一个微服务，提供给上层应用层使用。
 
-![ddd_layer](/assets/images/ddd_layer.png)
+![ddd_layer]({{ site.baseurl }}/assets/images/ddd_layer.png)
 
 上图来源于[此](https://www.jianshu.com/p/b6ec06d6b594)
 
@@ -1683,7 +1683,7 @@ DDD随着微服务的流行又重新回到了大家的视野，他是将整个�
 
 以下是阿里的中台图，来源于[此](https://www.21cto.com/article/2390)
 
-![阿里中台](/assets/images/ali_zhongtai.jpg)
+![阿里中台]({{ site.baseurl }}/assets/images/ali_zhongtai.jpg)
 
 
 ### [Serverless](https://jimmysong.io/serverless-handbook/concepts/what-is-serverless.html)

@@ -106,7 +106,9 @@ document.addEventListener('DOMContentLoaded', function() {
   var toc = document.getElementById('markdown-toc')
   var btn = document.getElementsByClassName('toc-button')[0]
   if(toc == undefined){
-    btn.style.display = "none"
+    if(btn != undefined){
+      btn.style.display = "none"
+    }
   }else{
     btn.addEventListener('click', function(){
       if(toc.style.display == "block"){

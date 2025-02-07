@@ -5,8 +5,8 @@ date: 2017-5-29
 categories:
   - Tech
 description: 
-image: /assets/images/sina/b52af14839da1eeaf080253ddaa7831a.jpg
-image-sm: /assets/images/sina/b52af14839da1eeaf080253ddaa7831a.jpg
+image: "{{ site.baseurl }}/assets/images/sina/b52af14839da1eeaf080253ddaa7831a.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/b52af14839da1eeaf080253ddaa7831a.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -107,7 +107,7 @@ $$\class{myMJSmall}{
 > $$\delta_j^{(l)} = \frac{\partial}{\partial z_j^{(l)}}cost(t)$$<br/>
 > 即$$\delta$$表示$$cost(t)$$的斜率，斜率越大，则表示偏离越多，结果越不正确，所以$$\delta$$直观上看错误差
 
-![delta计算](/assets/images/nn_delta.png)
+![delta计算]({{ site.baseurl }}/assets/images/nn_delta.png)
 
 
 #### 实战技巧
@@ -185,7 +185,7 @@ Theta3 = rand(1,11) * (2 * INIT_EPSILON) - INIT_EPSILON;
 
 * 图示
 
-![梯度下降](/assets/images/bp.png)
+![梯度下降]({{ site.baseurl }}/assets/images/bp.png)
 
 > $$J(\Theta)$$已经不是凸函数了，所以通过梯度下降查找到的值可能是局部最小值（local minimum）
 

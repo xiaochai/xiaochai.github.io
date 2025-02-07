@@ -5,8 +5,8 @@ date: 2017-5-22
 categories:
   - Tech
 description: 
-image: /assets/images/sina/b852fd131f1bfe22e47737833043076d.jpg
-image-sm: /assets/images/sina/c8b716450b06db26513f66e7943de993.jpg
+image: "{{ site.baseurl }}/assets/images/sina/b852fd131f1bfe22e47737833043076d.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/c8b716450b06db26513f66e7943de993.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -34,7 +34,7 @@ $$\class{myMJSmall}{h_\theta(x) = g(\theta^Tx) \\
 > $$g(z)$$称为S型函数（Sigmoid function）或逻辑函数（Logistic function）<br/>
 > $$h_\theta(x)$$值表示$$y=1$$的概率值，即$$h_\theta(x) = P(y=1\mid x;\theta) = 1-P(y=0\mid x;\theta)$$
 
-![逻辑函数图像](/assets/images/sigmoid.png)
+![逻辑函数图像]({{ site.baseurl }}/assets/images/sigmoid.png)
 
 ```matlab
 x=-10:0.01:10;
@@ -129,7 +129,7 @@ $$\class{myMJSmall}{
 
 * 如果特征太多，那么假设函数的曲线会通过每一样本（每一个样本按假设函数算出来的y值都与样本的y值一致），即$$J(\theta)=\frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})^2\approx 0$$，但是不能泛化(generalize)到新样本。
 
-![fitting](/assets/images/overfitting.png)
+![fitting]({{ site.baseurl }}/assets/images/overfitting.png)
 
 > 上图1，欠拟合（Underfitting），或者高偏差（High bias）<br/>
 > 上图2，拟合效果很好（Just right）<br/>

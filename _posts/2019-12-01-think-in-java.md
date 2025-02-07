@@ -5,8 +5,8 @@ date: 2020-01-06
 categories:
   - Reading
 description: 做为Java入门书籍，本不应该这时候才开始看，但其实中间断断续续看过多次，所以有一些东西已经了然于心，另外一些东西却是第一次了解。所以本次将本书从头到尾通读一遍（除去I/O和GUI相关），将新吸收到的记录下来，以供后续参考。
-image: /assets/images/tij.jpg
-image-sm: /assets/images/tij.jpg
+image: "{{ site.baseurl }}/assets/images/tij.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/tij.jpg"
 ---
 
 ## 第5章 初使化和清理 
@@ -305,7 +305,7 @@ class F extends D.E{
 
 围绕下图，介绍一下基本的容器关系：
 
-![分类](/assets/images/container.jpeg)
+![分类]({{ site.baseurl }}/assets/images/container.jpeg)
 
 整体来说容器主要分为两大类：Collection和Map。
 
@@ -520,7 +520,7 @@ Java的数组为容量不可变数组，其性质与其它语言的数组类似�
 <br/>
 
 
-![分类](/assets/images/container_detail.jpeg)
+![分类]({{ site.baseurl }}/assets/images/container_detail.jpeg)
 
 围绕上图，在原来简单的结构图中加入了一些抽象类和遗留组件（Legacy）。
 

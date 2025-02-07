@@ -5,8 +5,8 @@ date: 2017-5-20
 categories:
   - Tech
 description: 
-image: /assets/images/screenshot-octave-4-2.png
-image-sm: /assets/images/screenshot-octave-4-2.png
+image: "{{ site.baseurl }}/assets/images/screenshot-octave-4-2.png"
+image-sm: "{{ site.baseurl }}/assets/images/screenshot-octave-4-2.png"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">

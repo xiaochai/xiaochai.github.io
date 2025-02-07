@@ -5,8 +5,8 @@ date: 2017-06-11
 categories:
   - Tech
 description: 
-image: /assets/images/svm.jpeg
-image-sm: /assets/images/svm.jpeg
+image: "{{ site.baseurl }}/assets/images/svm.jpeg"
+image-sm: "{{ site.baseurl }}/assets/images/svm.jpeg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -38,12 +38,12 @@ J(\theta) & = -ylog(h_\theta(x)) - (1-y)log(1- h_\theta(x)) \\
 > 如果$$y = 1$$，令$$cost_1(z) = J(\theta) = -log(\frac{1}{1+e^{-z}})$$; 其中$$z = \theta^Tx$$ <br/>
 > $$cost_1$$的图案如下蓝线，如果我们用两条直线来近似此函数，则得到如下紫色线条（称之为hinge loss function）
 
-![cost_1](/assets/images/cost1.png)
+![cost_1]({{ site.baseurl }}/assets/images/cost1.png)
 
 > 同理，如果$$y = 0$$，令$$cost_0(z) = J(\theta) = -log(1-\frac{1}{1+e^{-z}})$$; 其中$$z = \theta^Tx$$ <br/>
 > $$cost_0$$的图案如下蓝线，如果我们用两条直线来近似此函数，则得到如下紫色线条
 
-![cost_0](/assets/images/cost0.png)
+![cost_0]({{ site.baseurl }}/assets/images/cost0.png)
 
 * 完整的代价函数
 
@@ -89,7 +89,7 @@ h_\theta(x) =
 > 由于SVM的决策边界总是有很大的间距，所以SVM也叫大间距分类算法<br/>
 > 如果有一些异点（outlier），为了不影响大间距的特性，我们可以减小$$C$$的值
 
-![svm](/assets/images/sina/557238e00a3556c1ce40098070a4bedc.jpg)
+![svm]({{ site.baseurl }}/assets/images/sina/557238e00a3556c1ce40098070a4bedc.jpg)
 
 #### 大间距分类背后的数学原理
 

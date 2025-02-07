@@ -5,8 +5,8 @@ date: 2017-06-15
 categories:
   - Tech
 description: 
-image: /assets/images/k_means.jpg
-image-sm: /assets/images/k_means.jpg
+image: "{{ site.baseurl }}/assets/images/k_means.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/k_means.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -103,7 +103,7 @@ J(c^{(1)},\cdots,c^{(m)},\mu_1,\cdots,\mu_K) = \frac{1}{m}\sum_{i=1}^{m}||x^{(i)
 > 但更多的情况是，J值一直是平稳减少的，此时很难用此方法先出K的值<br/>
 > 注意：随着K的增加，J的值总是减少的，如果J的值没有减少，则很可能收敛在了局部最小值
 
-![](/assets/images/elbow.jpeg)
+![]({{ site.baseurl }}/assets/images/elbow.jpeg)
 
 
 ### Lecture2: Dimensionality Reduction

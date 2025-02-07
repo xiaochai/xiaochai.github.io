@@ -6,28 +6,28 @@ categories:
   - Life
   - Gallery
 description: 春节四天游神，还记得上一次是在11年前
-image: /assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg
-image-sm: /assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg
+image: "{{ site.baseurl }}/assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg"
+image-sm: "{{ site.baseurl }}/assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
 thumbs:
-- /assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg
-- /assets/images/sina/cc260990484afb73dbcbaf1e1858a330.jpg
-- /assets/images/sina/c07de5784433eb8bf5428006919a1f2f.jpg
-- /assets/images/sina/859f1b2b5a17d4a63a6e9dd89e394970.jpg
-- /assets/images/sina/f0b1999ee6d7cde3e2403acec16e14ed.jpg
-- /assets/images/sina/88c4cc1e5efc6e3ddd6970863bc418dc.jpg
-- /assets/images/sina/d1969d5ccbc49f51040158b8b23d29d4.jpg
-- /assets/images/sina/7eef450dc3974e0f6c331b2abc6b74fe.jpg
+- "{{ site.baseurl }}/assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
+- "{{ site.baseurl }}/assets/images/sina/cc260990484afb73dbcbaf1e1858a330.jpg"
+- "{{ site.baseurl }}/assets/images/sina/c07de5784433eb8bf5428006919a1f2f.jpg"
+- "{{ site.baseurl }}/assets/images/sina/859f1b2b5a17d4a63a6e9dd89e394970.jpg"
+- "{{ site.baseurl }}/assets/images/sina/f0b1999ee6d7cde3e2403acec16e14ed.jpg"
+- "{{ site.baseurl }}/assets/images/sina/88c4cc1e5efc6e3ddd6970863bc418dc.jpg"
+- "{{ site.baseurl }}/assets/images/sina/d1969d5ccbc49f51040158b8b23d29d4.jpg"
+- "{{ site.baseurl }}/assets/images/sina/7eef450dc3974e0f6c331b2abc6b74fe.jpg"
 ---
 
-![图](/assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg)
-![图](/assets/images/sina/74a68cd9f2fd845400d7abbfc49a474f.jpg)
-![图](/assets/images/sina/18a8c87fc75dbab26da29ab93f9076ac.jpg)
-![图](/assets/images/sina/f52e2a561e1f051811ff1859a44c6b10.jpg)
-![图](/assets/images/sina/c90f31a0e5fe6e3c6a4506538fb43543.jpg)
-![图](/assets/images/sina/2c12a605a9a47b77e4b81bb3580cc1cb.jpg)
-![图](/assets/images/sina/f919b06dc17ab5a3bb2df591e9632e38.jpg)
-![图](/assets/images/sina/7879e922ffd7ec1e2c90d4ae9190cc9b.jpg)
-![图](/assets/images/sina/a586233672da7a2b2b7bb81429e0d979.jpg)
-![图](/assets/images/sina/7a676f58dc46a970547a4098332723e2.jpg)
-![图](/assets/images/sina/edabee7115638d2444b5b9da6d548e41.jpg)
-![图](/assets/images/sina/93b5582e3003d501f17d5b2a5071137c.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/74a68cd9f2fd845400d7abbfc49a474f.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/18a8c87fc75dbab26da29ab93f9076ac.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/f52e2a561e1f051811ff1859a44c6b10.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/c90f31a0e5fe6e3c6a4506538fb43543.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/2c12a605a9a47b77e4b81bb3580cc1cb.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/f919b06dc17ab5a3bb2df591e9632e38.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/7879e922ffd7ec1e2c90d4ae9190cc9b.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/a586233672da7a2b2b7bb81429e0d979.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/7a676f58dc46a970547a4098332723e2.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/edabee7115638d2444b5b9da6d548e41.jpg)
+![图]({{ site.baseurl }}/assets/images/sina/93b5582e3003d501f17d5b2a5071137c.jpg)
