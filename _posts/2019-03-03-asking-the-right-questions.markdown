@@ -6,8 +6,8 @@ date: 2019-03-03
 categories:
   - Reading
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/59f543809c3797da0e3ab657a9df8468.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/59f543809c3797da0e3ab657a9df8468.jpg"
+image: /assets/images/sina/59f543809c3797da0e3ab657a9df8468.jpg"
+image-sm: /assets/images/sina/59f543809c3797da0e3ab657a9df8468.jpg"
 ---
 
 ### 第一章 学会提出好问题

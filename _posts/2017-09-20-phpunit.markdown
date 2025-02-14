@@ -5,8 +5,8 @@ date: 2017-09-20
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/phpunit.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/phpunit.jpg"
+image: /assets/images/phpunit.jpg"
+image-sm: /assets/images/phpunit.jpg"
 ---
 单元测试在日常的编程中占有十分重要的地位，但大部分公司为了敏捷开发的效率要求，往往都忽略了测试用例的编写，而把这部分工作丢到了QA的身上。
 

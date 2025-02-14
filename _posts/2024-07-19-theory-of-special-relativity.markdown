@@ -5,8 +5,8 @@ date: 2024-07-19
 categories:
   - Tech
 description: 我们都看过很多的相对论的科普视频，大概了解狭义相对论的结论。但是如果想让我定量地分析这些结论的推导过程，或者从一个实际例子出发求解其中的具体值，我并不能很好地解决。甚至我都有可能直觉性地给出相反的结论。这篇文章梳理了狭义相对论中的几个基本概念和推导过程，基本上涵盖了狭义相对论的所有场景，以及补充了一部分广义相对论的结论，做为备忘录。
-image: "{{ site.baseurl }}/assets/images/theory_of_special_relativity/cover.jpeg"
-image-sm: "{{ site.baseurl }}/assets/images/theory_of_special_relativity/cover-sm.jpeg"
+image: /assets/images/theory_of_special_relativity/cover.jpeg"
+image-sm: /assets/images/theory_of_special_relativity/cover-sm.jpeg"
 
 ---
 * ignore but need

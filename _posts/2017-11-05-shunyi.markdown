@@ -6,17 +6,17 @@ categories:
   - Life
   - Gallery
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/49eed0287213cdaa2e8962142d3beb0f.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/a2a8cbdd18fe2b1824ea98bb7861848a.jpg"
+image: /assets/images/sina/49eed0287213cdaa2e8962142d3beb0f.jpg"
+image-sm: /assets/images/sina/a2a8cbdd18fe2b1824ea98bb7861848a.jpg"
 thumbs:
-- "{{ site.baseurl }}/assets/images/sina/7e1d8cdbac10e551500da730bb6e1f3d.jpg"
-- "{{ site.baseurl }}/assets/images/sina/62efa6e3c21498a9e6a6c140872847ae.jpg"
-- "{{ site.baseurl }}/assets/images/sina/099ff91a597d6624c671e1be42eb6a5a.jpg"
-- "{{ site.baseurl }}/assets/images/sina/74b89f9bb7ba2736699795f67d8be2b5.jpg"
-- "{{ site.baseurl }}/assets/images/sina/9ecc0779d9a607493413b30067efd754.jpg"
-- "{{ site.baseurl }}/assets/images/sina/84ae05da9246eb0007d2e24f19d191c6.jpg"
-- "{{ site.baseurl }}/assets/images/sina/58a7fa01715babf0d879afc420860e00.jpg"
-- "{{ site.baseurl }}/assets/images/sina/ec85287020eceecfa7782de8052deab5.jpg"
+- /assets/images/sina/7e1d8cdbac10e551500da730bb6e1f3d.jpg"
+- /assets/images/sina/62efa6e3c21498a9e6a6c140872847ae.jpg"
+- /assets/images/sina/099ff91a597d6624c671e1be42eb6a5a.jpg"
+- /assets/images/sina/74b89f9bb7ba2736699795f67d8be2b5.jpg"
+- /assets/images/sina/9ecc0779d9a607493413b30067efd754.jpg"
+- /assets/images/sina/84ae05da9246eb0007d2e24f19d191c6.jpg"
+- /assets/images/sina/58a7fa01715babf0d879afc420860e00.jpg"
+- /assets/images/sina/ec85287020eceecfa7782de8052deab5.jpg"
 ---
 
 家搬顺义已经两月有余，屋内大大小小的细节修整了不少，家具家电也陆续置办齐全，总算看起来像一个温馨的家了。

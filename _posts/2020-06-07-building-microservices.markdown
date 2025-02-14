@@ -5,8 +5,8 @@ date: 2020-06-07
 categories:
   - Reading
 description: 第一遍读本书是在我自己状态不太好的一个时间点，很庆幸从书中学到很多东西，可以说系统化地将微服务相关的内容做了一个有条理的组织，把整个知识体系建立起来了。刚巧又碰到了找工作的契机，就又从头读了一遍把知识巩固了一下，把对应的关键点都记录在此笔记中，以供后续回看。在此基础上建立的思考，结合实践中遇到的问题和处理方式，才真正理解了理论的重要性，包括此次面试中也吃了不少理论知识匮乏的亏。所以对于自己定的方向（也与此次找工作的结果一致），本书会是一系列学习的开篇，后续会读取更多类似的理论书籍来丰富自己。
-image: "{{ site.baseurl }}/assets/images/microservices.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/microservices.jpg"
+image: /assets/images/microservices.jpg"
+image-sm: /assets/images/microservices.jpg"
 ---
 
 ## 1. 微服务总述

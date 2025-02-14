@@ -5,8 +5,8 @@ date: 2020-06-28
 categories:
   - Reading
 description: 由于新的工作可能需要用到一些Python，所以入了下门。
-image: "{{ site.baseurl }}/assets/images/python.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/python.jpg"
+image: /assets/images/python.jpg"
+image-sm: /assets/images/python.jpg"
 ---
 ## 快速上手
 

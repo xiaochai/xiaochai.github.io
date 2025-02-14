@@ -6,17 +6,17 @@ categories:
   - Life
   - Gallery
 description: 春节四天游神，还记得上一次是在11年前
-image: "{{ site.baseurl }}/assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
+image: /assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg"
+image-sm: /assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
 thumbs:
-- "{{ site.baseurl }}/assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
-- "{{ site.baseurl }}/assets/images/sina/cc260990484afb73dbcbaf1e1858a330.jpg"
-- "{{ site.baseurl }}/assets/images/sina/c07de5784433eb8bf5428006919a1f2f.jpg"
-- "{{ site.baseurl }}/assets/images/sina/859f1b2b5a17d4a63a6e9dd89e394970.jpg"
-- "{{ site.baseurl }}/assets/images/sina/f0b1999ee6d7cde3e2403acec16e14ed.jpg"
-- "{{ site.baseurl }}/assets/images/sina/88c4cc1e5efc6e3ddd6970863bc418dc.jpg"
-- "{{ site.baseurl }}/assets/images/sina/d1969d5ccbc49f51040158b8b23d29d4.jpg"
-- "{{ site.baseurl }}/assets/images/sina/7eef450dc3974e0f6c331b2abc6b74fe.jpg"
+- /assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
+- /assets/images/sina/cc260990484afb73dbcbaf1e1858a330.jpg"
+- /assets/images/sina/c07de5784433eb8bf5428006919a1f2f.jpg"
+- /assets/images/sina/859f1b2b5a17d4a63a6e9dd89e394970.jpg"
+- /assets/images/sina/f0b1999ee6d7cde3e2403acec16e14ed.jpg"
+- /assets/images/sina/88c4cc1e5efc6e3ddd6970863bc418dc.jpg"
+- /assets/images/sina/d1969d5ccbc49f51040158b8b23d29d4.jpg"
+- /assets/images/sina/7eef450dc3974e0f6c331b2abc6b74fe.jpg"
 ---
 
 ![图]({{ site.baseurl }}/assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg)

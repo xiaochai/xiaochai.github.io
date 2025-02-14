@@ -5,7 +5,7 @@
 	    <a class="gallery__link" href="{{ post.url | prepend: site.baseurl }}">
           {% for thumb in post.thumbs %}
             <div class="gallery__img">
-				<figure class="absolute-bg" style="background-image: url('{{ thumb }}');"></figure>
+				<figure class="absolute-bg" style="background-image: url('{{ thumb | prepend: site.baseurl }}');"></figure>
 			</div>
           {% endfor %}
 		  <div class="gallery__upper">

@@ -5,8 +5,8 @@ date: 2018-02-14
 categories:
   - Life
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/6c9d83a98e35dd97324740c87a9de4af.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/0c7cb261c4e3f6c3d5038aa699e4f84c.jpg"
+image: /assets/images/sina/6c9d83a98e35dd97324740c87a9de4af.jpg"
+image-sm: /assets/images/sina/0c7cb261c4e3f6c3d5038aa699e4f84c.jpg"
 ---
 
 如果 你愿意

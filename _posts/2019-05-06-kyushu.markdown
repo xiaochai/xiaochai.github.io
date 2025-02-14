@@ -6,17 +6,17 @@ categories:
   - Journey
   - Gallery
 description: 虽然提前半年定了去日本的便宜机票，但我们俩深知彼此都是较懒的人，攻略不可能做得如此的详尽。而且我们去的是九州，远离于东京、京都等大都市，必然无法详尽浏览过多的知名景点。所以我们早早的就立下了一个这样的FLAG，以体验异国风情为主，以浏览景点为辅，做为第一次去日本（也是第一次出国）的基调，轻松自由行。
-image: "{{ site.baseurl }}/assets/images/sina/45f6f65cbc307a645f22d5c7ec321ea5.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/45f6f65cbc307a645f22d5c7ec321ea5.jpg"
+image: /assets/images/sina/45f6f65cbc307a645f22d5c7ec321ea5.jpg"
+image-sm: /assets/images/sina/45f6f65cbc307a645f22d5c7ec321ea5.jpg"
 thumbs:
-- "{{ site.baseurl }}/assets/images/sina/39310800dd3819858abbc11f481ec540.jpg"
-- "{{ site.baseurl }}/assets/images/sina/b5bc104d42e47f29ad3486aee187de01.jpg"
-- "{{ site.baseurl }}/assets/images/sina/936e48990be239165c241b11217765c5.jpg"
-- "{{ site.baseurl }}/assets/images/sina/12426e1b4d14c3738dec1fec0a67f365.jpg"
-- "{{ site.baseurl }}/assets/images/sina/38fdfe04165f32abff476f9458e67b8f.jpg"
-- "{{ site.baseurl }}/assets/images/sina/ca360212266c7b6bd34e34cdbe83e822.jpg"
-- "{{ site.baseurl }}/assets/images/sina/c9243e27e70978ab4689e7f7bfaecc3c.jpg"
-- "{{ site.baseurl }}/assets/images/sina/ddd6b6b3ba96ec2fdc0a399654f99edd.jpg"
+- /assets/images/sina/39310800dd3819858abbc11f481ec540.jpg"
+- /assets/images/sina/b5bc104d42e47f29ad3486aee187de01.jpg"
+- /assets/images/sina/936e48990be239165c241b11217765c5.jpg"
+- /assets/images/sina/12426e1b4d14c3738dec1fec0a67f365.jpg"
+- /assets/images/sina/38fdfe04165f32abff476f9458e67b8f.jpg"
+- /assets/images/sina/ca360212266c7b6bd34e34cdbe83e822.jpg"
+- /assets/images/sina/c9243e27e70978ab4689e7f7bfaecc3c.jpg"
+- /assets/images/sina/ddd6b6b3ba96ec2fdc0a399654f99edd.jpg"
 ---
 
 ### 初识日本

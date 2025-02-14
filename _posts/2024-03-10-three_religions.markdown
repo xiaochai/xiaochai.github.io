@@ -5,8 +5,8 @@ date: 2024-03-10
 categories:
   - Reading
 description: 我们知道世界有三大宗教，基督教、伊斯兰教、佛教；而按信仰人数排序又为基督教、伊斯兰教、印度教、佛教；由此可见基督教和伊斯兰教传播之广、影响之众。基督教和伊斯兰教相差甚大，你很难想象在带着十字架的教皇与带着头巾在麦加朝圣的穆斯林有什么共同之处。但事实总带有些戏剧性，戏剧总有现实感，基督教和伊斯兰教都起源于犹太教，这三教他们信着同一个神、他们都认为耶路撒冷是他们的圣地、他们造就了世界上最难调解的冲突——巴以冲突。
-image: "{{ site.baseurl }}/assets/images/three_religions/1.avif"
-image-sm: "{{ site.baseurl }}/assets/images/three_religions/1.avif"
+image: /assets/images/three_religions/1.avif"
+image-sm: /assets/images/three_religions/1.avif"
 ---
 <script src="{{ site.baseurl }}/assets/js/jquery-3.7.1.min.js"></script>
 <script src="{{ site.baseurl }}/assets/js/image_block.js"></script>

@@ -5,8 +5,8 @@ date: 2019-11-14
 categories:
   - Tech
 description: Java自JDK 5引入泛型以来，泛型已经体现在我们代码的各个角落。借助看《Java编程思想》的机会，来全方面理清一下对泛型的理解。
-image: "{{ site.baseurl }}/assets/images/java.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/java.jpg"
+image: /assets/images/java.jpg"
+image-sm: /assets/images/java.jpg"
 ---
 
 Java自JDK 5引入泛型以来，泛型已经体现在我们代码的各个角落。例如我们日常中不断使用的各种容器：

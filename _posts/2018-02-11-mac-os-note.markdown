@@ -5,8 +5,8 @@ date: 2018-02-11
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/05b380865d13dd97de4462cb92c0ecf4.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/d7a8c9264dd9aef2b2044b6d8b9d1c5e.jpg"
+image: /assets/images/sina/05b380865d13dd97de4462cb92c0ecf4.jpg"
+image-sm: /assets/images/sina/d7a8c9264dd9aef2b2044b6d8b9d1c5e.jpg"
 ---
 
 * macOS版本：10.13.3 High Sierra

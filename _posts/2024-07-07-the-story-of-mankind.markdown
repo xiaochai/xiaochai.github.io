@@ -5,8 +5,8 @@ date: 2024-07-07
 categories:
   - Reading
 description: 房龙的《人类的故事》从史前文明一直讲到了一战开始，虽然重点着墨于欧洲的历史，但也兼顾了与之相关联的地区以及中国与印度相关的历史。此文绝不是罗列历史事件，也不是讲述人物传记，而是将众多错综复杂的事件通过一系列承上启下的文笔，以作者自己认为合理的简繁安排，将人类的故事呈现给读者。所以对于没有基本的了解的读者，可能需要诸多外部的资料参考去理解作者想要表达的意思或者当时的历史事件，但如果对于了解了这块史实的读者又比较难从中获取更多有意义的知识。这可以说是本书比较尴尬的定位。但对于我来说，通过本书的阅读以及外部资料的参考，使我建立了相对比较完整的世界历史观，可谓是本书莫大的功劳。
-image: "{{ site.baseurl }}/assets/images/the_story_of_mankind/cover.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/the_story_of_mankind/cover.jpg"
+image: /assets/images/the_story_of_mankind/cover.jpg"
+image-sm: /assets/images/the_story_of_mankind/cover.jpg"
 
 ---
 <style>

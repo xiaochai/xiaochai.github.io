@@ -5,8 +5,8 @@ date: 2017-08-17
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/b21a93b9fbd0dd636b247d2f0ebe11e9.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/b21a93b9fbd0dd636b247d2f0ebe11e9.jpg"
+image: /assets/images/sina/b21a93b9fbd0dd636b247d2f0ebe11e9.jpg"
+image-sm: /assets/images/sina/b21a93b9fbd0dd636b247d2f0ebe11e9.jpg"
 ---
 
 为了更加系统地了解Composer，完整地阅读了官方文档，并记录在此，供后续参考。

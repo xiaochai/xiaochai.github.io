@@ -5,8 +5,8 @@ date: 2017-06-15
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/k_means.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/k_means.jpg"
+image: /assets/images/k_means.jpg"
+image-sm: /assets/images/k_means.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">

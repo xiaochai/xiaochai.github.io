@@ -5,8 +5,8 @@ date: 2017-5-24
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/neural_network.jpeg"
-image-sm: "{{ site.baseurl }}/assets/images/neural_network.jpeg"
+image: /assets/images/neural_network.jpeg"
+image-sm: /assets/images/neural_network.jpeg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">

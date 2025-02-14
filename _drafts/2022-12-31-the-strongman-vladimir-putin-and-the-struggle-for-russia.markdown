@@ -5,8 +5,8 @@ date: 2022-11-31
 categories:
   - Reading
 description: 
-image: "{{ site.baseurl }}/assets/images/putin.jpeg"
-image-sm: "{{ site.baseurl }}/assets/images/putin-sm.jpg"
+image: /assets/images/putin.jpeg"
+image-sm: /assets/images/putin-sm.jpg"
 
 ---
 * ignore but need

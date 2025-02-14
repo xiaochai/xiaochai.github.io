@@ -6,8 +6,8 @@ date: 2018-04-29
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/grpc.svg"
-image-sm: "{{ site.baseurl }}/assets/images/grpc.svg"
+image: /assets/images/grpc.svg"
+image-sm: /assets/images/grpc.svg"
 ---
 
 作为一篇gRPC调研的总结，本篇主要介绍了gRPC在go语言上的使用方式，并着重记录了如何使用gRPC创建一个简单的聊天程序。

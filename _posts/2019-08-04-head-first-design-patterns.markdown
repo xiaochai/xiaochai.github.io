@@ -6,8 +6,8 @@ date: 2019-08-04
 categories:
   - Reading
 description: 设计原则 ● 找出应用中可能需要变化之处，把它们独立出来，不要和那些不需要变化的代码混在一起 把会变化的部分取出并封装起来，好让其他部分不会受到影响，这样可以导致代码的变化所引起的后果变少，代码更加可控并且不容易出问题。 大多数的模式都着眼于软件变化的主题，允许系统局部改变独立于其他部分。 ...
-image: "{{ site.baseurl }}/assets/images/headFirstPattern.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/headFirstPattern.jpg"
+image: /assets/images/headFirstPattern.jpg"
+image-sm: /assets/images/headFirstPattern.jpg"
 ---
 ## 设计原则
 

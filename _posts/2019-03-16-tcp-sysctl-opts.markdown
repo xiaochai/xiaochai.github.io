@@ -5,8 +5,8 @@ date: 2019-03-16
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/9866755ff640532fe997d969c4e5a4ea.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/9866755ff640532fe997d969c4e5a4ea.jpg"
+image: /assets/images/sina/9866755ff640532fe997d969c4e5a4ea.jpg"
+image-sm: /assets/images/sina/9866755ff640532fe997d969c4e5a4ea.jpg"
 ---
 
 在机器上执行以下任意命令，就可以看到这个此机器上的TIME_WAIT的数量：

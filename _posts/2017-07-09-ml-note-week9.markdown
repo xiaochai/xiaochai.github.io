@@ -5,8 +5,8 @@ date: 2017-07-09
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/recom_system.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/recom_system.jpg"
+image: /assets/images/recom_system.jpg"
+image-sm: /assets/images/recom_system.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">

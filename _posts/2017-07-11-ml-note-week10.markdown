@@ -5,8 +5,8 @@ date: 2017-07-11
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/sgd.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sgd.jpg"
+image: /assets/images/sgd.jpg"
+image-sm: /assets/images/sgd.jpg"
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">

@@ -6,8 +6,8 @@ date: 2018-09-11
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/curl-logo.svg"
-image-sm: "{{ site.baseurl }}/assets/images/curl-logo.svg"
+image: /assets/images/curl-logo.svg"
+image-sm: /assets/images/curl-logo.svg"
 ---
 
 ### 缘起

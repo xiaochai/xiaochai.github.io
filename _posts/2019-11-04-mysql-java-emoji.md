@@ -5,8 +5,8 @@ date: 2019-11-04
 categories:
   - Tech
 description: 众所周知，要在MySQL中支持Emoji等Unicode字符，需要将MySQL的字符集设置成utf8mb4。为了能让客户端也能正常更新写入这些字符，不仅是表字段的字符集，连接的字符集也要设置对才行。
-image: "{{ site.baseurl }}/assets/images/mysql-emoji.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/mysql-emoji.jpg"
+image: /assets/images/mysql-emoji.jpg"
+image-sm: /assets/images/mysql-emoji.jpg"
 ---
 
 ### 事起之由

@@ -5,8 +5,8 @@ date: 2017-5-2
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/2f51008722e313ffedd02e7f727592c7.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/71699a3bb31857640b6b1661e4adc89a.jpg"
+image: /assets/images/sina/2f51008722e313ffedd02e7f727592c7.jpg"
+image-sm: /assets/images/sina/71699a3bb31857640b6b1661e4adc89a.jpg"
 ---
 每一次重装ubuntu都要从头开始装一些软件配置vim环境。为了方便『下一次』，这次就把这些操作都记录下来（包括必要的软件安装和vim、bash的配置）
 

@@ -5,8 +5,8 @@ date: 2024-11-11
 categories:
   - Tech
 description: 在日常使用百度和谷歌地图的时候，你有没有想过缩小后的整个世界的地图是什么样子的？不过目前这两个地图的缩小比例都存在上限，无法在一个屏幕中全部展示。但你会发现东西向的地图是循环的，南北南的地图却是有限的，甚至看不到北极或者南极点。
-image: "{{ site.baseurl }}/assets/images/mercator_projection/cover.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/mercator_projection/cover_s@0.5x.jpg"
+image: /assets/images/mercator_projection/cover.jpg"
+image-sm: /assets/images/mercator_projection/cover_s@0.5x.jpg"
 ---
 * ignore but need
 {:toc}

@@ -5,8 +5,8 @@ date: 2020-07-05
 categories:
   - Tech
 description: 随着HTTPS的普及以及诸如Google、苹果这样的大公司对HTTPS的强制使用，现在再来了解HTTPS显得略晚了些。好在一切都还来得及，本文一步步由浅入深不断提出问题、寻找答案，慢慢解开TLS的冰山一角:)
-image: "{{ site.baseurl }}/assets/images/tls-flow.png"
-image-sm: "{{ site.baseurl }}/assets/images/tls-flow.png"
+image: /assets/images/tls-flow.png"
+image-sm: /assets/images/tls-flow.png"
 
 ---
 * ignore but need

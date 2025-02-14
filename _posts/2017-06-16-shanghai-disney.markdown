@@ -5,8 +5,8 @@ date: 2017-6-16
 categories:
   - Journey
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/2622e7e9054b85e677863831efe4bdda.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/0245e3cfcd76b98657686b0dea38e4b7.jpg"
+image: /assets/images/sina/2622e7e9054b85e677863831efe4bdda.jpg"
+image-sm: /assets/images/sina/0245e3cfcd76b98657686b0dea38e4b7.jpg"
 ---
 最幸福的不是来上海玩，而是明明是周五，却可以不上班！
 

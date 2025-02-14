@@ -6,8 +6,8 @@ date: 2018-05-23
 categories:
   - Tech
 description: 
-image: "{{ site.baseurl }}/assets/images/sina/850453bd7432f6683f75e778128a47cd.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/fbf7f4386451df6aea290f7e5aff2bd0.jpg"
+image: /assets/images/sina/850453bd7432f6683f75e778128a47cd.jpg"
+image-sm: /assets/images/sina/fbf7f4386451df6aea290f7e5aff2bd0.jpg"
 ---
 ### 原理
 

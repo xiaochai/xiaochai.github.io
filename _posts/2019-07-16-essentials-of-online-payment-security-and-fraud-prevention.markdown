@@ -6,8 +6,8 @@ date: 2019-07-16
 categories:
   - Reading
 description: 风控即未来：网络支付安全和反欺诈原理（Essentials of Online Payment Security and Fraud Prevention）
-image: "{{ site.baseurl }}/assets/images/sina/313bd97a332387976edc1d9bb0ebd017.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/sina/313bd97a332387976edc1d9bb0ebd017.jpg"
+image: /assets/images/sina/313bd97a332387976edc1d9bb0ebd017.jpg"
+image-sm: /assets/images/sina/313bd97a332387976edc1d9bb0ebd017.jpg"
 ---
 
 ### 第一章 了解在线支付

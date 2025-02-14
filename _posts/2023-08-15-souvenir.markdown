@@ -5,8 +5,8 @@ date: 2023-08-15
 categories:
   - Life
 description: 那是一个花园，遍地都是盛开的月季，仿佛又回到了同样开满月季的二环
-image: "{{ site.baseurl }}/assets/images/feverfew.jpeg"
-image-sm: "{{ site.baseurl }}/assets/images/feverfew.jpeg"
+image: /assets/images/feverfew.jpeg"
+image-sm: /assets/images/feverfew.jpeg"
 
 ---
 

@@ -5,8 +5,8 @@ date: 2020-01-06
 categories:
   - Reading
 description: 做为Java入门书籍，本不应该这时候才开始看，但其实中间断断续续看过多次，所以有一些东西已经了然于心，另外一些东西却是第一次了解。所以本次将本书从头到尾通读一遍（除去I/O和GUI相关），将新吸收到的记录下来，以供后续参考。
-image: "{{ site.baseurl }}/assets/images/tij.jpg"
-image-sm: "{{ site.baseurl }}/assets/images/tij.jpg"
+image: /assets/images/tij.jpg"
+image-sm: /assets/images/tij.jpg"
 ---
 
 ## 第5章 初使化和清理 

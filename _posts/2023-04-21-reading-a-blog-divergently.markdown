@@ -5,8 +5,8 @@ date: 2023-04-21
 categories:
   - Tech
 description: 读到一篇文章，核心的思路和结论并不难，但从文章引出了繁多的概念和知识点，所以发散地阅读此blog，并以此记录。
-image: "{{ site.baseurl }}/assets/images/go-motorcycle.svg"
-image-sm: "{{ site.baseurl }}/assets/images/go-motorcycle.svg"
+image: /assets/images/go-motorcycle.svg"
+image-sm: /assets/images/go-motorcycle.svg"
 
 ---
 <style>

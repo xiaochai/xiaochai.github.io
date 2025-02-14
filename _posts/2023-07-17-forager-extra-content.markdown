@@ -6,17 +6,17 @@ categories:
   - Game
   - Gallery
 description: 浮岛物语全成就之后，把额外内容的文本过一遍，就可以卸载这个游戏了~
-image: "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/1.jpeg"
-image-sm: "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/1.jpeg"
+image: /assets/images/forager/HowIMadeForage/1.jpeg"
+image-sm: /assets/images/forager/HowIMadeForage/1.jpeg"
 thumbs:
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/1.jpeg"
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/2.jpeg"
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/3.jpeg"
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/4.jpeg"
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/5.jpeg"
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/6.jpeg"
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/7.jpeg"
-- "{{ site.baseurl }}/assets/images/forager/HowIMadeForage/8.jpeg"
+- /assets/images/forager/HowIMadeForage/1.jpeg"
+- /assets/images/forager/HowIMadeForage/2.jpeg"
+- /assets/images/forager/HowIMadeForage/3.jpeg"
+- /assets/images/forager/HowIMadeForage/4.jpeg"
+- /assets/images/forager/HowIMadeForage/5.jpeg"
+- /assets/images/forager/HowIMadeForage/6.jpeg"
+- /assets/images/forager/HowIMadeForage/7.jpeg"
+- /assets/images/forager/HowIMadeForage/8.jpeg"
 
 ---
 * ignore but need

@@ -5,8 +5,8 @@ date: 2023-08-09
 categories:
   - Tech
 description: 先从简单的手写数字识别入手，入门机器学习的模型常识、模型训练、工程构建、图像处理等基本技能，通过在线手写识别验证学习成果
-image: "{{ site.baseurl }}/assets/images/mnist/mnist.jpeg"
-image-sm: "{{ site.baseurl }}/assets/images/mnist/mnist.jpeg"
+image: /assets/images/mnist/mnist.jpeg"
+image-sm: /assets/images/mnist/mnist.jpeg"
 
 ---
 * ignore but need
