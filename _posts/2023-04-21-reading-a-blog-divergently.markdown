@@ -5,8 +5,8 @@ date: 2023-04-21
 categories:
   - Tech
 description: 读到一篇文章，核心的思路和结论并不难，但从文章引出了繁多的概念和知识点，所以发散地阅读此blog，并以此记录。
-image: /assets/images/go-motorcycle.svg
-image-sm: /assets/images/go-motorcycle.svg
+image: /assets/images/go-motorcycle.svg"
+image-sm: /assets/images/go-motorcycle.svg"
 
 ---
 <style>
@@ -54,13 +54,13 @@ if configVersion > 0{
 
 作者还提到了关于math.Abs的性能讨论的golang邮件组帖子，里面讨论了各种Abs实现的性能差异，可以从中窥见Abs函数的历史版本以及go的历史版本中一些性能提升演化。值得注意的是Russ Cox也在帖子中回复了，并且指出了沿用至今的Abs写法。
 
-![图片](/assets/images/google_disscuss.png)
+![图片]({{ site.baseurl }}/assets/images/google_disscuss.png)
 
 我也去扒了一下[go1.5的源码](https://github.com/golang/go/blob/go1.5.4/src/math/abs.go)，当时的math.Abs确实是用的switch来实现的，而在[1.6.1](https://github.com/golang/go/blob/go1.6.1/src/math/abs.go)的时候就换成了if来实现了。
 
 而if和switch生成二进制之间的差异是什么，以及这个使用[Float64frombits的bug](https://github.com/golang/go/issues/13095)又代表什么，可以继续发散深究下去(但我这由于精力问题就停止了:-)。
 
-![图片](/assets/images/go_source.png)
+![图片]({{ site.baseurl }}/assets/images/go_source.png)
 
 ## 循序渐进地深入
 
@@ -117,7 +117,7 @@ func BenchmarkWithStdLib(b *testing.B) {
 
 如果只是串行地执行这些步骤，则会耗费相当多的时间，所以现代CPU一般采用多层的流水线来加快这一处理过程，如下是一个5层流水线的示意图。可以看到随着流水线的增加，提高了指令执行的并行度。
 
-![图片](/assets/images/pipeline.png)
+![图片]({{ site.baseurl }}/assets/images/pipeline.png)
 
 #### [分支预测](https://zh.wikipedia.org/wiki/%E5%88%86%E6%94%AF%E9%A0%90%E6%B8%AC%E5%99%A8)
 
@@ -132,7 +132,7 @@ func BenchmarkWithStdLib(b *testing.B) {
 
 ### 随机函数生成器的选择
 
-解决之前简单参数所带来的问题，引入了随机参数，这就用到了随机数生成器。在go中有math/rand库的随机数生成器可选(伪随机)，但这里作者使用了xorshift这一随机函数生成器，代码比基础库中的简单很多，性能应该也快不少，没有做实际的验证。有兴趣地同学可以研究一下[xorshift](https://en.wikipedia.org/wiki/Xorshift)的[论文](/assets/xorshift.pdf)，对比一下基础库中生成方式与此的不同点。
+解决之前简单参数所带来的问题，引入了随机参数，这就用到了随机数生成器。在go中有math/rand库的随机数生成器可选(伪随机)，但这里作者使用了xorshift这一随机函数生成器，代码比基础库中的简单很多，性能应该也快不少，没有做实际的验证。有兴趣地同学可以研究一下[xorshift](https://en.wikipedia.org/wiki/Xorshift)的[论文]({{ site.baseurl }}/assets/xorshift.pdf)，对比一下基础库中生成方式与此的不同点。
 
 另外真随机生成器crypto/rand的生成原理，有兴趣也可以了解一下。
 
@@ -173,7 +173,7 @@ float类型的保存格式都采用的IEEE 754标准，我们再一起再回顾�
 
 ##### 格式说明
 
-![图片](/assets/images/ieee754.png)
+![图片]({{ site.baseurl }}/assets/images/ieee754.png)
 
 对浮点数进行存储，需要先进行规范化。例如1789，规范化之后就是1.789*10^3，而对于二进制来说，个位数总是为1，所以存储时会忽略这块的数值。
 
@@ -199,7 +199,7 @@ float类型的保存格式都采用的IEEE 754标准，我们再一起再回顾�
 
 5. 所以整体的数值为<font style="background-color:#fbbfbc">1</font><font style="background-color:#62d256">10000001001</font><font style="background-color:#935af6">0011010010101101010000000000000000000000000000000000</font>，红色为符号，绿色为指数，紫色为小数部分。
 
-| ![图片](/assets/images/int2binary.jpeg) | ![图片](/assets/images/float2binary.jpeg) |
+| ![图片]({{ site.baseurl }}/assets/images/int2binary.jpeg) | ![图片]({{ site.baseurl }}/assets/images/float2binary.jpeg) |
 | 整数部分转化过程| 小数部分转化过程|
 
 验证一下

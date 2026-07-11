@@ -7,9 +7,9 @@
           {% for post in site.categories[cat_name] limit: 1 %}
             <div class="card__img">
               {% if post.image-sm %}
-                <figure class="absolute-bg" style="background-image: url('{{ post.image-sm }}');"></figure>
+                <figure class="absolute-bg" style="background-image: url('{{ post.image-sm | prepend: site.baseurl }}');"></figure>
               {% else %}
-                <figure class="absolute-bg" style="background-image: url('{{ post.image }}');"></figure>
+                <figure class="absolute-bg" style="background-image: url('{{ post.image | prepend: site.baseurl }}');"></figure>
               {% endif %}
             </div>
           {% endfor %}

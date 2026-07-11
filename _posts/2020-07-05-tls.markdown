@@ -5,8 +5,8 @@ date: 2020-07-05
 categories:
   - Tech
 description: 随着HTTPS的普及以及诸如Google、苹果这样的大公司对HTTPS的强制使用，现在再来了解HTTPS显得略晚了些。好在一切都还来得及，本文一步步由浅入深不断提出问题、寻找答案，慢慢解开TLS的冰山一角:)
-image: /assets/images/tls-flow.png
-image-sm: /assets/images/tls-flow.png
+image: /assets/images/tls-flow.png"
+image-sm: /assets/images/tls-flow.png"
 
 ---
 * ignore but need
@@ -30,7 +30,7 @@ TLS的前身SSL(Secure Sockets Layer)是由网景开发，应用于HTTPS中，�
 
 TLS的交互流程发生于[TCP的三次握手](/2017/11/14/tcp-ip/)之后，典型的流程(TLS 1.2)如下：
 
-![TLS流程](/assets/images/tls-flow.png)
+![TLS流程]({{ site.baseurl }}/assets/images/tls-flow.png)
 
 从TCP三次握手成功后，还会有两次的往返交互来达成一致，随后才开始使用对称加密的方式来传输应用层信息：
 
@@ -48,7 +48,7 @@ TLS的交互流程发生于[TCP的三次握手](/2017/11/14/tcp-ip/)之后，典
 
 如果抓包确认一下以上流程，会发现大部分情况下我们抓到的TLS的交互流程与这张图上还是有一些区别的，这其中的区别又有什么说道呢？
 
-![](/assets/images/tls-my-flow.png)
+![]({{ site.baseurl }}/assets/images/tls-my-flow.png)
 <center>以上抓包的流程中多了Server Key Exchange和New Session Ticket这两个消息包</center>
 
 接下来从各个方面来深入理解一下TLS的握手过程。
@@ -107,7 +107,7 @@ CA的私钥如此重要，关于它的保护措施可以查看此文章：[CA �
 
 Chrome打开任意一个https的网站，在地址栏的最左边可以查看网站的对应证书链：
 
-![](/assets/images/cer-chain.png)
+![]({{ site.baseurl }}/assets/images/cer-chain.png)
 
 证书链中最顶端的为根证书(Root Certificates)，一般随操作系统分发，自签名，属于Root CA；最底端的为终端用户证书(End-User Certificates)，即网站所属者的证书；位于中间的证书可能有多级，都称之为中间证书(Intermediates Certificates)。
 
@@ -201,7 +201,7 @@ openssl x509 -text -inform DER -in baidu.com.cer -out baidu.com.pem
 
 ### 证书链的校验
 
-![](/assets/images/Chain_of_trust.svg)
+![]({{ site.baseurl }}/assets/images/Chain_of_trust.svg)
 
 如图中所示
 
@@ -250,7 +250,7 @@ CRLs方式存在性能问题，随着被吊销的证书越来越多，CRL文件�
 
 它的每一个包的整体结构如下图：
 
-![](/assets/images/tls-record.png)
+![]({{ site.baseurl }}/assets/images/tls-record.png)
 <center>一字节的内容类型，两个字节的版本号（版本号分成两部分：主版本号和子版本号，由于历史原因，TLS v1.0表示为0x0301，v1.1表示为0x0302，以此类推），两个字节剩下的内容长度</center>
 
 其定义如下：
@@ -882,7 +882,7 @@ Server端随时可以发送，用于告知Client端需要重新协商。此类�
 
 最开始的重协商机制存在安全漏洞，可以通过以下的方式进行中间人攻击：
 
-![](/assets/images/renegotiation.jpg)
+![]({{ site.baseurl }}/assets/images/renegotiation.jpg)
 
 攻击流程：
 1. Client发起clientHello握手请求，被中间人暂时存下来

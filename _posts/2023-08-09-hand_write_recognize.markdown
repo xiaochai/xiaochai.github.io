@@ -5,24 +5,24 @@ date: 2023-08-09
 categories:
   - Tech
 description: 先从简单的手写数字识别入手，入门机器学习的模型常识、模型训练、工程构建、图像处理等基本技能，通过在线手写识别验证学习成果
-image: /assets/images/mnist/mnist.jpeg
-image-sm: /assets/images/mnist/mnist.jpeg
+image: /assets/images/mnist/mnist.jpeg"
+image-sm: /assets/images/mnist/mnist.jpeg"
 
 ---
 * ignore but need
 {:toc}
 
 ## 最终成果体验
-点击[在线体验](/assets/html/hand_write/)，或直接在下面内嵌的网页中体验:)
+点击[在线体验]({{ site.baseurl }}/assets/html/hand_write/)，或直接在下面内嵌的网页中体验:)
 
-<iframe src="/assets/html/hand_write/" width="800px" height="250px"></iframe>
+<iframe src="{{ site.baseurl }}/assets/html/hand_write/" width="800px" height="250px"></iframe>
 
 
 ## 为什么会开始这个项目
 
 在玩王国之泪的时候，看到一些海利亚文，总想着识别出来这些海利亚文的含义。手动去查了一下字母对照表，发现不仅难分辨，还有一些重复的，一个字一个字对照未免太累了。
 
-![海利亚文](/assets/images/mnist/hailiyawen.png)
+![海利亚文]({{ site.baseurl }}/assets/images/mnist/hailiyawen.png)
 
 于是想着是不是可以用机器学习的思路将这些图片中的文字自动识别出来的呢？
 
@@ -111,7 +111,7 @@ table td{
 
 
 <table width="1000px"><tr><td width="400px">训练集前100张</td><td width="400px">测试集前100张</td><td width="200px">训练集第二张</td></tr>
-<tr><td><img src="/assets/images//mnist/mnist_train.png"/></td><td><img src="/assets/images//mnist/mnist_test.png"/></td><td><img src="/assets/images//mnist/sample_0.png"/></td></tr>
+<tr><td><img src="{{ site.baseurl }}/assets/images//mnist/mnist_train.png"/></td><td><img src="{{ site.baseurl }}/assets/images//mnist/mnist_test.png"/></td><td><img src="{{ site.baseurl }}/assets/images//mnist/sample_0.png"/></td></tr>
 </table>
 
 
@@ -251,7 +251,7 @@ hand_write_model_with_cnn：保存下来的模型，默认情况下保存的类�
 
 logs：tensorboard用于生成页面的日志数据，在命令行运行`tensorboard --logdir logs/fit`，就可以在浏览器中访问`localhost:6006`来查看训练过程中的各个指标了，如下图展示的是loss(损失值)和accuracy(准确度)在每一轮迭代中的趋势。
 
-![图片](/assets/images/mnist/tensor_board.png)
+![图片]({{ site.baseurl }}/assets/images/mnist/tensor_board.png)
 
 ## 图片识别(predict.py)
 
@@ -268,7 +268,7 @@ print(model.summary())
 
 比如我们随便在某个地方手写了一个数字8，则需要对他进行以下处理，完成如下图的转变
 
-![](/assets/images/mnist/transfer8.png)
+![]({{ site.baseurl }}/assets/images/mnist/transfer8.png)
 
 1. 使用PIL库读取图片f = Image.open(file)
 2. 转化为灰度图片i = f.convert("L")
@@ -526,8 +526,8 @@ $.post("/submit/", {"data": c.toDataURL("image/png")},
 
 这样，在site目录下运行`python3 manage.py runserver 0.0.0.0:8000`，就能在浏览器中打开`localhost:8000`看到效果了
 
-<video style="width: 815px; height: 221px;" id="video" controls="" preload="none" poster="/assets/images/mnist/mov_frame.jpg">
-      <source id="mp4" src="/assets/images/mnist/handwrite_show.mov" type="video/mp4"/>
+<video style="width: 815px; height: 221px;" id="video" controls="" preload="none" poster="{{ site.baseurl }}/assets/images/mnist/mov_frame.jpg">
+      <source id="mp4" src="{{ site.baseurl }}/assets/images/mnist/handwrite_show.mov" type="video/mp4"/>
 </video>
 
 ## 使用Tensorflow JS代替服务端工作
