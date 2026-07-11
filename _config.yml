@@ -7,10 +7,12 @@ google_analytics:
 
 # SEO settings
 title: Fade Temple
-description: 枯燥乏味，愤世嫉俗，灵光乍现，铭之
+description: 小差的个人博客，记录技术、阅读、历史、旅行与随想。
 url: ""
+lang: zh-CN
+locale: zh_CN
 twitter_username: 
-default_img: 
+default_img: /assets/images/deer.jpeg
 
 # Profile settings
 name: 小差小差

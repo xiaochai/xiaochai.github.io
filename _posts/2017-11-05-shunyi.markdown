@@ -6,8 +6,8 @@ categories:
   - Life
   - Gallery
 description: 
-image: /assets/images/sina/49eed0287213cdaa2e8962142d3beb0f.jpg"
-image-sm: /assets/images/sina/a2a8cbdd18fe2b1824ea98bb7861848a.jpg"
+image: /assets/images/sina/49eed0287213cdaa2e8962142d3beb0f.jpg
+image-sm: /assets/images/sina/a2a8cbdd18fe2b1824ea98bb7861848a.jpg
 thumbs:
 - /assets/images/sina/7e1d8cdbac10e551500da730bb6e1f3d.jpg"
 - /assets/images/sina/62efa6e3c21498a9e6a6c140872847ae.jpg"

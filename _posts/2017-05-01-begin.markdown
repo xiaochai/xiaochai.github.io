@@ -6,8 +6,8 @@ categories:
   - Journey
   - Gallery
 description: 
-image: /assets/images/sina/adaddde12c133e965bf37d7a8a4b4f74.jpg"
-image-sm: /assets/images/sina/fbeba802f456c8e7608f4bdcd5672fa7.jpg"
+image: /assets/images/sina/adaddde12c133e965bf37d7a8a4b4f74.jpg
+image-sm: /assets/images/sina/fbeba802f456c8e7608f4bdcd5672fa7.jpg
 thumbs:
 - /assets/images/sina/83508b25771b54eaeae27c89d1da394f.jpg"
 - /assets/images/sina/35eec7d0e23ea088289e94cd6bf2ba20.jpg"

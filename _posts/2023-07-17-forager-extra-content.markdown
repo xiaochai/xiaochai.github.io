@@ -6,8 +6,8 @@ categories:
   - Game
   - Gallery
 description: 浮岛物语全成就之后，把额外内容的文本过一遍，就可以卸载这个游戏了~
-image: /assets/images/forager/HowIMadeForage/1.jpeg"
-image-sm: /assets/images/forager/HowIMadeForage/1.jpeg"
+image: /assets/images/forager/HowIMadeForage/1.jpeg
+image-sm: /assets/images/forager/HowIMadeForage/1.jpeg
 thumbs:
 - /assets/images/forager/HowIMadeForage/1.jpeg"
 - /assets/images/forager/HowIMadeForage/2.jpeg"

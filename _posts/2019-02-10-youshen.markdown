@@ -6,8 +6,8 @@ categories:
   - Life
   - Gallery
 description: 春节四天游神，还记得上一次是在11年前
-image: /assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg"
-image-sm: /assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
+image: /assets/images/sina/43544bfc3f2734504cbef3532a9ecec3.jpg
+image-sm: /assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg
 thumbs:
 - /assets/images/sina/a788eb3f62f501c2b19c6389112669b4.jpg"
 - /assets/images/sina/cc260990484afb73dbcbaf1e1858a330.jpg"

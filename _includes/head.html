@@ -3,39 +3,142 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>{% if page.title %}{{ page.title | escape }} | {{ site.title }}{% else %}{{ site.title | escape }}{% endif %}</title>
-  <meta name="author" content="{{ site.name }}">
-  <meta name="description" content="{{ site.description }}">
-  <meta property="og:title" content="{% if page.title %}{{ page.title | escape }} | {{ site.title }}{% else %}{{ site.title | escape }}{% endif %}">
-  <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}">
-  <meta property="og:site_name" content="{{ site.title }}">
-  <meta property="og:description" content="{% if page.description %}{{ page.description | escape }}{% else %}{{ site.description }}{% endif %}">
-  <meta property="og:image" content="{% if page.image %}{{ page.image | replace: '"', '' | prepend: site.baseurl | prepend: site.url }}{% else %}{{ site.default_img | prepend: site.baseurl | prepend: site.url }}{% endif %}">
-  <meta property="og:type" content="blog">
+  {% assign seo_is_post = false %}
+  {% if page.layout == 'post' or page.layout == 'post_n' %}
+    {% assign seo_is_post = true %}
+  {% endif %}
 
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:description" content="{% if page.description %}{{ page.description | escape }}{% else %}{{ site.description }}{% endif %}">
-  <meta name="twitter:title" content="{% if page.title %}{{ page.title | escape }} | {{ site.title }}{% else %}{{ site.title | escape }}{% endif %}">
-  <meta name="twitter:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}">
-  <meta name="twitter:site" content="{{ site.title }}">
+  {% assign seo_title = site.title %}
+  {% if page.title %}
+    {% assign seo_title = page.title | append: ' | ' | append: site.title %}
+  {% endif %}
+
+  {% assign raw_description = page.description %}
+  {% if raw_description == nil or raw_description == '' %}
+    {% if page.excerpt %}
+      {% assign raw_description = page.excerpt %}
+    {% elsif page.url == '/' %}
+      {% assign raw_description = site.description %}
+    {% elsif page.url contains '/category/' %}
+      {% assign raw_description = page.title | append: ' 分类下的文章列表。' | append: site.description %}
+    {% elsif page.url == '/archive/' %}
+      {% assign raw_description = '按时间顺序浏览 Fade Temple 的全部文章归档。' %}
+    {% else %}
+      {% assign raw_description = site.description %}
+    {% endif %}
+  {% endif %}
+  {% assign seo_description = raw_description | strip_html | strip_newlines | normalize_whitespace | truncate: 160 %}
+
+  {% assign seo_canonical = page.url | replace: 'index.html', '' | prepend: site.baseurl | prepend: site.url %}
+  {% assign seo_image_path = page.image | default: site.default_img | replace: '"', '' %}
+  {% assign seo_image = '' %}
+  {% if seo_image_path != '' %}
+    {% assign seo_image = seo_image_path | prepend: site.baseurl | prepend: site.url %}
+  {% endif %}
+  {% assign seo_type = 'website' %}
+  {% if seo_is_post %}
+    {% assign seo_type = 'article' %}
+  {% endif %}
+  {% assign twitter_card = 'summary' %}
+  {% if seo_image != '' %}
+    {% assign twitter_card = 'summary_large_image' %}
+  {% endif %}
+
+  <title>{{ seo_title | escape }}</title>
+  <meta name="author" content="{{ site.name | escape }}">
+  <meta name="description" content="{{ seo_description | escape }}">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+
+  <meta property="og:title" content="{{ seo_title | escape }}">
+  <meta property="og:url" content="{{ seo_canonical }}">
+  <meta property="og:site_name" content="{{ site.title | escape }}">
+  <meta property="og:description" content="{{ seo_description | escape }}">
+  <meta property="og:type" content="{{ seo_type }}">
+  <meta property="og:locale" content="{{ site.locale | default: 'zh_CN' }}">
+  {% if seo_image != '' %}
+  <meta property="og:image" content="{{ seo_image }}">
+  <meta property="og:image:alt" content="{{ page.title | default: site.title | escape }}">
+  {% endif %}
+  {% if seo_is_post %}
+  <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+  <meta property="article:modified_time" content="{{ page.last_modified_at | default: page.date | date_to_xmlschema }}">
+  {% if page.categories and page.categories.size > 0 %}
+  <meta property="article:section" content="{{ page.categories | first | escape }}">
+  {% endif %}
+  {% endif %}
+
+  <meta name="twitter:card" content="{{ twitter_card }}">
+  <meta name="twitter:description" content="{{ seo_description | escape }}">
+  <meta name="twitter:title" content="{{ seo_title | escape }}">
+  <meta name="twitter:url" content="{{ seo_canonical }}">
+  {% if site.twitter_username and site.twitter_username != '' %}
+  <meta name="twitter:site" content="@{{ site.twitter_username }}">
   <meta name="twitter:creator" content="@{{ site.twitter_username }}">
-  <meta name="twitter:domain" content="{{ site.url }}">
-  <meta property="twitter:image" content="{% if page.image %}{{ page.image | replace: '"', '' | prepend: site.baseurl | prepend: site.url }}{% else %}{{ site.default_img | prepend: site.baseurl | prepend: site.url }}{% endif %}">
+  {% endif %}
+  {% if seo_image != '' %}
+  <meta name="twitter:image" content="{{ seo_image }}">
+  <meta name="twitter:image:alt" content="{{ page.title | default: site.title | escape }}">
+  {% endif %}
 
-  <!-- <meta name="referrer" content="never"> -->
-  <!-- <meta name="referrer" content="no-referrer" /> -->
-
-  <!--link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Lora|Space+Mono:700"-->
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/font-awesome.min.4.6.3.css">
-
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/normalize.min.4.2.0.css">
-
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | prepend: site.baseurl }}">
-
   <link href="{{ site.baseurl }}/assets/css/syntax.css" rel="stylesheet">
-
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | prepend: site.baseurl | prepend: site.url }}">
-  <link rel="canonical" href="{{ page.url | replace: 'index.html', '' | prepend: site.baseurl | prepend: site.url }}">
+  <link rel="canonical" href="{{ seo_canonical }}">
+
+  <script type="application/ld+json">
+  {% if seo_is_post %}
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ page.title | default: site.title | jsonify }},
+    "description": {{ seo_description | jsonify }},
+    "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+    "dateModified": {{ page.last_modified_at | default: page.date | date_to_xmlschema | jsonify }},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ seo_canonical | jsonify }}
+    },
+    "author": {
+      "@type": "Person",
+      "name": {{ site.name | jsonify }}
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": {{ site.name | jsonify }}
+    }{% if seo_image != '' %},
+    "image": {{ seo_image | jsonify }}{% endif %}{% if page.categories and page.categories.size > 0 %},
+    "articleSection": {{ page.categories | first | jsonify }}{% endif %}
+  }
+  {% else %}
+  {% if page.url == '/' %}
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": {{ site.title | jsonify }},
+    "url": {{ site.url | append: site.baseurl | jsonify }},
+    "description": {{ site.description | jsonify }},
+    "inLanguage": {{ site.lang | default: 'zh-CN' | jsonify }},
+    "publisher": {
+      "@type": "Person",
+      "name": {{ site.name | jsonify }}
+    }{% if seo_image != '' %},
+    "image": {{ seo_image | jsonify }}{% endif %}
+  }
+  {% else %}
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": {{ page.title | default: site.title | jsonify }},
+    "url": {{ seo_canonical | jsonify }},
+    "description": {{ seo_description | jsonify }},
+    "inLanguage": {{ site.lang | default: 'zh-CN' | jsonify }}{% if seo_image != '' %},
+    "image": {{ seo_image | jsonify }}{% endif %}
+  }
+  {% endif %}
+  {% endif %}
+  </script>
 
   {% if site.google_analytics %}
     <script>
