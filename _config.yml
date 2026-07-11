@@ -4,7 +4,7 @@ baseurl: ""
 paginate: 5
 paginate_path: "/page-:num"
 google_analytics: 
-
+baidu_analytics: 5299591567b957a1a8f189fe72dcab86
 # SEO settings
 title: Fade Temple
 description: 小差的个人博客，记录技术、阅读、历史、旅行与随想。

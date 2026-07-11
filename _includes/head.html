@@ -140,6 +140,18 @@
   {% endif %}
   </script>
 
+  {% if site.baidu_analytics and site.baidu_analytics != '' %}
+    <script>
+      var _hmt = window._hmt || [];
+      (function() {
+        var hm = document.createElement('script');
+        hm.src = 'https://hm.baidu.com/hm.js?{{ site.baidu_analytics }}';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  {% endif %}
+
   {% if site.google_analytics %}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
