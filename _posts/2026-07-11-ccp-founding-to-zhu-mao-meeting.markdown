@@ -21,6 +21,18 @@ image-sm: /assets/images/history/ccp_timeline_cover_clean.jpg
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
+.mast__container h1 {
+  font-size: 2.2rem;
+  line-height: 1.18;
+  max-width: 18ch;
+}
+
+@media (min-width: 54em) {
+  .mast__container h1 {
+    font-size: 2.7rem;
+  }
+}
+
 .history-shell {
   width: 100%;
   max-width: none;
